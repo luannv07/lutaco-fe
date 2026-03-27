@@ -1,0 +1,24 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "delete": "Xóa",
+      "search": "Tìm kiếm",
+      "create": "Tạo mới"
+    },
+    "messages": {
+      "confirm_delete": "Bạn có chắc chắn muốn xóa mục này không?",
+      "success": "Thao tác thành công!",
+      "error": "Có lỗi xảy ra, vui lòng thử lại."
+    },
+    "table": {
+      "actions": "Hành động",
+      "no_data": "Không có dữ liệu"
+    }
+  },
+  "menu": {
+    "dashboard": "Bảng điều khiển",
+    "my_address": "Địa chỉ của tôi"
+  }
+}

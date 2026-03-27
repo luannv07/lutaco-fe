@@ -1,0 +1,24 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "search": "Search",
+      "create": "Create New"
+    },
+    "messages": {
+      "confirm_delete": "Are you sure you want to delete this item?",
+      "success": "Operation successful!",
+      "error": "An error occurred, please try again."
+    },
+    "table": {
+      "actions": "Actions",
+      "no_data": "No data available"
+    }
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "my_address": "My Address"
+  }
+}
