@@ -161,6 +161,10 @@ AI MUST enforce this distinction.
 
 ---
 
+notice: 
+- prevent max possible thing can null
+- you must not use angular old syntas: use @if instead of *ngif....and anything like that
+
 ## 9. Template Rules (ZERO TOLERANCE)
 
 AI MUST NOT generate:

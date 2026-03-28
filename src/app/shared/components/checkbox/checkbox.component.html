@@ -1,0 +1,16 @@
+<label [for]="id || name" [ngClass]="checkboxContainerClasses">
+  <input
+    type="checkbox"
+    [id]="id || name"
+    [name]="name"
+    [checked]="checked"
+    [disabled]="disabled"
+    [ngClass]="checkboxInputClasses"
+    (change)="onChange($event); onModelChange($event.target.checked)"
+    (focus)="onFocus($event)"
+    (blur)="onBlur($event)"
+  />
+  @if (label) {
+    <span [ngClass]="labelClasses">{{ label }}</span>
+  }
+</label>

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Import FontAwesomeModule
+
+// Import shared components
+import { ButtonComponent } from './components/button/button.component';
+import { InputComponent } from './components/input/input.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { TextareaComponent } from './components/textarea/textarea.component';
 
 /**
  * An array of commonly used modules and components for standalone components.
@@ -26,9 +33,11 @@ export const SHARED_IMPORTS = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
+  FontAwesomeModule, // Add FontAwesomeModule
 
   // Add your own shared standalone components, directives, or pipes here
-  // Example:
-  // MySharedComponent,
-  // MySharedPipe,
+  ButtonComponent, // Add ButtonComponent
+  InputComponent, // Add InputComponent
+  CheckboxComponent, // Add CheckboxComponent
+  TextareaComponent, // Add TextareaComponent
 ];

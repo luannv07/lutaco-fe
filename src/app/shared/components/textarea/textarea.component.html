@@ -1,0 +1,27 @@
+<div class="mb-4">
+  @if (label) {
+    <label [for]="id || name" [ngClass]="labelClasses">
+      {{ label }}
+      @if (required) {
+        <span class="text-red-500">*</span>
+      }
+    </label>
+  }
+  <textarea
+    [id]="id || name"
+    [name]="name"
+    [value]="value"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [readOnly]="readonly"
+    [required]="required"
+    [rows]="rows"
+    [ngClass]="textareaClasses"
+    (input)="onInput($event); onModelChange($event.target.value)"
+    (focus)="onFocus($event)"
+    (blur)="onBlur($event)"
+  ></textarea>
+  @if (errorMessage) {
+    <p class="mt-1 text-sm text-red-600">{{ errorMessage }}</p>
+  }
+</div>
