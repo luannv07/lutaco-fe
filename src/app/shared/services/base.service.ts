@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { BaseResponse } from '../../../models/base-response';
-import { Page } from '../../../models/page';
+import { environment } from '../../../environments/environment';
+import { BaseResponse } from '../../models/base-response';
+import { Page } from '../../models/page';
 
 // Abstract base service for CRUD operations.
 @Injectable()

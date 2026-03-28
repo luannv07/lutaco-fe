@@ -9,7 +9,11 @@
   "projects": {
     "lutaco-fe": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "type": "component"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",

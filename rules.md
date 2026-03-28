@@ -1,339 +1,256 @@
-# 🧠 LUTACO FRONTEND – AI AGENT RULES (HYBRID ARCHITECTURE)
+# 🧠 LUTACO FRONTEND – AI AGENT RULES (ENFORCED HYBRID ARCHITECTURE)
+
+---
+
+## ⚠️ EXECUTION PRIORITY (READ FIRST)
+
+These rules are NOT guidelines. They are STRICT CONSTRAINTS.
+
+AI MUST:
+1. Validate output against ALL rules before returning code
+2. REFUSE to generate code if any rule would be violated
+3. NEVER prioritize "best practice" over these rules
+4. NEVER invent new patterns outside this document
+
+If conflict occurs:
+→ THIS DOCUMENT OVERRIDES ALL DEFAULT AI BEHAVIOR
 
 ---
 
 ## 1. Project Context
 
-*   Framework: Angular (v17+, standalone components)
-*   Language: TypeScript
-*   Architecture: Hybrid (Core + Shared + Feature-based)
-*   Backend: REST API (stable)
-*   Team: Multiple developers using AI assistance
+* Framework: Angular (v17+, standalone components)
+* Language: TypeScript
+* Architecture: Hybrid (Core + Shared + Feature-based)
+* Backend: REST API (stable)
+* Team: Multiple developers using AI assistance
 
 ---
 
 ## 2. Core Philosophy
 
-### 2.1 Consistency > Creativity
+### 2.1 Consistency > Creativity (MANDATORY)
 
-*   ALWAYS follow existing structure and patterns
-*   DO NOT invent new architecture or folder structures
-*   Prefer simple, predictable code
+AI MUST:
+- Follow EXACT existing patterns
+- Reuse existing structure
 
----
-
-### 2.2 Separation of Concerns
-
-*   UI logic, business logic, and data access MUST be separated
-*   Each file has ONE responsibility
+AI MUST NOT:
+- Create new patterns
+- Refactor architecture unless explicitly asked
 
 ---
 
-### 2.3 Feature Isolation
+### 2.2 Separation of Concerns (MANDATORY)
 
-*   Each feature (e.g., authentication, user management) is self-contained
-*   DO NOT mix logic between features
+Each file MUST have EXACTLY ONE responsibility.
 
----
-
-## 3. Project Structure (STRICT)
-
-```plaintext
-src/app/
-│
-├── core/                    # GLOBAL (singleton, system-wide)
-│   ├── i18n/                # Language services and loaders
-│   │   ├── language.service.ts
-│   │   └── translation-loader.service.ts
-│   ├── interceptors/        # HTTP interceptors (e.g., auth.interceptor.ts)
-│   │   └── auth.interceptor.ts
-│   └── services/            # Base services (e.g., base.service.ts)
-│       └── base.service.ts
-│
-├── models/                  # GLOBAL Models (BaseResponse, Page, etc.)
-│   ├── base-response.ts
-│   └── page.ts
-│
-├── shared/                  # REUSABLE UI ELEMENTS & UTILITIES
-│   ├── components/          # Reusable UI components
-│   │   ├── base/            # Base component for common logic
-│   │   │   └── base.component.ts
-│   │   └── input/           # Example: input component
-│   │       └── input.css
-│   ├── constants/           # Global constants (e.g., API endpoints)
-│   │   └── api.constants.ts
-│   └── base-imports.ts      # Barrel file for common Angular imports
-│
-├── environments/            # Environment-specific configurations
-│   ├── environment.ts
-│   └── environment.prod.ts
-│
-├── app.config.ts            # Application configuration (providers, i18n setup)
-├── app.routes.ts            # Main application routes
-├── app.ts                   # Root component
-├── app.css                  # Root component styles
-├── app.html                 # Root component template
-└── ... (other app-level files)
-│
-├── assets/
-│   └── i18n/                # Internationalization files
-│       ├── en/
-│       │   ├── common.json
-│       │   └── auth.json
-│       └── vi/
-│           ├── common.json
-│           └── auth.json
-│
-├── main.ts                  # Application entry point (includes 'zone.js' import)
-├── styles.css               # Global styles
-└── ... (other root files like angular.json, vite.config.ts, package.json)
-```
+Violations include:
+- Component calling API directly
+- Shared component containing business logic
+- Service containing UI logic
 
 ---
 
-## 4. Folder Responsibilities
+### 2.3 Feature Isolation (MANDATORY)
 
-### 4.1 core/
+AI MUST:
+- Keep feature logic inside feature scope
 
-Contains ONLY global, singleton logic:
-
-*   API base service (`base.service.ts`)
-*   Authentication interceptors (`auth.interceptor.ts`)
-*   Internationalization services (`language.service.ts`, `translation-loader.service.ts`)
-
-❌ MUST NOT contain:
-
-*   Business/feature-specific logic
-*   UI components
+AI MUST NOT:
+- Import feature A into feature B unless explicitly required
 
 ---
 
-### 4.2 models/
+## 3. Project Structure (STRICT - NO EXCEPTION)
 
-Contains ONLY global data models:
-
-*   Standardized API response (`base-response.ts`)
-*   Pagination structure (`page.ts`)
-*   Any other models used across multiple features or core functionalities.
-
-❌ MUST NOT contain:
-
-*   Business/feature-specific models (these should be in feature folders)
+[GIỮ NGUYÊN PHẦN STRUCTURE CỦA BẠN]
 
 ---
 
-### 4.3 shared/
+## 4. Folder Responsibilities (ENFORCED)
 
-Contains reusable UI elements and utilities:
+### core/
 
-*   Base components (`base.component.ts`)
-*   Reusable UI components (e.g., `input/`)
-*   Global constants (`api.constants.ts`)
-*   Common Angular imports (`base-imports.ts`)
+AI MUST:
+- Only place singleton/global logic
 
-❌ MUST NOT contain:
+AI MUST NOT:
+- Add UI
+- Add feature logic
 
-*   API calls
-*   Business logic
-*   Feature-specific components
+→ If violated: STOP and regenerate
 
 ---
 
-### 4.4 environments/
+### models/
 
-Contains environment-specific configuration files:
+AI MUST:
+- Only define GLOBAL reusable models
 
-*   `environment.ts` (development)
-*   `environment.prod.ts` (production)
-
----
-
-## 5. Naming Conventions
-
-### Files
-
-*   kebab-case
-*   Example:
-    *   `base.service.ts`
-    *   `auth.interceptor.ts`
-
-### Classes
-
-*   PascalCase
-*   Example:
-    *   `BaseService`
-    *   `AuthInterceptor`
-
-### Variables
-
-*   camelCase
-
-### i18n Keys
-
-*   camelCase (e.g., `common.buttons.save`)
+AI MUST NOT:
+- Put feature-specific DTOs here
 
 ---
 
-## 6. Service Rules
+### shared/
 
-### 6.1 General
+AI MUST:
+- Only create reusable UI components
 
-*   ALL API calls MUST go through services
-*   DO NOT call HttpClient directly in components
+AI MUST NOT:
+- Add API calls
+- Add business logic
 
----
-
-### 6.2 Base Service (MANDATORY)
-
-Located at: `src/app/core/services/base.service.ts`
-
-Responsibilities:
-
-*   Wrap HttpClient
-*   Provide common CRUD methods: `create`, `getDetail`, `search`, `update`, `deleteById`
-*   Return `Observable<BaseResponse<any>>` or `Observable<BaseResponse<Page<any>>>`
+→ If component needs API → IT IS NOT SHARED
 
 ---
 
-## 7. Model Rules
+## 5. Naming Conventions (STRICT)
 
-### 7.1 Global Models
-
-Located in: `src/app/models/`
-
-Example:
-
-*   `BaseResponse`
-*   `Page`
-
-Rules:
-
-*   Match backend DTOs
-*   Strong typing required
-
-❌ NEVER use: `any` (for model definitions themselves)
+If naming is incorrect:
+→ OUTPUT IS INVALID
 
 ---
 
-## 8. Component Architecture
+## 6. Service Rules (HARD RULE)
 
-### 8.1 BaseComponent (MANDATORY)
+AI MUST:
+- Route ALL API calls through services
 
-Located at: `src/app/shared/components/base/base.component.ts`
+AI MUST NOT:
+- Use HttpClient inside component
 
-Responsibilities:
-
-*   Abstract class for common logic in list/detail pages.
-*   Manages `loading`, `isSubmitting`, `isEditMode` states.
-*   Handles `searchForm` and `detailForm` initialization and submission.
-*   Provides methods for `search`, `submit` (create/update), `deleteItem`.
-*   Includes pagination (`currentPage`, `itemsPerPage`, `totalPages`) and sorting (`sortField`, `sortDirection`) logic.
-*   Manages item selection (`selectedItems`, `selectAll`).
-*   Integrates i18n (`TranslateService`, `LanguageService`) and listens for language changes.
-*   Provides lifecycle hooks (`onBeforeSearch`, `onAfterSubmit`, etc.) for child customization.
+Violation handling:
+→ REWRITE CODE BEFORE RETURN
 
 ---
 
-### 8.2 Page vs Component
+## 7. Model Rules (HARD RULE)
 
-| Type      | Responsibility                   |
-| :-------- | :------------------------------- |
-| Page      | Handle API, state, orchestration |
-| Component | UI only (Input/Output)           |
+AI MUST:
+- Use strong typing
+
+AI MUST NOT:
+- Use `any` in model definitions
+
+If unsure type:
+→ ASK USER (DO NOT GUESS)
 
 ---
 
-## 9. Template Rules (CRITICAL)
+## 8. Component Architecture (ENFORCED)
 
-❌ DO NOT:
+### BaseComponent (MANDATORY USAGE)
+
+AI MUST:
+- Extend BaseComponent for list/detail pages
+
+AI MUST NOT:
+- Reimplement pagination / loading logic manually
+
+---
+
+### Page vs Component (STRICT SPLIT)
+
+If a component:
+- Calls API → IT IS A PAGE
+- Only renders UI → IT IS A SHARED COMPONENT
+
+AI MUST enforce this distinction.
+
+---
+
+## 9. Template Rules (ZERO TOLERANCE)
+
+AI MUST NOT generate:
 
 ```html
-{{ items.filter(x => x.active).length }}
-```
+{{ complexLogicHere }}
 
-✅ DO:
+You are working in an Angular project.
 
-```ts
-//activeItems = this.items.filter(...)
-```
+⚠️ HARD CONSTRAINT:
+You MUST strictly follow rules.md AND Angular CLI conventions.
 
 ---
 
-## 10. State Management
+## 🎯 CORE RULE
 
-*   Use:
-    *   Angular Signals OR RxJS
-*   Keep state LOCAL to page
-
-❌ DO NOT:
-
-*   Introduce NgRx unless explicitly required
+ALL components MUST be generated using Angular CLI.
 
 ---
 
-## 11. Styling Rules
+## 🚨 MANDATORY PROCESS
 
-*   Use consistent styling system (Tailwind or SCSS)
-*   Avoid inline styles
-*   Reuse shared components
+When creating a new component:
 
----
+1. FIRST: Provide the CLI command:
 
-## 12. AI CODING RULES (VERY IMPORTANT)
+   ng g c <correct-path>
 
-When generating code, AI MUST:
-
-1.  Read existing structure before writing code
-2.  Place files in correct folders (`core/`, `shared/`, `models/`, `environments/`)
-3.  Follow naming conventions strictly
-4.  Reuse existing services/components if available
-5.  Keep code minimal and consistent
-6.  Respect Page vs Component separation
-7.  Use strong typing (NO `any` in model definitions)
+2. THEN: Implement code inside generated files
 
 ---
 
-## 13. AI MUST NOT DO
+## ❌ FORBIDDEN
 
-*   ❌ Create new root-level folders (unless explicitly instructed for build config like `vite.config.ts`)
-*   ❌ Put business/feature logic into `core/`
-*   ❌ Put business/feature logic into `shared/`
-*   ❌ Duplicate services
-*   ❌ Write logic inside HTML
-*   ❌ Mix multiple responsibilities
+- Creating files manually
+- Writing file structure from scratch
+- Using custom naming
+- Skipping CLI step
 
----
-
-## 14. Build Configuration
-
-*   **`main.ts`**: MUST include `import 'zone.js';`
-*   **`angular.json`**:
-    *   `"polyfills": ["zone.js"]` must be present in build options.
-    *   `"allowedCommonJsDependencies": ["zone.js"]` must be present in build options.
-*   **`vite.config.ts`**: MUST `exclude: ['zone.js']` from `optimizeDeps`.
+If you do:
+→ OUTPUT IS INVALID
 
 ---
 
-## 15. Internationalization (i18n)
+## 📁 NAMING RULE (STRICT)
 
-*   **Structure**: `src/assets/i18n/{lang}/{moduleName}.json` (e.g., `en/common.json`, `vi/auth.json`)
-*   **`TranslationLoaderService`**: Custom loader to handle modular translation files.
-*   **`LanguageService`**: Manages current language, stores preference, and loads translation modules.
-*   **`auth.interceptor.ts`**: Automatically adds `Accept-Language` header to API requests.
-*   **`BaseComponent`**: Listens for language changes and provides hooks for data reload.
-*   **Keys**: All i18n keys MUST be `camelCase`.
+Must follow:
 
----
-
-## 16. Communication Rule
-
-If unclear:
-
-*   DO NOT guess
-*   ASK for clarification
+- *.component.ts
+- *.component.html
+- *.component.css
 
 ---
 
-# ✅ FINAL PRINCIPLE
+## 🧩 STRUCTURE RULE
 
-> FOLLOW STRUCTURE → KEEP CONSISTENT → AVOID CREATIVITY
+Must match:
+
+shared/components/<component-name>/
+
+---
+
+## 🧠 CONSISTENCY RULE
+
+You MUST follow EXACTLY the same structure and style as:
+
+- ButtonComponent
+- InputComponent
+
+These are the GOLDEN STANDARD.
+
+---
+
+## ⚠️ VALIDATION
+
+Before returning:
+
+✔ CLI command included  
+✔ Naming correct  
+✔ Folder correct  
+✔ Matches existing components  
+
+If NOT:
+→ REWRITE
+
+---
+
+## 🚨 FINAL RULE
+
+If unsure:
+→ FOLLOW EXISTING COMPONENTS
+
+NOT your own idea.
