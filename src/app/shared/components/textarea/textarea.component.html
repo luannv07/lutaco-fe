@@ -1,6 +1,6 @@
 <div class="mb-4">
   @if (label) {
-    <label [for]="id || name" [ngClass]="labelClasses">
+    <label [for]="_id" [ngClass]="labelClasses">
       {{ label }}
       @if (required) {
         <span class="text-red-500">*</span>
@@ -8,20 +8,24 @@
     </label>
   }
   <textarea
-    [id]="id || name"
-    [name]="name"
-    [value]="value"
-    [placeholder]="placeholder"
+    (blur)="onBlur($event)"
+    (focus)="onFocus($event)"
+    (input)="handleInput($event)"
+    [attr.aria-describedby]="errorMessage ? 'error-' + _id : null"
     [disabled]="disabled"
+    [id]="_id"
+    [name]="name"
+    [ngClass]="textareaClasses"
+    [placeholder]="placeholder"
     [readOnly]="readonly"
     [required]="required"
     [rows]="rows"
-    [ngClass]="textareaClasses"
-    (input)="onInput($event); onModelChange($event.target.value)"
-    (focus)="onFocus($event)"
-    (blur)="onBlur($event)"
+    [value]="value"
   ></textarea>
   @if (errorMessage) {
-    <p class="mt-1 text-sm text-red-600">{{ errorMessage }}</p>
+    <p [@errorMessageAnimation] [id]="'error-' + _id" [ngClass]="errorTextClasses">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </p>
   }
 </div>

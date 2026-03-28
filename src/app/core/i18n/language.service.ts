@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslationLoaderService } from './translation-loader.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 // Key for storing the selected language in local storage
@@ -11,31 +11,13 @@ const LANG_STORAGE_KEY = 'current_lang';
   providedIn: 'root',
 })
 export class LanguageService {
+  // List of available languages
+  public readonly availableLangs = ['en', 'vi'];
   private translate = inject(TranslateService);
   private translationLoader = inject(TranslationLoaderService);
 
-  // List of available languages
-  public readonly availableLangs = ['en', 'vi'];
-
   constructor() {
     this.initLanguage();
-  }
-
-  /**
-   * Initializes the language for the application.
-   * It tries to use the language from localStorage, otherwise falls back to 'vi' (from fallbackLang).
-   * It also adds available languages to ngx-translate.
-   */
-  private initLanguage(): void {
-    const browserLang = navigator.language.match(/en|vi/) ? navigator.language : 'vi';
-    const storedLang = localStorage.getItem(LANG_STORAGE_KEY);
-    // Ensure defaultLang is always a string, using 'vi' as ultimate fallback
-    const defaultLang: string = storedLang || browserLang || 'vi';
-
-    this.translate.addLangs(this.availableLangs);
-    // Removed: this.translate.setDefaultLang('vi'); as fallbackLang is used in app.config.ts
-
-    this.setLanguage(defaultLang);
   }
 
   /**
@@ -47,7 +29,7 @@ export class LanguageService {
     if (!this.availableLangs.includes(lang)) {
       console.warn(`Language '${lang}' is not supported. Falling back to default.`);
       // Use getFallbackLang() if available, otherwise 'vi'
-      lang = this.translate.getFallbackLang() as string || 'vi';
+      lang = (this.translate.getFallbackLang() as string) || 'vi';
     }
     this.translate.use(lang);
     localStorage.setItem(LANG_STORAGE_KEY, lang);
@@ -72,11 +54,28 @@ export class LanguageService {
    */
   public loadTranslationModules(lang: string, modulePaths: string[]): Observable<any> {
     return this.translationLoader.loadMultipleTranslationFiles(lang, modulePaths).pipe(
-      map(mergedTranslations => {
+      map((mergedTranslations) => {
         // Merge all loaded translations into the current translation service store
         this.translate.setTranslation(lang, mergedTranslations, true); // Merge, don't overwrite
         return mergedTranslations;
-      })
+      }),
     );
+  }
+
+  /**
+   * Initializes the language for the application.
+   * It tries to use the language from localStorage, otherwise falls back to 'vi' (from fallbackLang).
+   * It also adds available languages to ngx-translate.
+   */
+  private initLanguage(): void {
+    const browserLang = navigator.language.match(/en|vi/) ? navigator.language : 'vi';
+    const storedLang = localStorage.getItem(LANG_STORAGE_KEY);
+    // Ensure defaultLang is always a string, using 'vi' as ultimate fallback
+    const defaultLang: string = storedLang || browserLang || 'vi';
+
+    this.translate.addLangs(this.availableLangs);
+    // Removed: this.translate.setDefaultLang('vi'); as fallbackLang is used in app.config.ts
+
+    this.setLanguage(defaultLang);
   }
 }

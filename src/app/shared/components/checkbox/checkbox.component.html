@@ -1,16 +1,32 @@
-<label [for]="id || name" [ngClass]="checkboxContainerClasses">
-  <input
-    type="checkbox"
-    [id]="id || name"
-    [name]="name"
-    [checked]="checked"
-    [disabled]="disabled"
-    [ngClass]="checkboxInputClasses"
-    (change)="onChange($event); onModelChange($event.target.checked)"
-    (focus)="onFocus($event)"
-    (blur)="onBlur($event)"
-  />
-  @if (label) {
-    <span [ngClass]="labelClasses">{{ label }}</span>
+<div class="flex flex-col">
+  <label [for]="_id" [ngClass]="checkboxContainerClasses">
+    <input
+      (blur)="onBlur($event)"
+      (change)="onModelChange($event)"
+      (focus)="onFocus($event)"
+      [attr.aria-checked]="checked"
+      [attr.aria-describedby]="errorMessage ? 'error-' + _id : null"
+      [attr.aria-disabled]="disabled"
+      [checked]="checked"
+      [disabled]="disabled"
+      [id]="_id"
+      [name]="name"
+      class="sr-only"
+      type="checkbox"
+    />
+    <div [ngClass]="checkboxVisualClasses">
+      @if (checked) {
+        <i [@checkmarkAnimation]="checked ? '*' : 'void'" class="fa-solid fa-check text-white"></i>
+      }
+    </div>
+    @if (label) {
+      <span [ngClass]="labelClasses">{{ label }}</span>
+    }
+  </label>
+  @if (errorMessage) {
+    <p [@errorMessageAnimation] [id]="'error-' + _id" [ngClass]="errorTextClasses">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </p>
   }
-</label>
+</div>

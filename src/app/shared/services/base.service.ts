@@ -26,12 +26,10 @@ export abstract class BaseService {
 
   // Search for resources with pagination.
   search(request: any, page: number, size: number): Observable<BaseResponse<Page<any>>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     if (request) {
-      Object.keys(request).forEach(key => {
+      Object.keys(request).forEach((key) => {
         const value = request[key];
         if (value !== null && value !== undefined && value !== '') {
           params = params.append(key, value);

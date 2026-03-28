@@ -47,13 +47,13 @@ export class TranslationLoaderService implements TranslateLoader {
       return of({});
     }
 
-    const requests = fileNames.map(fileName => this.loadTranslationFile(lang, fileName));
+    const requests = fileNames.map((fileName) => this.loadTranslationFile(lang, fileName));
 
     return forkJoin(requests).pipe(
-      map(responses => {
+      map((responses) => {
         // Merge all responses into a single object
         return responses.reduce((acc, response) => ({ ...acc, ...response }), {});
-      })
+      }),
     );
   }
 
@@ -64,6 +64,9 @@ export class TranslationLoaderService implements TranslateLoader {
    * @returns An Observable with the merged initial translations.
    */
   getTranslation(lang: string): Observable<any> {
-    return this.loadMultipleTranslationFiles(lang, this.initialModules.map(m => m.fileName));
+    return this.loadMultipleTranslationFiles(
+      lang,
+      this.initialModules.map((m) => m.fileName),
+    );
   }
 }

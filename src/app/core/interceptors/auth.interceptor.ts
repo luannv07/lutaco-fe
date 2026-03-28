@@ -17,7 +17,7 @@ const PUBLIC_API_ENDPOINTS: string[] = [
 // This interceptor attaches JWT and language headers to requests.
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
   const translateService = inject(TranslateService);
   // Ensure currentLang is always a string, defaulting to 'vi' if not set
@@ -27,7 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (
   const token = localStorage.getItem(TOKEN_STORAGE_KEY);
 
   // Check if the request is for a public API.
-  const isPublicApi = PUBLIC_API_ENDPOINTS.some(endpoint => req.url.includes(endpoint));
+  const isPublicApi = PUBLIC_API_ENDPOINTS.some((endpoint) => req.url.includes(endpoint));
 
   // Clone the request to add headers.
   let headers = req.headers;

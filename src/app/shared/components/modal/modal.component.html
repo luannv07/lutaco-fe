@@ -1,0 +1,28 @@
+@if (isOpen) {
+  <div (click)="onOverlayClick($event)" [@modalBackdropAnimation] [ngClass]="modalContainerClasses">
+    <div (click)="$event.stopPropagation()" [@modalPanelAnimation] [ngClass]="modalContentClasses">
+      <!-- Header -->
+      <div [ngClass]="modalHeaderClasses">
+        <h3 [ngClass]="modalTitleClasses">{{ title }}</h3>
+        <button (click)="onClose()" [ngClass]="closeButtonClasses" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Divider after header -->
+      <div class="border-t border-slate-100"></div>
+
+      <!-- Body -->
+      <div [ngClass]="modalBodyClasses">
+        <ng-content></ng-content>
+      </div>
+
+      <!-- Footer (conditional) -->
+      @if (showFooter) {
+        <div [ngClass]="modalFooterClasses">
+          <ng-content select="[modal-footer]"></ng-content>
+        </div>
+      }
+    </div>
+  </div>
+}

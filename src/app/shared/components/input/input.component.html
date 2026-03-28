@@ -1,6 +1,6 @@
 <div class="mb-4">
   @if (label) {
-    <label [for]="type" class="block text-sm font-medium text-gray-700 mb-1">
+    <label [for]="type" [ngClass]="labelClasses">
       {{ label }}
       @if (required) {
         <span class="text-red-500">*</span>
@@ -9,44 +9,40 @@
   }
   <div [ngClass]="wrapperClasses">
     <!-- Prefix Icon -->
-    @if (prefixIcon) {
+    @if (prefixIconClass) {
       <div [ngClass]="iconWrapperClasses" class="left-0 pl-3">
-        @if (isPrefixFontAwesomeIcon()) {
-          <fa-icon [icon]="prefixIcon" class="text-gray-400"></fa-icon>
-        } @else {
-          <i [ngClass]="prefixIcon" class="text-gray-400"></i>
-        }
+        <i [ngClass]="prefixIconClass"></i>
       </div>
     }
 
     <!-- Input Field -->
     <input
-      [id]="type"
-      [type]="type"
-      [value]="value"
-      [placeholder]="placeholder"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (input)="onInput($event)"
+      [attr.aria-describedby]="errorMessage ? 'error-' + type : null"
       [disabled]="disabled"
+      [id]="type"
+      [ngClass]="inputClasses"
+      [placeholder]="placeholder"
       [readOnly]="readonly"
       [required]="required"
-      [ngClass]="inputClasses"
-      (input)="onInput($event)"
-      (focus)="onFocus($event)"
-      (blur)="onBlur($event)"
+      [type]="type"
+      [value]="value"
     />
 
     <!-- Suffix Icon -->
-    @if (suffixIcon) {
+    @if (suffixIconClass) {
       <div [ngClass]="iconWrapperClasses" class="right-0 pr-3">
-        @if (isSuffixFontAwesomeIcon()) {
-          <fa-icon [icon]="suffixIcon" class="text-gray-400"></fa-icon>
-        } @else {
-          <i [ngClass]="suffixIcon" class="text-gray-400"></i>
-        }
+        <i [ngClass]="suffixIconClass"></i>
       </div>
     }
   </div>
   <!-- Error Message -->
   @if (errorMessage) {
-    <p class="mt-1 text-sm text-red-600">{{ errorMessage }}</p>
+    <p [@errorMessageAnimation] [id]="'error-' + type" [ngClass]="errorTextClasses">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </p>
   }
 </div>

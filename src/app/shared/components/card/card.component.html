@@ -1,0 +1,6 @@
+<div [ngClass]="cardClasses">
+  @if (title) {
+    <h3 [ngClass]="titleClasses">{{ title }}</h3>
+  }
+  <ng-content></ng-content>
+</div>

@@ -1,0 +1,14 @@
+<div [@toastAnimation]="{value: 'visible', params: getAnimationParams()}" [ngClass]="toastClasses">
+  <div class="flex-shrink-0">
+    <i [ngClass]="iconClasses"></i>
+  </div>
+  <div class="flex-1">
+    <h4 class="font-semibold text-lg">{{ title }}</h4>
+    <p class="text-sm">{{ message }}</p>
+  </div>
+  <div class="flex-shrink-0">
+    <button (click)="onClose()" [ngClass]="closeButtonClasses">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>

@@ -2,8 +2,8 @@
   /* Giữ lại các style gốc nếu cần, hoặc xóa nếu Tailwind đã xử lý hết */
   :host {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -19,8 +19,8 @@
     letter-spacing: -0.125rem;
     margin: 0;
     font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
   }
 
   p {
@@ -51,180 +51,313 @@
 <main class="main-container">
   <h1 class="text-4xl font-bold text-gray-800 mb-4">Component Demo</h1>
   <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
-    Explore different button, input, checkbox, and textarea types, sizes, states, icons, and custom classes.
+    Explore different button, input, checkbox, textarea, badge, card, select, modal, and table components.
   </p>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
 
     <!-- Section: Basic Button Types -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Basic Button Types</h2>
       <div class="flex flex-wrap gap-3">
-        <app-button label="Primary" buttonType="primary" (clickEvent)="onButtonClick('Primary')"></app-button>
-        <app-button label="Secondary" buttonType="secondary" (clickEvent)="onButtonClick('Secondary')"></app-button>
-        <app-button label="Danger" buttonType="danger" (clickEvent)="onButtonClick('Danger')"></app-button>
-        <app-button label="Success" buttonType="success" (clickEvent)="onButtonClick('Success')"></app-button>
-        <app-button label="Warning" buttonType="warning" (clickEvent)="onButtonClick('Warning')"></app-button>
-        <app-button label="Info" buttonType="info" (clickEvent)="onButtonClick('Info')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Primary')" buttonType="primary" label="Primary"></app-button>
+        <app-button (clickEvent)="onButtonClick('Secondary')" buttonType="secondary" label="Secondary"></app-button>
+        <app-button (clickEvent)="onButtonClick('Danger')" buttonType="danger" label="Danger"></app-button>
+        <app-button (clickEvent)="onButtonClick('Success')" buttonType="success" label="Success"></app-button>
+        <app-button (clickEvent)="onButtonClick('Warning')" buttonType="warning" label="Warning"></app-button>
+        <app-button (clickEvent)="onButtonClick('Info')" buttonType="info" label="Info"></app-button>
       </div>
     </div>
 
     <!-- Section: Outline & Flat Buttons -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Outline & Flat Buttons</h2>
       <div class="flex flex-wrap gap-3">
-        <app-button label="Outline" buttonType="outline" (clickEvent)="onButtonClick('Outline')"></app-button>
-        <app-button label="Flat" buttonType="flat" (clickEvent)="onButtonClick('Flat')"></app-button>
-        <app-button label="Outline Danger" buttonType="outline" customClass="!border-red-500 !text-red-500 hover:!bg-red-50" (clickEvent)="onButtonClick('Outline Danger')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Outline')" buttonType="outline" label="Outline"></app-button>
+        <app-button (clickEvent)="onButtonClick('Flat')" buttonType="flat" label="Flat"></app-button>
+        <app-button (clickEvent)="onButtonClick('Outline Danger')" buttonType="outline"
+                    customClass="!border-red-500 !text-red-500 hover:!bg-red-50"
+                    label="Outline Danger"></app-button>
       </div>
     </div>
 
     <!-- Section: Button Sizes -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Button Sizes</h2>
       <div class="flex flex-wrap gap-3 items-center">
-        <app-button label="Small" buttonType="primary" size="small" (clickEvent)="onButtonClick('Small')"></app-button>
-        <app-button label="Medium" buttonType="primary" size="medium" (clickEvent)="onButtonClick('Medium')"></app-button>
-        <app-button label="Large" buttonType="primary" size="large" (clickEvent)="onButtonClick('Large')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Small')" buttonType="primary" label="Small" size="small"></app-button>
+        <app-button (clickEvent)="onButtonClick('Medium')" buttonType="primary" label="Medium"
+                    size="medium"></app-button>
+        <app-button (clickEvent)="onButtonClick('Large')" buttonType="primary" label="Large" size="large"></app-button>
       </div>
     </div>
 
     <!-- Section: Button States -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Button States</h2>
       <div class="flex flex-wrap gap-3">
-        <app-button label="Disabled" buttonType="primary" [disabled]="true"></app-button>
-        <app-button label="Loading" buttonType="primary" [loading]="true"></app-button>
-        <app-button label="Toggle Loading" buttonType="info" [loading]="isLoading()" (clickEvent)="onButtonClick('Toggle Loading')"></app-button>
+        <app-button [disabled]="true" buttonType="primary" label="Disabled"></app-button>
+        <app-button [loading]="true" buttonType="primary" label="Loading"></app-button>
+        <app-button (clickEvent)="onButtonClick('Toggle Loading')" [loading]="isLoading()" buttonType="info"
+                    label="Toggle Loading"></app-button>
       </div>
     </div>
 
     <!-- Section: Buttons with Icons -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Buttons with Icons</h2>
       <div class="flex flex-wrap gap-3">
-        <app-button label="Save" buttonType="success" [iconClass]="faSave" (clickEvent)="onButtonClick('Save')"></app-button>
-        <app-button label="Delete" buttonType="danger" [iconClass]="faTrash" iconPosition="right" (clickEvent)="onButtonClick('Delete')"></app-button>
-        <app-button label="Edit" buttonType="secondary" [iconClass]="faEdit" (clickEvent)="onButtonClick('Edit')"></app-button>
-        <app-button [iconClass]="faStar" ariaLabel="Star" buttonType="warning"></app-button>
+        <app-button (clickEvent)="onButtonClick('Save')" [iconClass]="iconSave" buttonType="success"
+                    label="Save"></app-button>
+        <app-button (clickEvent)="onButtonClick('Delete')" [iconClass]="iconTrash" buttonType="danger" iconPosition="right"
+                    label="Delete"></app-button>
+        <app-button (clickEvent)="onButtonClick('Edit')" [iconClass]="iconEdit" buttonType="secondary"
+                    label="Edit"></app-button>
+        <app-button [iconClass]="iconStar" ariaLabel="Star" buttonType="warning"></app-button>
       </div>
     </div>
 
     <!-- Section: Full Width & Custom Class Buttons -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Full Width & Custom Class Buttons</h2>
       <div class="flex flex-col gap-3">
-        <app-button label="Full Width Button" buttonType="primary" [fullWidth]="true" (clickEvent)="onButtonClick('Full Width')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Full Width')" [fullWidth]="true" buttonType="primary"
+                    label="Full Width Button"></app-button>
         <app-button
-          label="Custom Purple"
+          (clickEvent)="onButtonClick('Custom Purple')"
           buttonType="primary"
           customClass="!bg-purple-600 hover:!bg-purple-700 !text-yellow-300 !rounded-full !shadow-lg"
-          (clickEvent)="onButtonClick('Custom Purple')"
+          label="Custom Purple"
         ></app-button>
         <app-button
-          label="Custom Border"
+          (clickEvent)="onButtonClick('Custom Border')"
           buttonType="flat"
           customClass="!border-2 !border-indigo-500 !text-indigo-700 hover:!bg-indigo-50"
-          (clickEvent)="onButtonClick('Custom Border')"
+          label="Custom Border"
         ></app-button>
       </div>
     </div>
 
     <!-- Section: Button Focus/Blur Events -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-xl font-semibold mb-4">Button Focus/Blur Events</h2>
       <div class="flex flex-wrap gap-3">
         <app-button
-          label="Focus Me"
-          buttonType="info"
+          (blurEvent)="onButtonBlur('Focus Me')"
           (clickEvent)="onButtonClick('Focus Me')"
           (focusEvent)="onButtonFocus('Focus Me')"
-          (blurEvent)="onButtonBlur('Focus Me')"
+          buttonType="info"
+          label="Focus Me"
         ></app-button>
       </div>
     </div>
 
     <!-- Section: Basic Input Types -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-full">
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
       <h2 class="text-xl font-semibold mb-4">Basic Input Types</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <app-input label="Text Input" type="text" placeholder="Enter text" [value]="textInputValue()" (valueChange)="onTextInputChange($event)"></app-input>
-        <app-input label="Password" type="password" placeholder="Enter password" [value]="passwordInputValue()" (valueChange)="onPasswordInputChange($event)"></app-input>
-        <app-input label="Email" type="email" placeholder="Enter email" [value]="emailInputValue()" (valueChange)="onEmailInputChange($event)"></app-input>
-        <app-input label="Number" type="number" placeholder="Enter number"></app-input>
+        <app-input (valueChange)="onTextInputChange($event)" [value]="textInputValue()" label="Text Input" placeholder="Enter text"
+                   type="text"></app-input>
+        <app-input (valueChange)="onPasswordInputChange($event)" [value]="passwordInputValue()" label="Password" placeholder="Enter password"
+                   type="password"></app-input>
+        <app-input (valueChange)="onEmailInputChange($event)" [value]="emailInputValue()" label="Email" placeholder="Enter email"
+                   type="email"></app-input>
+        <app-input label="Number" placeholder="Enter number" type="number"></app-input>
       </div>
     </div>
 
     <!-- Section: Input with Icons -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-full">
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
       <h2 class="text-xl font-semibold mb-4">Input with Icons</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <app-input label="Username" type="text" placeholder="Enter username" [prefixIcon]="faUser" (focusEvent)="onInputFocus('Username')" (blurEvent)="onInputBlur('Username')"></app-input>
-        <app-input label="Password" type="password" placeholder="Enter password" [prefixIcon]="faLock" [suffixIcon]="faEye" (focusEvent)="onInputFocus('Password')" (blurEvent)="onInputBlur('Password')"></app-input>
-        <app-input label="Search" type="search" placeholder="Search..." [suffixIcon]="faSearch" (valueChange)="onSearchInputChange($event)"></app-input>
-        <app-input label="Email" type="email" placeholder="your@example.com" [prefixIcon]="faEnvelope"></app-input>
+        <app-input (blurEvent)="onInputBlur('Username')" (focusEvent)="onInputFocus('Username')" [prefixIconClass]="iconUser" label="Username"
+                   placeholder="Enter username" type="text"></app-input>
+        <app-input (blurEvent)="onInputBlur('Password')" (focusEvent)="onInputFocus('Password')" [prefixIconClass]="iconLock" [suffixIconClass]="iconEye"
+                   label="Password" placeholder="Enter password"
+                   type="password"></app-input>
+        <app-input (valueChange)="onSearchInputChange($event)" [suffixIconClass]="iconSearch" label="Search" placeholder="Search..."
+                   type="search"></app-input>
+        <app-input [prefixIconClass]="iconEnvelope" label="Email" placeholder="your@example.com"
+                   type="email"></app-input>
       </div>
     </div>
 
     <!-- Section: Input States & Customization -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-full">
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
       <h2 class="text-xl font-semibold mb-4">Input States & Customization</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <app-input label="Disabled Input" type="text" placeholder="Cannot type here" [disabled]="true"></app-input>
-        <app-input label="Readonly Input" type="text" value="This is readonly" [readonly]="true"></app-input>
-        <app-input label="Required Field" type="text" placeholder="This field is required" [required]="true"></app-input>
+        <app-input [disabled]="true" label="Disabled Input" placeholder="Cannot type here" type="text"></app-input>
+        <app-input [readonly]="true" label="Readonly Input" type="text" value="This is readonly"></app-input>
+        <app-input [required]="true" label="Required Field" placeholder="This field is required"
+                   type="text"></app-input>
         <app-input
-          label="Input with Error"
-          type="text"
-          placeholder="Enter something"
-          [value]="inputWithError()"
           (valueChange)="onInputWithErrorChange($event)"
           [errorMessage]="hasError() ? 'This field is invalid' : ''"
+          [value]="inputWithError()"
+          label="Input with Error"
+          placeholder="Enter something"
+          type="text"
         ></app-input>
-        <app-button label="Toggle Input Error" buttonType="info" (clickEvent)="onButtonClick('Toggle Input Error')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Toggle Input Error')" buttonType="info"
+                    label="Toggle Input Error"></app-button>
       </div>
     </div>
 
     <!-- Section: Checkbox Types -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-full">
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
       <h2 class="text-xl font-semibold mb-4">Checkbox Types</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <app-checkbox label="Remember Me" name="rememberMe" [checked]="rememberMe()" (checkedChange)="onRememberMeChange($event)" (focusEvent)="onCheckboxFocus('Remember Me')" (blurEvent)="onCheckboxBlur('Remember Me')"></app-checkbox>
-        <app-checkbox label="I agree to the terms and conditions" name="agreeTerms" [checked]="agreeTerms()" (checkedChange)="onAgreeTermsChange($event)"></app-checkbox>
-        <app-checkbox label="Disabled Checkbox" name="disabledCheckbox" [checked]="false" [disabled]="true"></app-checkbox>
+        <app-checkbox (blurEvent)="onCheckboxBlur('Remember Me')" (checkedChange)="onRememberMeChange($event)" (focusEvent)="onCheckboxFocus('Remember Me')"
+                      [checked]="rememberMe()" label="Remember Me"
+                      name="rememberMe"></app-checkbox>
+        <app-checkbox (checkedChange)="onAgreeTermsChange($event)" [checked]="agreeTerms()" label="I agree to the terms and conditions"
+                      name="agreeTerms"></app-checkbox>
+        <app-checkbox [checked]="false" [disabled]="true" label="Disabled Checkbox"
+                      name="disabledCheckbox"></app-checkbox>
         <app-checkbox
-          label="Checkbox with Error"
-          name="checkboxError"
+          (blurEvent)="onCheckboxBlur('Checkbox with Error')"
+          (focusEvent)="onCheckboxFocus('Checkbox with Error')"
           [checked]="false"
           [customClass]="toggleCheckboxError() ? '!border-red-500 !ring-red-500' : ''"
-          (focusEvent)="onCheckboxFocus('Checkbox with Error')"
-          (blurEvent)="onCheckboxBlur('Checkbox with Error')"
+          label="Checkbox with Error"
+          name="checkboxError"
         ></app-checkbox>
-        <app-button label="Toggle Checkbox Error" buttonType="info" (clickEvent)="onButtonClick('Toggle Checkbox Error')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Toggle Checkbox Error')" buttonType="info"
+                    label="Toggle Checkbox Error"></app-button>
       </div>
     </div>
 
     <!-- Section: Textarea Types -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-full">
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
       <h2 class="text-xl font-semibold mb-4">Textarea Types</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <app-textarea label="Comments" name="comments" placeholder="Enter your comments here..." [value]="commentText()" (valueChange)="onCommentTextChange($event)" (focusEvent)="onTextareaFocus('Comments')" (blurEvent)="onTextareaBlur('Comments')"></app-textarea>
-        <app-textarea label="Description" name="description" placeholder="A longer description..." [value]="descriptionText()" [rows]="5" (valueChange)="onDescriptionTextChange($event)"></app-textarea>
-        <app-textarea label="Disabled Textarea" name="disabledTextarea" value="This is disabled" [disabled]="true"></app-textarea>
-        <app-textarea label="Readonly Textarea" name="readonlyTextarea" value="This is readonly content." [readonly]="true"></app-textarea>
+        <app-textarea (blurEvent)="onTextareaBlur('Comments')" (focusEvent)="onTextareaFocus('Comments')" (valueChange)="onCommentTextChange($event)" [value]="commentText()"
+                      label="Comments" name="comments"
+                      placeholder="Enter your comments here..."></app-textarea>
+        <app-textarea (valueChange)="onDescriptionTextChange($event)" [rows]="5" [value]="descriptionText()"
+                      label="Description" name="description"
+                      placeholder="A longer description..."></app-textarea>
+        <app-textarea [disabled]="true" label="Disabled Textarea" name="disabledTextarea"
+                      value="This is disabled"></app-textarea>
+        <app-textarea [readonly]="true" label="Readonly Textarea" name="readonlyTextarea"
+                      value="This is readonly content."></app-textarea>
         <app-textarea
+          (valueChange)="onDescriptionTextChange($event)"
+          [errorMessage]="textareaHasError() ? 'This field is required' : ''"
+          [value]="descriptionText()"
           label="Textarea with Error"
           name="textareaError"
           placeholder="Enter something"
-          [value]="descriptionText()"
-          (valueChange)="onDescriptionTextChange($event)"
-          [errorMessage]="textareaHasError() ? 'This field is required' : ''"
         ></app-textarea>
-        <app-button label="Toggle Textarea Error" buttonType="info" (clickEvent)="onButtonClick('Toggle Textarea Error')"></app-button>
+        <app-button (clickEvent)="onButtonClick('Toggle Textarea Error')" buttonType="info"
+                    label="Toggle Textarea Error"></app-button>
       </div>
     </div>
 
+    <!-- Section: Badge & Card Components -->
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
+      <h2 class="text-xl font-semibold mb-4">Badge & Card Components</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-card title="Expense Summary">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <app-badge label="Total: $1,200" type="primary"></app-badge>
+            <app-badge label="Food: $300" type="danger"></app-badge>
+            <app-badge label="Transport: $150" type="warning"></app-badge>
+            <app-badge label="Utilities: $200" type="neutral"></app-badge>
+            <app-badge label="Savings: $550" type="success"></app-badge>
+          </div>
+          <p class="text-slate-600">This card displays a summary of your monthly expenses using various badge types.</p>
+        </app-card>
+
+        <app-card customClass="border border-indigo-300">
+          <h3 class="text-lg font-medium text-indigo-700 mb-2">Custom Card Example</h3>
+          <p class="text-slate-600">This is a card with custom styling and content directly inside it, without a title
+            prop.</p>
+          <div class="mt-4">
+            <app-badge label="New Feature" type="primary"></app-badge>
+            <app-badge customClass="ml-2" label="Beta" type="warning"></app-badge>
+          </div>
+        </app-card>
+      </div>
+    </div>
+
+    <!-- Section: Select Component -->
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
+      <h2 class="text-xl font-semibold mb-4">Select Component</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <app-select
+          (blurEvent)="onSelectBlur('Expense Category')"
+          (focusEvent)="onSelectFocus('Expense Category')"
+          (valueChange)="onCategoryChange($event)"
+          [options]="categoryOptions"
+          [value]="selectedCategory()"
+          label="Expense Category"
+          name="expenseCategory"
+          placeholder="Choose a category"
+        ></app-select>
+        <app-select
+          (valueChange)="onSelectWithErrorChange($event)"
+          [errorMessage]="selectHasError() ? 'Please select a valid option' : ''"
+          [options]="categoryOptions"
+          [value]="selectWithError()"
+          label="Select with Error"
+          name="selectWithError"
+          placeholder="Choose an option"
+        ></app-select>
+        <app-button (clickEvent)="onButtonClick('Toggle Select Error')" buttonType="info"
+                    label="Toggle Select Error"></app-button>
+      </div>
+    </div>
+
+    <!-- Section: Modal Component -->
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
+      <h2 class="text-xl font-semibold mb-4">Modal Component</h2>
+      <div class="flex flex-wrap gap-3">
+        <app-button (clickEvent)="onButtonClick('Open Modal')" buttonType="primary" label="Open Modal"></app-button>
+      </div>
+
+      <app-modal (closeEvent)="onModalClose()" [isOpen]="isModalOpen()" title="Add New Expense">
+        <p class="text-slate-700 mb-4">This is the content of the modal. You can place any form or information here.</p>
+        <div class="grid grid-cols-1 gap-4">
+          <app-input label="Amount" placeholder="Enter amount" type="number"></app-input>
+          <app-select [options]="categoryOptions" label="Category" placeholder="Select category"></app-select>
+          <app-textarea label="Notes" placeholder="Add some notes..."></app-textarea>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+          <app-button (clickEvent)="onModalClose()" buttonType="secondary" label="Cancel"></app-button>
+          <app-button buttonType="success" label="Save Expense"></app-button>
+        </div>
+      </app-modal>
+    </div>
+
+    <!-- Section: Toast Demo Buttons -->
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
+      <h2 class="text-xl font-semibold mb-4">Toast Notifications</h2>
+      <div class="flex flex-wrap gap-3">
+        <app-button (clickEvent)="onButtonClick('Show Success Toast')" buttonType="success"
+                    label="Show Success Toast"></app-button>
+        <app-button (clickEvent)="onButtonClick('Show Warning Toast')" buttonType="warning"
+                    label="Show Warning Toast"></app-button>
+        <app-button (clickEvent)="onButtonClick('Show Danger Toast')" buttonType="danger"
+                    label="Show Danger Toast"></app-button>
+        <app-button (clickEvent)="onButtonClick('Show Info Toast')" buttonType="info"
+                    label="Show Info Toast"></app-button>
+      </div>
+    </div>
+
+    <!-- Section: Table Component -->
+    <div class="bg-white p-6 rounded-lg shadow-sm col-span-full">
+      <h2 class="text-xl font-semibold mb-4">Table Component</h2>
+      <app-table
+        [columns]="tableColumns"
+        [data]="tableData"
+        [selectable]="true"
+        (rowClick)="onRowClicked($event)"
+        (selectionChange)="onSelectionChange($event)"
+      ></app-table>
+    </div>
   </div>
 </main>
 
 <router-outlet />
+<app-toast-container />

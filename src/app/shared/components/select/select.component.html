@@ -1,0 +1,38 @@
+<div class="mb-4">
+  @if (label) {
+    <label [for]="_id" [ngClass]="labelClasses">
+      {{ label }}
+      @if (required) {
+        <span class="text-red-500">*</span>
+      }
+    </label>
+  }
+  <div [ngClass]="wrapperClasses">
+    <select
+      (blur)="onBlur($event)"
+      (change)="onChange($event)"
+      (focus)="onFocus($event)"
+      [attr.aria-describedby]="errorMessage ? 'error-' + _id : null"
+      [disabled]="disabled"
+      [id]="_id"
+      [name]="name"
+      [ngClass]="selectClasses"
+      [required]="required"
+      [value]="value"
+    >
+      @if (placeholder) {
+        <option [selected]="!value" disabled value="">{{ placeholder }}</option>
+      }
+      @for (option of options; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+    <i [ngClass]="arrowIconClasses" class="fa-solid fa-chevron-down"></i>
+  </div>
+  @if (errorMessage) {
+    <p [@errorMessageAnimation] [id]="'error-' + _id" [ngClass]="errorTextClasses">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </p>
+  }
+</div>
