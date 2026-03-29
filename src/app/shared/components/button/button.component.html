@@ -1,0 +1,24 @@
+<button
+  (blur)="onBlur($event)"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  [attr.aria-label]="ariaLabel || label"
+  [disabled]="disabled || loading"
+  [ngClass]="buttonClasses"
+  [type]="type"
+>
+  <!-- Icon (visible if iconClass is provided and not loading) -->
+  @if (iconClass && !loading) {
+    <i [ngClass]="iconClass"></i>
+  }
+
+  <!-- Loading Spinner (visible if loading is true) -->
+  @if (loading) {
+    <i class="fa-solid fa-spinner fa-spin"></i>
+  }
+
+  <!-- Label (visible if not loading) -->
+  @if (!loading) {
+    <span>{{ label }}</span>
+  }
+</button>
