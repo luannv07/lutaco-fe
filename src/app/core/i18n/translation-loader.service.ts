@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateLoader } from '@ngx-translate/core';
-import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
 // Defines the structure for a module to be loaded
@@ -24,6 +24,8 @@ export class TranslationLoaderService implements TranslateLoader {
     { name: 'common', fileName: 'common' }, // Chỉ load common lúc khởi động
   ];
 
+  private cache = new Map<string, any>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -33,11 +35,17 @@ export class TranslationLoaderService implements TranslateLoader {
    * @returns An Observable with the translation object for that module.
    */
   public loadTranslationFile(lang: string, fileName: string): Observable<any> {
+    const cacheKey = `${lang}:${fileName}`;
+
+    if (this.cache.has(cacheKey)) {
+      return of(this.cache.get(cacheKey)); // ← Trả về cache, không gọi HTTP
+    }
+
     return this.http.get(`${this.basePath}${lang}/${fileName}.json`).pipe(
-      catchError(() => of({})), // ← Trả về rỗng nếu file không tồn tại
+      tap((data) => this.cache.set(cacheKey, data)), // ← Lưu vào cache
+      catchError(() => of({})),
     );
   }
-
   /**
    * Loads multiple translation files for a given language and module file names, then merges them.
    * @param lang The language code.
