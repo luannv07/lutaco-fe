@@ -1,14 +1,33 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { ButtonComponent } from './components/button/button.component';
+import { InputComponent } from './components/input/input.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { TextareaComponent } from './components/textarea/textarea.component';
+import { BadgeComponent } from './components/badge/badge.component';
+import { CardComponent } from './components/card/card.component';
+import { SelectComponent } from './components/select/select.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { TableComponent } from './components/table/table.component';
 
-/**
- * An array of commonly used modules for standalone components.
- * Import this array and spread it into the 'imports' array of your component
- * to easily include common functionalities.
- */
 export const SHARED_IMPORTS = [
-  // Angular common modules
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
+  RouterModule,
+  TranslateModule,
+];
+
+export const SHARED_COMPONENTS = [
+  ButtonComponent,
+  InputComponent,
+  CheckboxComponent,
+  TextareaComponent,
+  BadgeComponent,
+  CardComponent,
+  SelectComponent,
+  ModalComponent,
+  TableComponent,
 ];

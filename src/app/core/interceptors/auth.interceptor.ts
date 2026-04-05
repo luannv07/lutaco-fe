@@ -24,8 +24,8 @@ export const authInterceptor: HttpInterceptorFn = (
   const currentLang: string = translateService.currentLang || translateService.defaultLang || 'vi';
 
   // Get the JWT token from local storage.
-  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-
+  const token =
+    typeof localStorage !== 'undefined' ? localStorage.getItem(TOKEN_STORAGE_KEY) : null;
   // Check if the request is for a public API.
   const isPublicApi = PUBLIC_API_ENDPOINTS.some((endpoint) => req.url.includes(endpoint));
 

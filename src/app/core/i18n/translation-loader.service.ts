@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateLoader } from '@ngx-translate/core';
-import { forkJoin, map, Observable, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 // Defines the structure for a module to be loaded
 interface TranslationModuleConfig {
@@ -14,13 +15,13 @@ interface TranslationModuleConfig {
 })
 export class TranslationLoaderService implements TranslateLoader {
   // Base path for translation files
-  private readonly basePath = './assets/i18n/';
+  private readonly basePath = '/assets/i18n/';
+  private platformId = inject(PLATFORM_ID); // ← Thêm
 
   // List of modules to load by default when the application starts.
   // These are typically common or core translations.
   private readonly initialModules: TranslationModuleConfig[] = [
-    { name: 'common', fileName: 'common' },
-    { name: 'auth', fileName: 'auth' }, // Example: Auth translations loaded initially
+    { name: 'common', fileName: 'common' }, // Chỉ load common lúc khởi động
   ];
 
   constructor(private http: HttpClient) {}
@@ -32,8 +33,9 @@ export class TranslationLoaderService implements TranslateLoader {
    * @returns An Observable with the translation object for that module.
    */
   public loadTranslationFile(lang: string, fileName: string): Observable<any> {
-    // Updated path structure: assets/i18n/lang/fileName.json
-    return this.http.get(`${this.basePath}${lang}/${fileName}.json`);
+    return this.http.get(`${this.basePath}${lang}/${fileName}.json`).pipe(
+      catchError(() => of({})), // ← Trả về rỗng nếu file không tồn tại
+    );
   }
 
   /**
@@ -64,6 +66,11 @@ export class TranslationLoaderService implements TranslateLoader {
    * @returns An Observable with the merged initial translations.
    */
   getTranslation(lang: string): Observable<any> {
+    // Server không load được file → trả về rỗng, client sẽ load lại
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({});
+    }
+
     return this.loadMultipleTranslationFiles(
       lang,
       this.initialModules.map((m) => m.fileName),

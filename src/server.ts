@@ -2,7 +2,7 @@ import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
   isMainModule,
-  writeResponseToNodeResponse,
+  writeResponseToNodeResponse
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
@@ -34,7 +34,8 @@ app.use(
     redirect: false,
   }),
 );
-
+app.use('/assets', express.static(join(process.cwd(), 'src/assets')));
+app.use('/assets', (req, res) => res.status(404).end());
 /**
  * Handle all other requests by rendering the Angular application.
  */

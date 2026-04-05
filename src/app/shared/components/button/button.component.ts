@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { SHARED_IMPORTS } from '../../base-imports'; // Corrected import path
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [...SHARED_IMPORTS], // Use SHARED_IMPORTS
+  imports: [CommonModule], // Use SHARED_IMPORTS
   templateUrl: './button.component.html',
   styleUrl: './button.component.css',
 })
