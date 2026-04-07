@@ -15,10 +15,13 @@
     "table": {
       "actions": "Actions",
       "no_data": "No data available"
+    },
+    "updating": "That feature is coming soon...",
+    "toast": {
+      "info": "Information",
+      "success": "Success",
+      "warn": "Warning",
+      "danger": "Danger!"
     }
-  },
-  "menu": {
-    "dashboard": "Dashboard",
-    "my_address": "My Address"
   }
 }

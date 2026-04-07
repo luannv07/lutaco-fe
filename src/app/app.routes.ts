@@ -24,6 +24,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard', // ← Redirect về dashboard, authGuard sẽ tự đẩy về login nếu chưa auth
+    redirectTo: 'dashboard',
   },
 ];

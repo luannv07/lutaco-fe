@@ -1,4 +1,4 @@
-<div class="mb-4">
+<div class="mb-2">
   @if (label) {
     <label [for]="type" [ngClass]="labelClasses">
       {{ label }}
@@ -17,6 +17,7 @@
 
     <!-- Input Field -->
     <input
+      #inputEl
       (blur)="onBlur($event)"
       (focus)="onFocus($event)"
       (input)="onInput($event)"
@@ -29,6 +30,7 @@
       [required]="required"
       [type]="type"
       [value]="value"
+      [attr.autofocus]="autoFocus ? '' : null"
     />
 
     <!-- Suffix Icon -->

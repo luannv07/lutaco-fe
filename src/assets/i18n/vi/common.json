@@ -15,10 +15,13 @@
     "table": {
       "actions": "Hành động",
       "no_data": "Không có dữ liệu"
+    },
+    "updating": "Tính năng sẽ sớm được cập nhật...",
+    "toast": {
+      "info": "Thông tin",
+      "success": "Thành công",
+      "warn": "Cảnh báo",
+      "danger": "Nguy hiểm!"
     }
-  },
-  "menu": {
-    "dashboard": "Bảng điều khiển",
-    "my_address": "Địa chỉ của tôi"
   }
 }

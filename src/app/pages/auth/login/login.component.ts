@@ -9,6 +9,9 @@ import { finalize } from 'rxjs';
 import { SHARED_COMPONENTS, SHARED_IMPORTS } from '../../../shared/base-imports';
 import { AuthData, AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/i18n/language.service';
+import { Toast } from '../../../shared/models/toast.model';
+import { ToastService } from '../../../shared/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +25,40 @@ export class LoginComponent {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private toastService: ToastService = inject(ToastService);
+  private translateService = inject(TranslateService);
+  private langService = inject(LanguageService);
+  // private datePipe = inject(DatePipe);
 
   loading = false;
   errorMessage = '';
 
   form: FormGroup = this.fb.group({
     username: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required]],
   });
+
+  toast: Toast = {
+    title: 'common.toast.info',
+    type: 'info',
+    message: 'common.updating',
+    visible: false,
+  };
+
+  /**
+   * Translates a given key.
+   * @param key The translation key.
+   * @returns The translated string.
+   */
+  translate(key: string): string {
+    return this.translateService.instant(key);
+  }
+
+  showToast() {
+    const title = this.translate(this.toast.title);
+    const message = this.translate(this.toast.message);
+    this.toastService.info(title, message);
+  }
 
   get usernameError(): string {
     const ctrl = this.form.get('username');
@@ -40,7 +69,6 @@ export class LoginComponent {
   get passwordError(): string {
     const ctrl = this.form.get('password');
     if (ctrl?.touched && ctrl?.hasError('required')) return 'auth.login.errors.password_required';
-    if (ctrl?.touched && ctrl?.hasError('minlength')) return 'auth.login.errors.password_minlength';
     return '';
   }
 
@@ -80,15 +108,16 @@ export class LoginComponent {
         },
         error: (err) => {
           this.errorMessage = err?.error?.message || 'auth.login.errors.failed';
+          if (err?.error?.params?.retryAt) {
+            this.errorMessage = this.errorMessage.concat('(' + err?.error?.params.retryAt + ')');
+          }
         },
       });
   }
-  private langService = inject(LanguageService);
 
   get currentLang(): string {
     return this.langService.getCurrentLanguage();
   }
-
   switchLang(): void {
     const next = this.currentLang === 'vi' ? 'en' : 'vi';
     this.langService.setLanguage(next);

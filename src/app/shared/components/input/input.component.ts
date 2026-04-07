@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations'; // Import animation modules
 
@@ -39,7 +39,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]),
   ],
 })
-export class InputComponent {
+export class InputComponent implements AfterViewInit {
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
+
   @Input() label: string = '';
   @Input() type: 'text' | 'password' | 'email' | 'number' | 'search' = 'text';
   @Input() value: string | number = '';
@@ -49,6 +51,7 @@ export class InputComponent {
   @Input() required: boolean = false;
   @Input() errorMessage: string = '';
   @Input() customClass: string = '';
+  @Input() autoFocus: boolean = false;
 
   @Input() prefixIconClass: string = '';
   @Input() suffixIconClass: string = '';
@@ -57,7 +60,14 @@ export class InputComponent {
   @Output() focusEvent = new EventEmitter<FocusEvent>();
   @Output() blurEvent = new EventEmitter<FocusEvent>();
   @Output() inputEvent = new EventEmitter<Event>();
-
+  // fix loi auto focus
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      setTimeout(() => {
+        this.inputEl?.nativeElement?.focus();
+      });
+    }
+  }
   get inputClasses(): string[] {
     let classes: string[] = [
       'block',
@@ -135,7 +145,7 @@ export class InputComponent {
   }
 
   get labelClasses(): string[] {
-    return ['text-sm', 'font-medium', 'text-slate-700', 'mb-1.5']; // Label: mb-1.5 (6px)
+    return ['text-sm', 'font-medium', 'text-slate-700', 'mb-1.5', 'block']; // Label: mb-1.5 (6px)
   }
 
   get errorTextClasses(): string[] {

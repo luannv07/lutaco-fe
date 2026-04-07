@@ -1,62 +1,12 @@
-<div class="fixed top-4 right-4 z-50 flex flex-col gap-3 w-80 pointer-events-none">
-  @if ((toasts$ | async)?.length) {
-    <div class="fixed inset-0 z-[9999] pointer-events-none">
-      <!-- Top Right -->
-      <div class="absolute top-4 right-4 flex flex-col items-end space-y-2 pointer-events-auto">
-        @for (toast of (toasts$ | async); track toast.id) {
-          @if (toast.position === 'top-right') {
-            <app-toast
-              (close)="removeToast(toast.id)"
-              [message]="toast.message"
-              [title]="toast.title"
-              [type]="toast.type"
-            ></app-toast>
-          }
-        }
-      </div>
-
-      <!-- Top Left -->
-      <div class="absolute top-4 left-4 flex flex-col items-start space-y-2 pointer-events-auto">
-        @for (toast of (toasts$ | async); track toast.id) {
-          @if (toast.position === 'top-left') {
-            <app-toast
-              (close)="removeToast(toast.id)"
-              [message]="toast.message"
-              [title]="toast.title"
-              [type]="toast.type"
-            ></app-toast>
-          }
-        }
-      </div>
-
-      <!-- Bottom Right -->
-      <div class="absolute bottom-4 right-4 flex flex-col items-end space-y-2 pointer-events-auto">
-        @for (toast of (toasts$ | async); track toast.id) {
-          @if (toast.position === 'bottom-right') {
-            <app-toast
-              (close)="removeToast(toast.id)"
-              [message]="toast.message"
-              [title]="toast.title"
-              [type]="toast.type"
-            ></app-toast>
-          }
-        }
-      </div>
-
-      <!-- Bottom Left -->
-      <div class="absolute bottom-4 left-4 flex flex-col items-start space-y-2 pointer-events-auto">
-        @for (toast of (toasts$ | async); track toast.id) {
-          @if (toast.position === 'bottom-left') {
-            <app-toast
-              (close)="removeToast(toast.id)"
-              [message]="toast.message"
-              [title]="toast.title"
-              [type]="toast.type"
-            ></app-toast>
-          }
-        }
-      </div>
-    </div>
+<div class="fixed top-4 right-4 z-[9999] flex flex-col items-end gap-2 pointer-events-none">
+  @for (toast of toasts$ | async; track toast.id) {
+    <app-toast
+      [title]="toast.title"
+      [message]="toast.message"
+      [type]="toast.type"
+      [duration]="toast.duration"
+      (close)="removeToast(toast.id)"
+      class="pointer-events-auto"
+    ></app-toast>
   }
-
 </div>
