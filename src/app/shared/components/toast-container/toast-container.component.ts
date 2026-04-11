@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-toast-container',
-  standalone: true,
+
   imports: [CommonModule, ToastComponent],
   templateUrl: './toast-container.component.html',
   styleUrl: './toast-container.component.css',

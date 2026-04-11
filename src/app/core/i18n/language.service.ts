@@ -10,9 +10,20 @@ const LANG_STORAGE_KEY = 'current_lang';
 export class LanguageService {
   public readonly availableLangs = ['en', 'vi'];
   private translate = inject(TranslateService);
+  public currentLang = toSignal(
+    this.translate.onLangChange.pipe(
+      map((e) => e.lang),
+      startWith(this.getCurrentLanguage()),
+    ),
+    { initialValue: this.getCurrentLanguage() },
+  );
   private translationLoader = inject(TranslationLoaderService);
   private platformId = inject(PLATFORM_ID); // ← Thêm
   private loadedModules = new Set<string>();
+
+  constructor() {
+    this.initLanguage();
+  }
 
   public loadTranslationModules(lang: string, modulePaths: string[]): Observable<any> {
     // Lưu lại module đã load
@@ -42,16 +53,6 @@ export class LanguageService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem(LANG_STORAGE_KEY, lang);
     }
-  }
-  public currentLang = toSignal(
-    this.translate.onLangChange.pipe(
-      map((e) => e.lang),
-      startWith(this.getCurrentLanguage()),
-    ),
-    { initialValue: this.getCurrentLanguage() },
-  );
-  constructor() {
-    this.initLanguage();
   }
 
   public getCurrentLanguage(): string {

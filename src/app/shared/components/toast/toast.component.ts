@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-export type ToastType = 'success' | 'warning' | 'danger' | 'info';
+export type ToastType = 'success' | 'warning' | 'error' | 'info';
 @Component({
   selector: 'app-toast',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.css',
@@ -46,7 +46,7 @@ export class ToastComponent {
       case 'warning':
         classes.push('bg-amber-50', 'border-amber-500', 'text-amber-800');
         break;
-      case 'danger':
+      case 'error':
         classes.push('bg-red-50', 'border-red-500', 'text-red-800');
         break;
       case 'info':
@@ -75,7 +75,7 @@ export class ToastComponent {
         return 'fa-solid fa-circle-check';
       case 'warning':
         return 'fa-solid fa-triangle-exclamation';
-      case 'danger':
+      case 'error':
         return 'fa-solid fa-circle-xmark';
       case 'info':
         return 'fa-solid fa-circle-info';

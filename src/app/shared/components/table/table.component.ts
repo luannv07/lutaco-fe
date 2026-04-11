@@ -5,7 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  Output,
+  Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,7 +24,7 @@ export type TableVariant = 'default' | 'striped' | 'bordered';
 
 @Component({
   selector: 'app-table',
-  standalone: true,
+
   imports: [CommonModule, FormsModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css', // Changed from .scss to .css

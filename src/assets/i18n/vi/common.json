@@ -21,7 +21,10 @@
       "info": "Thông tin",
       "success": "Thành công",
       "warn": "Cảnh báo",
-      "danger": "Nguy hiểm!"
+      "error": "Lỗi!"
+    },
+    "errors": {
+      "unexpectedError": "Đã xảy ra lỗi ko xác định."
     }
   }
 }

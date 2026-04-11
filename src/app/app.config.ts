@@ -1,4 +1,4 @@
-import { ApplicationConfig, APP_INITIALIZER, inject, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
@@ -7,7 +7,6 @@ import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { TranslationLoaderService } from './core/i18n/translation-loader.service';
 import { LanguageService } from './core/i18n/language.service';
-import { forkJoin, of } from 'rxjs';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslationLoaderService(http);

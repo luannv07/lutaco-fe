@@ -21,7 +21,10 @@
       "info": "Information",
       "success": "Success",
       "warn": "Warning",
-      "danger": "Danger!"
+      "error": "Error"
+    },
+    "errors": {
+      "unexpectedError": "An unexpected error occurred."
     }
   }
 }

@@ -4,7 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-textarea',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './textarea.component.html',
   styleUrl: './textarea.component.css',

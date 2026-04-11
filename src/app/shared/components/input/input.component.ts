@@ -1,10 +1,18 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations'; // Import animation modules
 
 @Component({
   selector: 'app-input',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
@@ -60,14 +68,7 @@ export class InputComponent implements AfterViewInit {
   @Output() focusEvent = new EventEmitter<FocusEvent>();
   @Output() blurEvent = new EventEmitter<FocusEvent>();
   @Output() inputEvent = new EventEmitter<Event>();
-  // fix loi auto focus
-  ngAfterViewInit() {
-    if (this.autoFocus) {
-      setTimeout(() => {
-        this.inputEl?.nativeElement?.focus();
-      });
-    }
-  }
+
   get inputClasses(): string[] {
     let classes: string[] = [
       'block',
@@ -157,6 +158,15 @@ export class InputComponent implements AfterViewInit {
       'items-center',
       'gap-1',
     ];
+  }
+
+  // fix loi auto focus
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      setTimeout(() => {
+        this.inputEl?.nativeElement?.focus();
+      });
+    }
   }
 
   onInput(event: Event): void {

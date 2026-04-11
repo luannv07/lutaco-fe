@@ -60,13 +60,13 @@ export class ToastService {
     this.show(title, message, 'warning', position, duration);
   }
 
-  danger(
+  error(
     title: string,
     message: string,
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
-    this.show(title, message, 'danger', position, duration);
+    this.show(title, message, 'error', position, duration);
   }
 
   info(

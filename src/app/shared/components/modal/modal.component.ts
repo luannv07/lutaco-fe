@@ -11,7 +11,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-modal',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',

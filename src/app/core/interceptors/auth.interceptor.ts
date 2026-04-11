@@ -13,7 +13,6 @@ const PUBLIC_API_ENDPOINTS: string[] = [
   ApiEndpoints.AUTH.REGISTER,
   ApiEndpoints.AUTH.REFRESH_TOKEN,
 ];
-
 // This interceptor attaches JWT and language headers to requests.
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,

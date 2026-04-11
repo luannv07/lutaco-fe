@@ -38,23 +38,23 @@
     <!-- Fields -->
     <div class="flex flex-col gap-4">
       <app-input
-        [label]="'auth.login.username' | translate"
-        [placeholder]="'auth.login.username_placeholder' | translate"
-        [errorMessage]="usernameError | translate"
-        [value]="form.get('username')?.value"
-        prefixIconClass="fa-solid fa-user"
         (valueChange)="onUsernameChange($event)"
         [autoFocus]="true"
+        [errorMessage]="usernameError | translate"
+        [label]="'auth.login.username' | translate"
+        [placeholder]="'auth.login.username_placeholder' | translate"
+        [value]="form.get('username')?.value"
+        prefixIconClass="fa-solid fa-user"
       />
       <app-input
-        [label]="'auth.login.password' | translate"
-        [placeholder]="'auth.login.password_placeholder' | translate"
-        [errorMessage]="passwordError | translate"
-        [value]="form.get('password')?.value"
-        type="password"
-        prefixIconClass="fa-solid fa-lock"
         (valueChange)="onPasswordChange($event)"
         [autoFocus]="false"
+        [errorMessage]="passwordError | translate"
+        [label]="'auth.login.password' | translate"
+        [placeholder]="'auth.login.password_placeholder' | translate"
+        [value]="form.get('password')?.value"
+        prefixIconClass="fa-solid fa-lock"
+        type="password"
       />
     </div>
 
@@ -68,18 +68,18 @@
 
     <!-- Submit -->
     <app-button
+      [fullWidth]="true"
       [label]="'auth.login.submit' | translate"
       [loading]="loading"
-      [fullWidth]="true"
-      [type]="'submit'"
       size="large"
+      [type]="'submit'"
     />
 
     <!-- Register -->
     <p class="text-center text-sm text-slate-500 mt-6">
       {{ 'auth.login.no_account' | translate }}
-      <a routerLink="/auth/register"
-         class="text-indigo-600 hover:text-indigo-500 font-semibold ml-1 transition-colors">
+      <a class="text-indigo-600 hover:text-indigo-500 font-semibold ml-1 transition-colors"
+         routerLink="/auth/register">
         {{ 'auth.login.register' | translate }}
       </a>
     </p>
