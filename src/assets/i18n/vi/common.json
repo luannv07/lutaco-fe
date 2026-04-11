@@ -1,30 +1,38 @@
 {
   "common": {
-    "buttons": {
-      "save": "Lưu",
-      "cancel": "Hủy",
-      "delete": "Xóa",
-      "search": "Tìm kiếm",
-      "create": "Tạo mới"
+    "ui": {
+      "buttons": {
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "delete": "Xóa",
+        "search": "Tìm kiếm",
+        "create": "Tạo mới"
+      },
+      "table": {
+        "actions": "Hành động",
+        "noData": "Không có dữ liệu"
+      },
+      "status": {
+        "updating": "Tính năng sẽ sớm được cập nhật..."
+      },
+      "toast": {
+        "info": "Thông tin",
+        "success": "Thành công",
+        "warn": "Cảnh báo",
+        "error": "Lỗi!"
+      }
     },
+
     "messages": {
-      "confirm_delete": "Bạn có chắc chắn muốn xóa mục này không?",
+      "confirmDelete": "Bạn có chắc chắn muốn xóa mục này không?",
       "success": "Thao tác thành công!",
       "error": "Có lỗi xảy ra, vui lòng thử lại."
     },
-    "table": {
-      "actions": "Hành động",
-      "no_data": "Không có dữ liệu"
-    },
-    "updating": "Tính năng sẽ sớm được cập nhật...",
-    "toast": {
-      "info": "Thông tin",
-      "success": "Thành công",
-      "warn": "Cảnh báo",
-      "error": "Lỗi!"
-    },
-    "errors": {
-      "unexpectedError": "Đã xảy ra lỗi ko xác định."
+
+    "validation": {
+      "common": {
+        "unexpectedError": "Đã xảy ra lỗi không xác định."
+      }
     }
   }
 }

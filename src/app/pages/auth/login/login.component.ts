@@ -20,9 +20,9 @@ export class LoginComponent {
   loading = false;
   errorMessage = '';
   toast: Toast = {
-    title: 'common.toast.info',
+    title: 'common.ui.toast.info',
     type: 'info',
-    message: 'common.updating',
+    message: 'common.ui.status.updating',
     visible: false,
   };
   private fb = inject(FormBuilder);
@@ -38,13 +38,15 @@ export class LoginComponent {
 
   get usernameError(): string {
     const ctrl = this.form.get('username');
-    if (ctrl?.touched && ctrl?.hasError('required')) return 'auth.login.errors.username_required';
+    if (ctrl?.touched && ctrl?.hasError('required'))
+      return 'auth.login.validation.username.required';
     return '';
   }
 
   get passwordError(): string {
     const ctrl = this.form.get('password');
-    if (ctrl?.touched && ctrl?.hasError('required')) return 'auth.login.errors.password_required';
+    if (ctrl?.touched && ctrl?.hasError('required'))
+      return 'auth.login.validation.password.required';
     return '';
   }
 
@@ -93,12 +95,13 @@ export class LoginComponent {
         if (response.success) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage = this.translate('common.errors.unexpectedError');
+          this.errorMessage = this.translate('common.validation.common.unexpectedError');
         }
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = error?.error.message || this.translate('common.errors.unexpectedError');
+        this.errorMessage =
+          error?.error.message || this.translate('common.validation.common.unexpectedError');
         this.loading = false;
       },
     });

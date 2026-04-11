@@ -20,10 +20,10 @@
     </div>
 
     <h2 class="text-2xl font-bold text-slate-800 tracking-tight mb-1">
-      {{ 'auth.login.title' | translate }}
+      {{ 'auth.login.ui.title' | translate }}
     </h2>
     <p class="text-sm text-slate-500 mb-7">
-      {{ 'auth.login.subtitle' | translate }}
+      {{ 'auth.login.ui.subtitle' | translate }}
     </p>
 
     <!-- Error banner -->
@@ -38,20 +38,22 @@
     <!-- Fields -->
     <div class="flex flex-col gap-4">
       <app-input
+        [required]="true"
         (valueChange)="onUsernameChange($event)"
         [autoFocus]="true"
         [errorMessage]="usernameError | translate"
-        [label]="'auth.login.username' | translate"
-        [placeholder]="'auth.login.username_placeholder' | translate"
+        [label]="'auth.login.fields.username.label' | translate"
+        [placeholder]="'auth.login.fields.username.placeholder' | translate"
         [value]="form.get('username')?.value"
         prefixIconClass="fa-solid fa-user"
       />
       <app-input
+        [required]="true"
         (valueChange)="onPasswordChange($event)"
         [autoFocus]="false"
         [errorMessage]="passwordError | translate"
-        [label]="'auth.login.password' | translate"
-        [placeholder]="'auth.login.password_placeholder' | translate"
+        [label]="'auth.login.fields.password.label' | translate"
+        [placeholder]="'auth.login.fields.password.placeholder' | translate"
         [value]="form.get('password')?.value"
         prefixIconClass="fa-solid fa-lock"
         type="password"
@@ -62,14 +64,14 @@
     <div class="flex justify-end mb-6">
       <a (click)="showToast()"
          class="text-sm cursor-pointer text-indigo-600 hover:text-indigo-500 font-medium transition-colors">
-        {{ 'auth.login.forgot_password' | translate }}
+        {{ 'auth.login.ui.forgotPassword' | translate }}
       </a>
     </div>
 
     <!-- Submit -->
     <app-button
       [fullWidth]="true"
-      [label]="'auth.login.submit' | translate"
+      [label]="'auth.login.ui.submit' | translate"
       [loading]="loading"
       size="large"
       [type]="'submit'"
@@ -77,10 +79,10 @@
 
     <!-- Register -->
     <p class="text-center text-sm text-slate-500 mt-6">
-      {{ 'auth.login.no_account' | translate }}
+      {{ 'auth.login.ui.noAccount' | translate }}
       <a class="text-indigo-600 hover:text-indigo-500 font-semibold ml-1 transition-colors"
          routerLink="/auth/register">
-        {{ 'auth.login.register' | translate }}
+        {{ 'auth.login.ui.register' | translate }}
       </a>
     </p>
 

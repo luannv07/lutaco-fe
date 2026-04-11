@@ -8,4 +8,11 @@ export interface AuthData {
   authenticated?: boolean;
 }
 
-
+export interface UserCreateRequest {
+  username: string;
+  password: string;
+  fullName: string;
+  address?: string; // optional
+  email: string;
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
+}

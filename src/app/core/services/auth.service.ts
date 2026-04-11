@@ -2,10 +2,10 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthData, LoginRequest } from '../../models/auth';
+import { AuthData, LoginRequest, UserCreateRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
 import { BaseService } from '../../shared/services/base.service';
-import { Observable, tap, throwError, catchError, of } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 
 const TOKEN_STORAGE_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -106,5 +106,10 @@ export class AuthService extends BaseService {
         return throwError(() => error);
       })
     );
+  }
+  register(request: UserCreateRequest): Observable<BaseResponse<void>> {
+    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
+
+    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/register`, request);
   }
 }

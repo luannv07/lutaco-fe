@@ -1,2 +1,5 @@
 /* Tailwind CSS handles styling for this component. */
 /* Custom styles can be added here if absolutely necessary and not achievable with Tailwind. */
+:host {
+  display: block;
+}

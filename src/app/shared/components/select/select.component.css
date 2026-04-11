@@ -1,1 +1,4 @@
 /* No specific SCSS needed for SelectComponent as styling is handled by Tailwind CSS classes in TypeScript. */
+:host {
+  display: block;
+}

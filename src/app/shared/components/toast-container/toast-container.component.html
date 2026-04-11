@@ -4,7 +4,7 @@
       (close)="removeToast(toast.id)"
       [duration]="toast.duration"
       [message]="toast.message"
-      [title]="toast.title"
+      [title]="toast.title ?? ''"
       [type]="toast.type"
       class="pointer-events-auto"
     ></app-toast>
