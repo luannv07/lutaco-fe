@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { BaseResponse } from '../../models/base-response';
@@ -11,8 +11,11 @@ export abstract class BaseService {
   // The specific API path for the resource (e.g., 'users'). Must be implemented by the extending class.
   protected abstract readonly apiUrl: string;
   protected readonly baseUrl = environment.baseUrl;
+  protected http: HttpClient = inject(HttpClient);
 
-  constructor(protected http: HttpClient) {}
+  constructor() {
+    console.log('Base service Called.');
+  }
 
   // Create a new resource.
   create(request: any): Observable<BaseResponse<any>> {

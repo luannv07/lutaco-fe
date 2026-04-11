@@ -1,0 +1,7 @@
+{
+  "dashboard": {
+    "user": {
+      "getMeSuccess": "User information loaded successfully."
+    }
+  }
+}

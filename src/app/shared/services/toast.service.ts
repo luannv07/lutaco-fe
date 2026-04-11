@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ToastPosition, ToastType } from '../components/toast/toast.component';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Toast {
   id: string;
-  title: string;
+  title?: string; // Make title optional
   message: string;
   type: ToastType;
   position: ToastPosition;
@@ -17,17 +18,20 @@ export interface Toast {
 })
 export class ToastService {
   private toastsSubject = new BehaviorSubject<Toast[]>([]);
+  private translateService: TranslateService = inject(TranslateService);
   toasts$: Observable<Toast[]> = this.toastsSubject.asObservable();
 
   show(
-    title: string,
     message: string,
     type: ToastType = 'info',
+    title?: string, // Make title optional
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
     const id = this.generateId();
-    const newToast: Toast = { id, title, message, type, position, duration };
+    // Use default title if not provided
+    const finalTitle = title !== undefined ? title : this.getDefaultTitle(type);
+    const newToast: Toast = { id, title: finalTitle, message, type, position, duration };
 
     this.toastsSubject.next([...this.toastsSubject.value, newToast]);
 
@@ -43,39 +47,94 @@ export class ToastService {
   }
 
   success(
-    title: string,
-    message: string,
+    arg1: string, // Can be message or title
+    arg2?: string, // Can be message if arg1 is title, or undefined if arg1 is message
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
-    this.show(title, message, 'success', position, duration);
+    let title: string | undefined;
+    let message: string;
+
+    if (arg2 === undefined) {
+      message = arg1;
+      title = this.translateService.instant('common.toast.success');
+    } else {
+      title = arg1;
+      message = arg2;
+    }
+    this.show(message, 'success', title, position, duration);
   }
 
   warning(
-    title: string,
-    message: string,
+    arg1: string,
+    arg2?: string,
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
-    this.show(title, message, 'warning', position, duration);
+    let title: string | undefined;
+    let message: string;
+
+    if (arg2 === undefined) {
+      message = arg1;
+      title = this.translateService.instant('common.toast.warn');
+    } else {
+      title = arg1;
+      message = arg2;
+    }
+    this.show(message, 'warning', title, position, duration);
   }
 
   error(
-    title: string,
-    message: string,
+    arg1: string,
+    arg2?: string,
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
-    this.show(title, message, 'error', position, duration);
+    let title: string | undefined;
+    let message: string;
+
+    if (arg2 === undefined) {
+      message = arg1;
+      title = this.translateService.instant('common.toast.error');
+    } else {
+      title = arg1;
+      message = arg2;
+    }
+    this.show(message, 'error', title, position, duration);
   }
 
   info(
-    title: string,
-    message: string,
+    arg1: string,
+    arg2?: string,
     position: ToastPosition = 'top-right',
     duration: number = 3000,
   ): void {
-    this.show(title, message, 'info', position, duration);
+    let title: string | undefined;
+    let message: string;
+
+    if (arg2 === undefined) {
+      message = arg1;
+      title = this.translateService.instant('common.toast.info');
+    } else {
+      title = arg1;
+      message = arg2;
+    }
+    this.show(message, 'info', title, position, duration);
+  }
+
+  private getDefaultTitle(type: ToastType): string | undefined {
+    switch (type) {
+      case 'success':
+        return this.translateService.instant('common.toast.success');
+      case 'warning':
+        return this.translateService.instant('common.toast.warn');
+      case 'error':
+        return this.translateService.instant('common.toast.error');
+      case 'info':
+        return this.translateService.instant('common.toast.info');
+      default:
+        return undefined;
+    }
   }
 
   private generateId(): string {
