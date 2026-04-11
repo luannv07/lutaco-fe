@@ -1,3 +1,53 @@
-<p>dashboard works!</p>
-hello
-<app-button [label]="'Logout'" (clickEvent)="logout()" />
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-slate-800 mb-4">Dashboard</h1>
+
+  <div class="flex items-center gap-4 mb-6">
+    <app-button [label]="'Logout'" (clickEvent)="logout()" [disabled]="isLoggingOut" />
+    <app-button [label]="'Get Me'" (clickEvent)="getMe()" [disabled]="isLoadingUser" />
+  </div>
+
+  @if (isLoadingUser) {
+    <div class="text-slate-500">Loading user data...</div>
+  } @else if (currentUser) {
+    <div class="bg-white shadow-lg rounded-xl p-6 border border-slate-200">
+      <h2 class="text-xl font-semibold text-slate-700 mb-4">User Information</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm text-slate-500">ID:</p>
+          <p class="font-medium text-slate-800">{{ currentUser.id }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Username:</p>
+          <p class="font-medium text-slate-800">{{ currentUser.username }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Full Name:</p>
+          <p class="font-medium text-slate-800">{{ currentUser.fullName }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Email:</p>
+          <p class="font-medium text-slate-800">{{ currentUser.email }}</p>
+        </div>
+        @if (currentUser.gender) {
+          <div>
+            <p class="text-sm text-slate-500">Gender:</p>
+            <p class="font-medium text-slate-800">{{ currentUser.gender.display }}</p>
+          </div>
+        }
+        @if (currentUser.userPlan) {
+          <div>
+            <p class="text-sm text-slate-500">User Plan:</p>
+            <p class="font-medium text-slate-800">{{ currentUser.userPlan.display }}</p>
+          </div>
+        }
+        <div>
+          <p class="text-sm text-slate-500">Role:</p>
+          <p class="font-medium text-slate-800">{{ currentUser.roleName }}</p>
+        </div>
+        <!-- Add more fields as needed -->
+      </div>
+    </div>
+  } @else {
+    <div class="text-slate-500">Click "Get Me" to load user information.</div>
+  }
+</div>
