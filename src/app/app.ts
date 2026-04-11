@@ -8,16 +8,15 @@ import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
+
   imports: [RouterOutlet, ToastContainerComponent, ...SHARED_IMPORTS],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
+  isReady = signal(false);
   private langService = inject(LanguageService);
   private router = inject(Router);
-
-  isReady = signal(false);
 
   constructor() {
     // Chờ router navigate xong lần đầu mới hiện UI

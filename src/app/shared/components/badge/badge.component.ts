@@ -4,7 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-badge',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './badge.component.html',
   styleUrl: './badge.component.css',

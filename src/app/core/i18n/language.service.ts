@@ -2,7 +2,7 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslationLoaderService } from './translation-loader.service';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, of, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 const LANG_STORAGE_KEY = 'current_lang';
@@ -10,9 +10,20 @@ const LANG_STORAGE_KEY = 'current_lang';
 export class LanguageService {
   public readonly availableLangs = ['en', 'vi'];
   private translate = inject(TranslateService);
+  public currentLang = toSignal(
+    this.translate.onLangChange.pipe(
+      map((e) => e.lang),
+      startWith(this.getCurrentLanguage()),
+    ),
+    { initialValue: this.getCurrentLanguage() },
+  );
   private translationLoader = inject(TranslationLoaderService);
   private platformId = inject(PLATFORM_ID); // ← Thêm
   private loadedModules = new Set<string>();
+
+  constructor() {
+    this.initLanguage();
+  }
 
   public loadTranslationModules(lang: string, modulePaths: string[]): Observable<any> {
     // Lưu lại module đã load
@@ -31,26 +42,17 @@ export class LanguageService {
       lang = 'vi';
     }
 
-    // Reload tất cả module đã load với ngôn ngữ mới
-    if (this.loadedModules.size > 0) {
-      this.loadTranslationModules(lang, Array.from(this.loadedModules)).subscribe();
-    }
+    const modules = Array.from(this.loadedModules);
 
-    this.translate.use(lang);
+    const load$ = modules.length ? this.loadTranslationModules(lang, modules) : of({});
+
+    load$.subscribe(() => {
+      this.translate.use(lang);
+    });
 
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem(LANG_STORAGE_KEY, lang);
     }
-  }
-  public currentLang = toSignal(
-    this.translate.onLangChange.pipe(
-      map((e) => e.lang),
-      startWith(this.getCurrentLanguage()),
-    ),
-    { initialValue: this.getCurrentLanguage() },
-  );
-  constructor() {
-    this.initLanguage();
   }
 
   public getCurrentLanguage(): string {

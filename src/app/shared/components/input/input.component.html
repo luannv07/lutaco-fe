@@ -1,4 +1,4 @@
-<div class="mb-4">
+<div class="mb-2">
   @if (label) {
     <label [for]="type" [ngClass]="labelClasses">
       {{ label }}
@@ -17,10 +17,12 @@
 
     <!-- Input Field -->
     <input
+      #inputEl
       (blur)="onBlur($event)"
       (focus)="onFocus($event)"
       (input)="onInput($event)"
       [attr.aria-describedby]="errorMessage ? 'error-' + type : null"
+      [attr.autofocus]="autoFocus ? '' : null"
       [disabled]="disabled"
       [id]="type"
       [ngClass]="inputClasses"

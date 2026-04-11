@@ -1,26 +1,20 @@
 // core/auth/auth.service.ts
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { AuthData, LoginRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
+import { BaseService } from '../../shared/services/base.service';
+import { Observable, tap } from 'rxjs';
 
 const TOKEN_STORAGE_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 
-export interface AuthData {
-  accessToken: string;
-  refreshToken: string;
-  authenticated: boolean;
-}
-
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService extends BaseService {
   private platformId = inject(PLATFORM_ID);
-  private http = inject(HttpClient);
   private router = inject(Router);
+  protected readonly apiUrl: string = 'auth';
 
   getToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) return null;
@@ -31,6 +25,7 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return false;
     try {
+      // Use global atob for browser environment
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.exp * 1000 > Date.now(); // Check expiry
     } catch {
@@ -38,10 +33,19 @@ export class AuthService {
     }
   }
 
-  login(response: AuthData): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.setItem(TOKEN_STORAGE_KEY, response.accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
+  login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
+    if (!isPlatformBrowser(this.platformId)) throw new Error('Unsupported platform');
+
+    return this.http
+      .post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/login`, loginRequest)
+      .pipe(
+        tap(response => {
+          if (response.data?.accessToken && response.data?.refreshToken) {
+            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
+            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+          }
+        })
+      );
   }
 
   logout(): void {

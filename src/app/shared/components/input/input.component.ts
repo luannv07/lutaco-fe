@@ -1,10 +1,18 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations'; // Import animation modules
 
 @Component({
   selector: 'app-input',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
@@ -39,7 +47,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]),
   ],
 })
-export class InputComponent {
+export class InputComponent implements AfterViewInit {
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
+
   @Input() label: string = '';
   @Input() type: 'text' | 'password' | 'email' | 'number' | 'search' = 'text';
   @Input() value: string | number = '';
@@ -49,6 +59,7 @@ export class InputComponent {
   @Input() required: boolean = false;
   @Input() errorMessage: string = '';
   @Input() customClass: string = '';
+  @Input() autoFocus: boolean = false;
 
   @Input() prefixIconClass: string = '';
   @Input() suffixIconClass: string = '';
@@ -135,7 +146,7 @@ export class InputComponent {
   }
 
   get labelClasses(): string[] {
-    return ['text-sm', 'font-medium', 'text-slate-700', 'mb-1.5']; // Label: mb-1.5 (6px)
+    return ['text-sm', 'font-medium', 'text-slate-700', 'mb-1.5', 'block']; // Label: mb-1.5 (6px)
   }
 
   get errorTextClasses(): string[] {
@@ -147,6 +158,15 @@ export class InputComponent {
       'items-center',
       'gap-1',
     ];
+  }
+
+  // fix loi auto focus
+  ngAfterViewInit() {
+    if (this.autoFocus) {
+      setTimeout(() => {
+        this.inputEl?.nativeElement?.focus();
+      });
+    }
   }
 
   onInput(event: Event): void {

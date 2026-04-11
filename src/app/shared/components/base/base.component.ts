@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core'; // Import TranslateService
-import { BaseService } from '../../../core/services/base.service';
 import { Page } from '../../../models/page';
 import { BaseResponse } from '../../../models/base-response';
 import { LanguageService } from '../../../core/i18n/language.service';
+import { BaseService } from '../../services/base.service';
 
 // Define a generic type for entities that have an ID.
 type Entity = { id: string | number };

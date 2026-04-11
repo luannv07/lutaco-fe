@@ -7,14 +7,16 @@
       <tr>
         @if (selectable) {
           <th [class]="thTxtCls" class="w-10 px-4 py-3">
-            <input (change)="toggleAll()" [checked]="allChecked()" [indeterminate]="someChecked()" class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+            <input (change)="toggleAll()" [checked]="allChecked()" [indeterminate]="someChecked()"
+                   class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                    type="checkbox" />
           </th>
         }
         @for (col of columns; track col.key) {
           <th (click)="sort(col)"
               [class.cursor-pointer]="col.sortable" [class]="thTxtCls" [style.text-align]="col.align||'left'"
-              [style.width]="col.width||'auto'" class="px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap select-none">
+              [style.width]="col.width||'auto'"
+              class="px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap select-none">
               <span class="inline-flex items-center gap-1.5">
                 {{ col.label }}
                 @if (col.sortable) {
@@ -55,8 +57,10 @@
               <div class="flex flex-col items-center gap-3">
                 <svg class="h-12 w-12 opacity-30" fill="none" stroke="currentColor" stroke-width="1"
                      viewBox="0 0 24 24">
-                  <path d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125v-.375A1.125 1.125 0 013.375 17.25h17.25a1.125 1.125 0 011.125 1.125V19.5m-18.75 0h18.75M6 18.375V6.375M18 18.375V6.375M6 6.375A1.125 1.125 0 017.125 5.25h9.75A1.125 1.125 0 0118 6.375m-12 0h12" stroke-linecap="round"
-                        stroke-linejoin="round" />
+                  <path
+                    d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125v-.375A1.125 1.125 0 013.375 17.25h17.25a1.125 1.125 0 011.125 1.125V19.5m-18.75 0h18.75M6 18.375V6.375M18 18.375V6.375M6 6.375A1.125 1.125 0 017.125 5.25h9.75A1.125 1.125 0 0118 6.375m-12 0h12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
                 </svg>
                 <span class="text-sm font-medium">Không có dữ liệu</span>
               </div>
@@ -68,7 +72,8 @@
                 [class]="rowBorderCls+' '+rowHoverCls+' '+stripedCls" class="transition-colors duration-150 group">
               @if (selectable) {
                 <td (click)="$event.stopPropagation();toggleRow($index)" class="px-4 py-3">
-                  <input [checked]="selected.has($index)" class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                  <input [checked]="selected.has($index)"
+                         class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                          type="checkbox" />
                 </td>
               }
@@ -156,7 +161,8 @@
     <div class="flex items-center gap-2">
       <span class="text-xs whitespace-nowrap">Đến trang</span>
       <input (keydown.enter)="gotoPage()" [(ngModel)]="gotoVal" [class]="inputCls"
-             [max]="totalPages" [min]="1" class="h-8 w-14 rounded-lg border text-center text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+             [max]="totalPages" [min]="1"
+             class="h-8 w-14 rounded-lg border text-center text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
              placeholder="—"
              type="number" />
       <button (click)="gotoPage()"

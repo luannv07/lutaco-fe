@@ -1,14 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { BaseResponse } from '../../../models/base-response';
-import { ApiEndpoints } from '../../../shared/constants/api.constants';
-import { finalize } from 'rxjs';
 import { SHARED_COMPONENTS, SHARED_IMPORTS } from '../../../shared/base-imports';
-import { AuthData, AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/i18n/language.service';
+import { Toast } from '../../../shared/models/toast.model';
+import { ToastService } from '../../../shared/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LoginRequest } from '../../../models/auth';
 
 @Component({
   selector: 'app-login',
@@ -18,18 +17,24 @@ import { LanguageService } from '../../../core/i18n/language.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
   loading = false;
   errorMessage = '';
-
+  toast: Toast = {
+    title: 'common.toast.info',
+    type: 'info',
+    message: 'common.updating',
+    visible: false,
+  };
+  private fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({
     username: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required]],
   });
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastService: ToastService = inject(ToastService);
+  private translateService = inject(TranslateService);
+  private langService = inject(LanguageService);
 
   get usernameError(): string {
     const ctrl = this.form.get('username');
@@ -40,8 +45,26 @@ export class LoginComponent {
   get passwordError(): string {
     const ctrl = this.form.get('password');
     if (ctrl?.touched && ctrl?.hasError('required')) return 'auth.login.errors.password_required';
-    if (ctrl?.touched && ctrl?.hasError('minlength')) return 'auth.login.errors.password_minlength';
     return '';
+  }
+
+  get currentLang(): string {
+    return this.langService.getCurrentLanguage();
+  }
+
+  /**
+   * Translates a given key.
+   * @param key The translation key.
+   * @returns The translated string.
+   */
+  translate(key: string): string {
+    return this.translateService.instant(key);
+  }
+
+  showToast() {
+    const title = this.translate(this.toast.title);
+    const message = this.translate(this.toast.message);
+    this.toastService.info(title, message);
   }
 
   onUsernameChange(value: string | number) {
@@ -63,30 +86,22 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    this.http
-      .post<BaseResponse<AuthData>>(
-        `${environment.baseUrl}/${ApiEndpoints.AUTH.LOGIN}`,
-        this.form.value,
-      )
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: (res) => {
-          if (res.success && res.data) {
-            this.authService.login(res.data);
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.errorMessage = res.message || 'auth.login.errors.failed';
-          }
-        },
-        error: (err) => {
-          this.errorMessage = err?.error?.message || 'auth.login.errors.failed';
-        },
-      });
-  }
-  private langService = inject(LanguageService);
+    const loginRequest: LoginRequest = this.form.value;
 
-  get currentLang(): string {
-    return this.langService.getCurrentLanguage();
+    this.authService.login(loginRequest).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = this.translate('common.errors.unexpectedError');
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error?.error.message || this.translate('common.errors.unexpectedError');
+        this.loading = false;
+      },
+    });
   }
 
   switchLang(): void {

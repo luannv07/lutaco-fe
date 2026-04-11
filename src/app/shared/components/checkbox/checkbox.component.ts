@@ -4,7 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-checkbox',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './checkbox.component.html',
   styleUrl: './checkbox.component.css',
