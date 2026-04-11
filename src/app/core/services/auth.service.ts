@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthData, LoginRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
 import { BaseService } from '../../shared/services/base.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, throwError, catchError, of } from 'rxjs';
 
 const TOKEN_STORAGE_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -21,6 +21,11 @@ export class AuthService extends BaseService {
     return localStorage.getItem(TOKEN_STORAGE_KEY);
   }
 
+  getRefreshToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
+  }
+
   isAuthenticated(): boolean {
     const token = this.getToken();
     if (!token) return false;
@@ -34,24 +39,72 @@ export class AuthService extends BaseService {
   }
 
   login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId)) throw new Error('Unsupported platform');
+    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
 
     return this.http
       .post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/login`, loginRequest)
       .pipe(
         tap(response => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
+              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+            }
           }
         })
       );
   }
 
-  logout(): void {
+  refreshToken(): Observable<BaseResponse<AuthData>> {
+    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
+
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.clearTokens();
+      this.router.navigate(['/auth/login']);
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    return this.http.post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
+      tap(response => {
+        if (response.data?.accessToken && response.data?.refreshToken) {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
+            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+          }
+        } else {
+          this.clearTokens();
+          this.router.navigate(['/auth/login']);
+          throw new Error('Failed to refresh token: Invalid response');
+        }
+      }),
+      catchError(error => {
+        this.clearTokens();
+        this.router.navigate(['/auth/login']);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  clearTokens(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-    this.router.navigate(['/auth/login']);
+  }
+
+  logout(): Observable<any> {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.clearTokens(); // Clear tokens even if not in browser
+      return of(null); // Return a completed observable for non-browser platforms
+    }
+    return this.http.post(`${this.baseUrl}/${this.apiUrl}/logout`, {}).pipe(
+      tap(() => {
+        this.clearTokens();
+      }),
+      catchError(error => {
+        this.clearTokens(); // Clear tokens even if logout API fails
+        return throwError(() => error);
+      })
+    );
   }
 }
