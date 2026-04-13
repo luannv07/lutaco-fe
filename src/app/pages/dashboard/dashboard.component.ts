@@ -33,13 +33,14 @@ export class DashboardComponent {
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {
-        const message = error?.error?.message || this.translateService.instant('common.messages.error'); // Use generic error message
+        const message =
+          error?.error?.message || this.translateService.instant('common.messages.error'); // Use generic error message
         this.toastService.error(message);
         this.router.navigate(['/auth/login']);
       },
       complete: () => {
         this.isLoggingOut = false;
-      }
+      },
     });
   }
 
@@ -50,19 +51,25 @@ export class DashboardComponent {
       next: (response) => {
         if (response.success && response.data) {
           this.currentUser = response.data;
-          this.toastService.success(this.translateService.instant('dashboard.user.getMeSuccess')); // Use specific success message
+          this.toastService.success(this.translateService.instant('common.messages.success')); // Use specific success message
         } else {
-          const message = response.message || this.translateService.instant('common.messages.error'); // Use generic error message
+          const message =
+            response.message || this.translateService.instant('common.messages.error'); // Use generic error message
           this.toastService.error(message);
         }
       },
       error: (error) => {
-        const message = error?.error?.message || this.translateService.instant('common.messages.error'); // Use generic error message
+        const message =
+          error?.error?.message || this.translateService.instant('common.messages.error'); // Use generic error message
         this.toastService.error(message);
       },
       complete: () => {
         this.isLoadingUser = false; // Reset loading state
-      }
+      },
     });
+  }
+
+  protected updatePlan() {
+    console.log('updated plan');
   }
 }

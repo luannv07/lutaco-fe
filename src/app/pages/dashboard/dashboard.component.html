@@ -3,7 +3,8 @@
 
   <div class="flex items-center gap-4 mb-6">
     <app-button [label]="'Logout'" (clickEvent)="logout()" [disabled]="isLoggingOut" />
-    <app-button [label]="'Get Me'" (clickEvent)="getMe()" [disabled]="isLoadingUser" />
+    <app-button [label]="'Get Me (Must authenticated)'" (clickEvent)="getMe()" [disabled]="isLoadingUser" />
+    <app-button [label]="'Get Premium'" (clickEvent)="updatePlan()" />
   </div>
 
   @if (isLoadingUser) {
@@ -38,6 +39,12 @@
           <div>
             <p class="text-sm text-slate-500">User Plan:</p>
             <p class="font-medium text-slate-800">{{ currentUser.userPlan.display }}</p>
+          </div>
+        }
+        @if (currentUser.userStatus) {
+          <div>
+            <p class="text-sm text-slate-500">User status:</p>
+            <p class="font-medium text-slate-800">{{ currentUser.userStatus.display }}</p>
           </div>
         }
         <div>

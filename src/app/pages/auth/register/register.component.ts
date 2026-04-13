@@ -108,21 +108,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.authService.register(request).subscribe({
       next: (response) => {
         if (response.success) {
-          const title = this.translateService.instant('common.ui.toast.success');
-          const message = this.translateService.instant('auth.register.ui.successMessage');
-          this.toastService.success(title, message);
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/auth/verify-otp']);
         } else {
-          this.errorMessage = this.translateService.instant(
-            'common.validation.common.unexpectedError',
-          );
+          this.errorMessage = this.translateService.instant('common.errors.unexpectedError');
         }
         this.loading = false;
       },
       error: (error) => {
         this.errorMessage =
-          error?.error?.message ??
-          this.translateService.instant('common.validation.common.unexpectedError');
+          error?.error?.message ?? this.translateService.instant('common.errors.unexpectedError');
         this.loading = false;
       },
     });

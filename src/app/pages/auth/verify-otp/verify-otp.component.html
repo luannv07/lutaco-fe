@@ -1,0 +1,103 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4 relative overflow-hidden">
+
+  <div
+    class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-300 rounded-full opacity-20 blur-3xl pointer-events-none"></div>
+  <div
+    class="absolute -bottom-24 -right-24 w-80 h-80 bg-purple-300 rounded-full opacity-20 blur-3xl pointer-events-none"></div>
+
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl shadow-indigo-100/50 p-10 animate-[slideUp_0.4s_ease-out]">
+
+    <!-- Brand -->
+    <div class="flex items-center gap-3 mb-8">
+      <div
+        class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+        <i class="fa-solid fa-bolt text-white text-sm"></i>
+      </div>
+      <span class="text-xl font-bold text-indigo-950 tracking-tight">Lutaco</span>
+    </div>
+
+    <!-- Icon -->
+    <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6">
+      <i class="fa-solid fa-envelope-open-text text-indigo-500 text-2xl"></i>
+    </div>
+
+    <h2 class="text-2xl font-bold text-slate-800 tracking-tight mb-1">
+      {{ 'auth.verifyOtp.ui.title' | translate }}
+    </h2>
+    <p class="text-sm text-slate-500 mb-7">
+      {{ 'auth.verifyOtp.ui.subtitle' | translate }}
+    </p>
+
+    <!-- Error banner -->
+    @if (errorMessage) {
+      <div
+        class="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm mb-5">
+        <i class="fa-solid fa-circle-exclamation shrink-0"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <!-- Success banner -->
+    @if (successMessage) {
+      <div
+        class="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm mb-5">
+        <i class="fa-solid fa-circle-check shrink-0"></i>
+        <span>{{ successMessage }}</span>
+      </div>
+    }
+
+    <!-- OTP inputs -->
+    <div class="flex justify-center gap-3 mb-8">
+      @for (i of otpIndexes; track i) {
+        <input
+          #otpInput
+          (input)="onOtpInput($event, i)"
+          (keydown)="onKeyDown($event, i)"
+          (paste)="onPaste($event)"
+          [value]="otpValues[i]"
+          class="w-12 h-14 text-center text-xl font-bold text-slate-800 border border-slate-300 rounded-xl shadow-sm
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500
+                 hover:border-slate-400 transition-colors duration-150 caret-transparent"
+          inputmode="numeric"
+          maxlength="1"
+          type="text"
+        />
+      }
+    </div>
+
+    <!-- Expiry hint -->
+    <p class="text-center text-xs text-slate-400 mb-6">
+      <i class="fa-regular fa-clock mr-1"></i>
+      {{ 'auth.verifyOtp.ui.expiryHint' | translate }}
+    </p>
+
+    <!-- Submit -->
+    <app-button
+      (click)="onSubmit()"
+      [disabled]="otp.length < 6"
+      [fullWidth]="true"
+      [label]="'auth.verifyOtp.ui.submit' | translate"
+      [loading]="loading"
+      size="large"
+    />
+
+    <!-- Resend -->
+    <p class="text-center text-sm text-slate-500 mt-6">
+      {{ 'auth.verifyOtp.ui.noCode' | translate }}
+      @if (resendCooldown > 0) {
+        <span class="text-slate-400 font-medium ml-1">
+          {{ 'auth.verifyOtp.ui.resendIn' | translate }} {{ resendCooldown }}s
+        </span>
+      } @else {
+        <button
+          (click)="resendOtp()"
+          [disabled]="resendLoading"
+          class="text-indigo-600 hover:text-indigo-500 font-semibold ml-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ 'auth.verifyOtp.ui.resend' | translate }}
+        </button>
+      }
+    </p>
+
+  </div>
+</div>

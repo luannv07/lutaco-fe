@@ -14,4 +14,9 @@ export const AUTH_ROUTES: Routes = [
     path: 'register',
     loadComponent: () => import('./register/register.component').then((m) => m.RegisterComponent),
   },
+  {
+    path: 'verify-otp',
+    loadComponent: () =>
+      import('./verify-otp/verify-otp.component').then((m) => m.VerifyOtpComponent),
+  },
 ];

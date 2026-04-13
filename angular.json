@@ -84,7 +84,10 @@
               "buildTarget": "lutaco-fe:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.config.js"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

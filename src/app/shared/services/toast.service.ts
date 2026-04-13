@@ -57,7 +57,7 @@ export class ToastService {
 
     if (arg2 === undefined) {
       message = arg1;
-      title = this.translateService.instant('common.toast.success');
+      title = this.translateService.instant('common.ui.toast.success');
     } else {
       title = arg1;
       message = arg2;
@@ -76,7 +76,7 @@ export class ToastService {
 
     if (arg2 === undefined) {
       message = arg1;
-      title = this.translateService.instant('common.toast.warn');
+      title = this.translateService.instant('common.ui.toast.warn');
     } else {
       title = arg1;
       message = arg2;
@@ -95,7 +95,7 @@ export class ToastService {
 
     if (arg2 === undefined) {
       message = arg1;
-      title = this.translateService.instant('common.toast.error');
+      title = this.translateService.instant('common.ui.toast.error');
     } else {
       title = arg1;
       message = arg2;
@@ -114,7 +114,7 @@ export class ToastService {
 
     if (arg2 === undefined) {
       message = arg1;
-      title = this.translateService.instant('common.toast.info');
+      title = this.translateService.instant('common.ui.toast.info');
     } else {
       title = arg1;
       message = arg2;
@@ -125,13 +125,13 @@ export class ToastService {
   private getDefaultTitle(type: ToastType): string | undefined {
     switch (type) {
       case 'success':
-        return this.translateService.instant('common.toast.success');
+        return this.translateService.instant('common.ui.toast.success');
       case 'warning':
-        return this.translateService.instant('common.toast.warn');
+        return this.translateService.instant('common.ui.toast.warn');
       case 'error':
-        return this.translateService.instant('common.toast.error');
+        return this.translateService.instant('common.ui.toast.error');
       case 'info':
-        return this.translateService.instant('common.toast.info');
+        return this.translateService.instant('common.ui.toast.info');
       default:
         return undefined;
     }

@@ -1,5 +1,11 @@
 import { inject } from '@angular/core';
-import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,7 +40,10 @@ export const authInterceptor: HttpInterceptorFn = (
   const currentLang: string = translateService.currentLang || translateService.defaultLang || 'vi';
 
   // Helper function to add authorization header
-  const addTokenHeader = (request: HttpRequest<unknown>, token: string | null): HttpRequest<unknown> => {
+  const addTokenHeader = (
+    request: HttpRequest<unknown>,
+    token: string | null,
+  ): HttpRequest<unknown> => {
     let headers = request.headers;
     headers = headers.set('Accept-Language', currentLang); // Always set language header
 
@@ -56,7 +65,6 @@ export const authInterceptor: HttpInterceptorFn = (
     authReq = req.clone({ headers: req.headers.set('Accept-Language', currentLang) });
   }
 
-
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 && error.error?.errorCode === 'UNAUTHORIZED' && !isPublicApi) {
@@ -76,21 +84,21 @@ export const authInterceptor: HttpInterceptorFn = (
               authService.clearTokens();
               router.navigate(['/auth/login']);
               return throwError(() => refreshError); // Re-throw refresh error
-            })
+            }),
           );
         } else {
           // If token is already being refreshed, queue the request
           return refreshTokenSubject.pipe(
-            filter(token => token !== null),
+            filter((token) => token !== null),
             take(1),
-            switchMap(token => {
+            switchMap((token) => {
               return next(addTokenHeader(req, token)); // Retry original request with new token
-            })
+            }),
           );
         }
       }
       // For other errors or if it's a public API 401, just re-throw
       return throwError(() => error);
-    })
+    }),
   );
 };

@@ -39,24 +39,26 @@ export class AuthService extends BaseService {
   }
 
   login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
+    if (!isPlatformBrowser(this.platformId))
+      return throwError(() => new Error('Unsupported platform'));
 
     return this.http
       .post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/login`, loginRequest)
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
             if (isPlatformBrowser(this.platformId)) {
               localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
               localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
             }
           }
-        })
+        }),
       );
   }
 
   refreshToken(): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
+    if (!isPlatformBrowser(this.platformId))
+      return throwError(() => new Error('Unsupported platform'));
 
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
@@ -65,25 +67,29 @@ export class AuthService extends BaseService {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
-      tap(response => {
-        if (response.data?.accessToken && response.data?.refreshToken) {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+    return this.http
+      .post<
+        BaseResponse<AuthData>
+      >(`${this.baseUrl}/${this.apiUrl}/refresh-token`, { refreshToken })
+      .pipe(
+        tap((response) => {
+          if (response.data?.accessToken && response.data?.refreshToken) {
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
+              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+            }
+          } else {
+            this.clearTokens();
+            this.router.navigate(['/auth/login']);
+            throw new Error('Failed to refresh token: Invalid response');
           }
-        } else {
+        }),
+        catchError((error) => {
           this.clearTokens();
           this.router.navigate(['/auth/login']);
-          throw new Error('Failed to refresh token: Invalid response');
-        }
-      }),
-      catchError(error => {
-        this.clearTokens();
-        this.router.navigate(['/auth/login']);
-        return throwError(() => error);
-      })
-    );
+          return throwError(() => error);
+        }),
+      );
   }
 
   clearTokens(): void {
@@ -101,15 +107,38 @@ export class AuthService extends BaseService {
       tap(() => {
         this.clearTokens();
       }),
-      catchError(error => {
+      catchError((error) => {
         this.clearTokens(); // Clear tokens even if logout API fails
         return throwError(() => error);
-      })
+      }),
     );
   }
-  register(request: UserCreateRequest): Observable<BaseResponse<void>> {
-    if (!isPlatformBrowser(this.platformId)) return throwError(() => new Error('Unsupported platform'));
+  register(request: UserCreateRequest): Observable<BaseResponse<AuthData>> {
+    if (!isPlatformBrowser(this.platformId))
+      return throwError(() => new Error('Unsupported platform'));
 
-    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/register`, request);
+    return this.http
+      .post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/register`, request)
+      .pipe(
+        tap((response) => {
+          if (response.data?.accessToken && response.data?.refreshToken) {
+            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
+            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+          }
+        }),
+      );
+  }
+  verifyOtp(otp: string): Observable<BaseResponse<void>> {
+    if (!isPlatformBrowser(this.platformId))
+      return throwError(() => new Error('Unsupported platform'));
+
+    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/verify-otp`, { otp });
+  }
+
+  resendOtp(): Observable<BaseResponse<void>> {
+    if (!isPlatformBrowser(this.platformId))
+      return throwError(() => new Error('Unsupported platform'));
+
+    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/send-otp`, {});
   }
 }
