@@ -2,6 +2,7 @@ import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../services/auth.service';
+import { UserStatus } from '../enums/user.enum';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -13,9 +14,14 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
+  if (authService.getCurrentUserStatus() === UserStatus.PENDING_VERIFICATION) {
+    return router.createUrlTree(['/auth/verify-otp']);
+  }
+
   if (authService.isAuthenticated()) {
     return true;
   }
+
 
   return router.createUrlTree(['/auth/login']);
 };

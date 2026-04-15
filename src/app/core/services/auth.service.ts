@@ -6,9 +6,8 @@ import { AuthData, LoginRequest, UserCreateRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
 import { BaseService } from '../../shared/services/base.service';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
-
-const TOKEN_STORAGE_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+import { LOCAL_STORAGE_KEY } from './local-storage.service';
+import { User } from '../../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService {
@@ -18,12 +17,12 @@ export class AuthService extends BaseService {
 
   getToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-    return localStorage.getItem(TOKEN_STORAGE_KEY);
+    return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
   }
 
   getRefreshToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
+    return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
   }
 
   isAuthenticated(): boolean {
@@ -38,6 +37,11 @@ export class AuthService extends BaseService {
     }
   }
 
+  getCurrentUserStatus(): string | null {
+    const user = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY) || null;
+    return user?.userStatus?.value ?? null;
+  }
+
   login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
     if (!isPlatformBrowser(this.platformId))
       return throwError(() => new Error('Unsupported platform'));
@@ -47,10 +51,14 @@ export class AuthService extends BaseService {
       .pipe(
         tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
-            }
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY,
+              response.data.accessToken,
+            );
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY,
+              response.data.refreshToken,
+            );
           }
         }),
       );
@@ -74,10 +82,14 @@ export class AuthService extends BaseService {
       .pipe(
         tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
-            }
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY,
+              response.data.accessToken,
+            );
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY,
+              response.data.refreshToken,
+            );
           } else {
             this.clearTokens();
             this.router.navigate(['/auth/login']);
@@ -94,8 +106,8 @@ export class AuthService extends BaseService {
 
   clearTokens(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    this.localStorageService.remove(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
+    this.localStorageService.remove(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
   }
 
   logout(): Observable<any> {
@@ -122,8 +134,14 @@ export class AuthService extends BaseService {
       .pipe(
         tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY,
+              response.data.accessToken,
+            );
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY,
+              response.data.refreshToken,
+            );
           }
         }),
       );
