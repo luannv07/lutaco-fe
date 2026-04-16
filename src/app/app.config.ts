@@ -5,6 +5,7 @@ import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { requestTimeoutInterceptor } from './core/interceptors/request-timeout.interceptor';
 import { TranslationLoaderService } from './core/i18n/translation-loader.service';
 import { LanguageService } from './core/i18n/language.service';
 
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
+    provideHttpClient(withInterceptors([authInterceptor, requestTimeoutInterceptor]), withFetch()),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,

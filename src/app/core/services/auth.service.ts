@@ -2,28 +2,45 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthData, LoginRequest, UserCreateRequest } from '../../models/auth';
+import { AuthData, LoginRequest, SendOtpRequest, UserCreateRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
 import { BaseService } from '../../shared/services/base.service';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
-
-const TOKEN_STORAGE_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { LOCAL_STORAGE_KEY } from './local-storage.service';
+import { User } from '../../models/user';
+import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService {
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
+  private userService = inject(UserService);
   protected readonly apiUrl: string = 'auth';
+
+  private syncCurrentUser(force = false): Observable<void> {
+    if (!isPlatformBrowser(this.platformId) || !this.isAuthenticated()) {
+      return of(void 0);
+    }
+
+    const currentUser = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY);
+    if (currentUser && !force) {
+      return of(void 0);
+    }
+
+    return this.userService.getMySelf().pipe(
+      map(() => void 0),
+      catchError(() => of(void 0)),
+    );
+  }
 
   getToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-    return localStorage.getItem(TOKEN_STORAGE_KEY);
+    return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
   }
 
   getRefreshToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
+    return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
   }
 
   isAuthenticated(): boolean {
@@ -38,6 +55,36 @@ export class AuthService extends BaseService {
     }
   }
 
+  getCurrentUserStatus(): string | null {
+    const user = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY) || null;
+    return user?.userStatus?.value ?? null;
+  }
+
+  private buildRegistrationOtpRequest(): SendOtpRequest | null {
+    const user = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY);
+    if (!user?.email || !user?.username) {
+      return null;
+    }
+
+    return {
+      email: user.email,
+      otpType: 'REGISTER',
+      username: user.username,
+    };
+  }
+
+  sendRegistrationOtpForCurrentUser(): Observable<void> {
+    const payload = this.buildRegistrationOtpRequest();
+    if (!payload) {
+      return of(void 0);
+    }
+
+    return this.resendOtp(payload).pipe(
+      map(() => void 0),
+      catchError(() => of(void 0)),
+    );
+  }
+
   login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
     if (!isPlatformBrowser(this.platformId))
       return throwError(() => new Error('Unsupported platform'));
@@ -47,12 +94,17 @@ export class AuthService extends BaseService {
       .pipe(
         tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
-            }
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY,
+              response.data.accessToken,
+            );
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY,
+              response.data.refreshToken,
+            );
           }
         }),
+        switchMap((response) => this.syncCurrentUser(true).pipe(map(() => response))),
       );
   }
 
@@ -74,16 +126,21 @@ export class AuthService extends BaseService {
       .pipe(
         tap((response) => {
           if (response.data?.accessToken && response.data?.refreshToken) {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-              localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
-            }
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY,
+              response.data.accessToken,
+            );
+            this.localStorageService.set(
+              LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY,
+              response.data.refreshToken,
+            );
           } else {
             this.clearTokens();
             this.router.navigate(['/auth/login']);
             throw new Error('Failed to refresh token: Invalid response');
           }
         }),
+        switchMap((response) => this.syncCurrentUser().pipe(map(() => response))),
         catchError((error) => {
           this.clearTokens();
           this.router.navigate(['/auth/login']);
@@ -94,8 +151,9 @@ export class AuthService extends BaseService {
 
   clearTokens(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    this.localStorageService.remove(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
+    this.localStorageService.remove(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
+    this.localStorageService.remove(LOCAL_STORAGE_KEY.USER_INFO_KEY);
   }
 
   logout(): Observable<any> {
@@ -120,12 +178,7 @@ export class AuthService extends BaseService {
     return this.http
       .post<BaseResponse<AuthData>>(`${this.baseUrl}/${this.apiUrl}/register`, request)
       .pipe(
-        tap((response) => {
-          if (response.data?.accessToken && response.data?.refreshToken) {
-            localStorage.setItem(TOKEN_STORAGE_KEY, response.data.accessToken);
-            localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refreshToken);
-          }
-        }),
+        switchMap((response) => this.syncCurrentUser(true).pipe(map(() => response))),
       );
   }
   verifyOtp(otp: string): Observable<BaseResponse<void>> {
@@ -135,10 +188,15 @@ export class AuthService extends BaseService {
     return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/verify-otp`, { otp });
   }
 
-  resendOtp(): Observable<BaseResponse<void>> {
+  resendOtp(request?: SendOtpRequest): Observable<BaseResponse<void>> {
     if (!isPlatformBrowser(this.platformId))
       return throwError(() => new Error('Unsupported platform'));
 
-    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/send-otp`, {});
+    const payload = request ?? this.buildRegistrationOtpRequest();
+    if (!payload) {
+      return throwError(() => new Error('Missing user data for send-otp request'));
+    }
+
+    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/send-otp`, payload);
   }
 }

@@ -1,24 +1,17 @@
+import { EnumValue } from './enum-value.model';
+
 export interface User {
   id: string;
   username: string;
   fullName: string;
   address: string | null;
   email: string;
-  gender: {
-    value: string;
-    display: string;
-  };
-  userStatus: {
-    value: string;
-    display: string;
-  };
+  gender: EnumValue;
+  userStatus: EnumValue;
+  userPlan: EnumValue;
   roleName: string;
   createdBy: string;
   createdDate: string;
   updatedBy: string;
   updatedDate: string;
-  userPlan: {
-    value: string;
-    display: string;
-  };
 }

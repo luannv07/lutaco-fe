@@ -1,0 +1,12 @@
+export enum UserType {
+  SYS_ADMIN = 'SYS_ADMIN',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export enum UserStatus {
+  PENDING_VERIFICATION = 'PENDING_VERIFICATION',
+  ACTIVE = 'ACTIVE',
+  DISABLED_BY_USER = 'DISABLED_BY_USER',
+  BANNED = 'BANNED',
+}

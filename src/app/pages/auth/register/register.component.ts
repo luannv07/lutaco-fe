@@ -108,7 +108,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.authService.register(request).subscribe({
       next: (response) => {
         if (response.success) {
-          this.router.navigate(['/auth/verify-otp']);
+          this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage = this.translateService.instant('common.errors.unexpectedError');
         }

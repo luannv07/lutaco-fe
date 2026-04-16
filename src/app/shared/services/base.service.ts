@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { BaseResponse } from '../../models/base-response';
 import { Page } from '../../models/page';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 
 // Abstract base service for CRUD operations.
 @Injectable()
@@ -12,6 +13,7 @@ export abstract class BaseService {
   protected abstract readonly apiUrl: string;
   protected readonly baseUrl = environment.baseUrl;
   protected http: HttpClient = inject(HttpClient);
+  protected localStorageService: LocalStorageService = inject(LocalStorageService);
 
   constructor() {
     console.log('Base service Called.');
