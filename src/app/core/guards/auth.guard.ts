@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { UserStatus } from '../enums/user.enum';
+import { map } from 'rxjs';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -15,13 +16,14 @@ export const authGuard: CanActivateFn = () => {
   }
 
   if (authService.getCurrentUserStatus() === UserStatus.PENDING_VERIFICATION) {
-    return router.createUrlTree(['/auth/verify-otp']);
+    return authService
+      .sendRegistrationOtpForCurrentUser()
+      .pipe(map(() => router.createUrlTree(['/auth/verify-otp'])));
   }
 
   if (authService.isAuthenticated()) {
     return true;
   }
-
 
   return router.createUrlTree(['/auth/login']);
 };

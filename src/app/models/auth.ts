@@ -8,6 +8,14 @@ export interface AuthData {
   authenticated?: boolean;
 }
 
+export type OtpType = 'REGISTER';
+
+export interface SendOtpRequest {
+  email: string;
+  otpType: OtpType;
+  username: string;
+}
+
 export interface UserCreateRequest {
   username: string;
   password: string;

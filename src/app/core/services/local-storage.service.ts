@@ -16,12 +16,11 @@ export class LocalStorageService {
     return isPlatformBrowser(this.platformId);
   }
 
-  get<T>(key: string): T | null {
-    if (!this.isBrowser) return null;
+  private serialize<T>(value: T): string {
+    return typeof value === 'string' ? value : JSON.stringify(value);
+  }
 
-    const rawValue = localStorage.getItem(key);
-    if (rawValue === null) return null;
-
+  private deserialize<T>(rawValue: string): T {
     try {
       return JSON.parse(rawValue) as T;
     } catch {
@@ -29,24 +28,33 @@ export class LocalStorageService {
     }
   }
 
+  get<T>(key: string): T | null {
+    if (!this.isBrowser) return null;
+
+    const rawValue = localStorage.getItem(key);
+    if (rawValue === null) return null;
+
+    return this.deserialize<T>(rawValue);
+  }
+
   add<T>(key: string, value: T): boolean {
     if (!this.isBrowser || this.has(key)) return false;
 
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, this.serialize(value));
     return true;
   }
 
   update<T>(key: string, value: T): boolean {
     if (!this.isBrowser || !this.has(key)) return false;
 
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, this.serialize(value));
     return true;
   }
 
   set<T>(key: string, value: T): void {
     if (!this.isBrowser) return;
 
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, this.serialize(value));
   }
 
   remove(key: string): void {

@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { UserStatus } from '../enums/user.enum';
+import { map } from 'rxjs';
 
 export const guestGuard: CanActivateFn = (_route, state) => {
   const authService = inject(AuthService);
@@ -22,7 +23,9 @@ export const guestGuard: CanActivateFn = (_route, state) => {
       return true;
     }
 
-    return router.createUrlTree(['/auth/verify-otp']);
+    return authService
+      .sendRegistrationOtpForCurrentUser()
+      .pipe(map(() => router.createUrlTree(['/auth/verify-otp'])));
   }
 
   return router.createUrlTree(['/dashboard']);
