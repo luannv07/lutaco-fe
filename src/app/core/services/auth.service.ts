@@ -1,6 +1,5 @@
 // core/auth/auth.service.ts
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthData, LoginRequest, SendOtpRequest, UserCreateRequest } from '../../models/auth';
 import { BaseResponse } from '../../models/base-response';
@@ -12,13 +11,16 @@ import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService {
-  private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
   private userService = inject(UserService);
   protected readonly apiUrl: string = 'auth';
 
   private syncCurrentUser(force = false): Observable<void> {
-    if (!isPlatformBrowser(this.platformId) || !this.isAuthenticated()) {
+    if (!this.isBrowser()) {
+      return of(void 0);
+    }
+
+    if (!this.isAuthenticated()) {
       return of(void 0);
     }
 
@@ -34,12 +36,12 @@ export class AuthService extends BaseService {
   }
 
   getToken(): string | null {
-    if (!isPlatformBrowser(this.platformId)) return null;
+    if (!this.isBrowser()) return null;
     return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
   }
 
   getRefreshToken(): string | null {
-    if (!isPlatformBrowser(this.platformId)) return null;
+    if (!this.isBrowser()) return null;
     return this.localStorageService.get<string>(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
   }
 
@@ -73,20 +75,8 @@ export class AuthService extends BaseService {
     };
   }
 
-  sendRegistrationOtpForCurrentUser(): Observable<void> {
-    const payload = this.buildRegistrationOtpRequest();
-    if (!payload) {
-      return of(void 0);
-    }
-
-    return this.resendOtp(payload).pipe(
-      map(() => void 0),
-      catchError(() => of(void 0)),
-    );
-  }
-
   login(loginRequest: LoginRequest): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId))
+    if (!this.isBrowser())
       return throwError(() => new Error('Unsupported platform'));
 
     return this.http
@@ -109,7 +99,7 @@ export class AuthService extends BaseService {
   }
 
   refreshToken(): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId))
+    if (!this.isBrowser())
       return throwError(() => new Error('Unsupported platform'));
 
     const refreshToken = this.getRefreshToken();
@@ -150,14 +140,14 @@ export class AuthService extends BaseService {
   }
 
   clearTokens(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!this.isBrowser()) return;
     this.localStorageService.remove(LOCAL_STORAGE_KEY.TOKEN_STORAGE_KEY);
     this.localStorageService.remove(LOCAL_STORAGE_KEY.REFRESH_TOKEN_KEY);
     this.localStorageService.remove(LOCAL_STORAGE_KEY.USER_INFO_KEY);
   }
 
   logout(): Observable<any> {
-    if (!isPlatformBrowser(this.platformId)) {
+    if (!this.isBrowser()) {
       this.clearTokens(); // Clear tokens even if not in browser
       return of(null); // Return a completed observable for non-browser platforms
     }
@@ -172,7 +162,7 @@ export class AuthService extends BaseService {
     );
   }
   register(request: UserCreateRequest): Observable<BaseResponse<AuthData>> {
-    if (!isPlatformBrowser(this.platformId))
+    if (!this.isBrowser())
       return throwError(() => new Error('Unsupported platform'));
 
     return this.http
@@ -180,23 +170,5 @@ export class AuthService extends BaseService {
       .pipe(
         switchMap((response) => this.syncCurrentUser(true).pipe(map(() => response))),
       );
-  }
-  verifyOtp(otp: string): Observable<BaseResponse<void>> {
-    if (!isPlatformBrowser(this.platformId))
-      return throwError(() => new Error('Unsupported platform'));
-
-    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/verify-otp`, { otp });
-  }
-
-  resendOtp(request?: SendOtpRequest): Observable<BaseResponse<void>> {
-    if (!isPlatformBrowser(this.platformId))
-      return throwError(() => new Error('Unsupported platform'));
-
-    const payload = request ?? this.buildRegistrationOtpRequest();
-    if (!payload) {
-      return throwError(() => new Error('Missing user data for send-otp request'));
-    }
-
-    return this.http.post<BaseResponse<void>>(`${this.baseUrl}/${this.apiUrl}/send-otp`, payload);
   }
 }

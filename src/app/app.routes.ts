@@ -23,6 +23,11 @@ export const routes: Routes = [
     resolve: { translations: translationResolver('dashboard') },
   },
   {
+    path: 'users',
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/users/users.routes').then((m) => m.USERS_ROUTES),
+  },
+  {
     path: '**',
     redirectTo: 'dashboard',
   },

@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { BaseResponse } from '../../models/base-response';
@@ -14,6 +15,11 @@ export abstract class BaseService {
   protected readonly baseUrl = environment.baseUrl;
   protected http: HttpClient = inject(HttpClient);
   protected localStorageService: LocalStorageService = inject(LocalStorageService);
+  protected platformId = inject(PLATFORM_ID);
+
+  protected isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
   constructor() {
     console.log('Base service Called.');

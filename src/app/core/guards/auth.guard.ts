@@ -2,8 +2,6 @@ import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../services/auth.service';
-import { UserStatus } from '../enums/user.enum';
-import { map } from 'rxjs';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -13,12 +11,6 @@ export const authGuard: CanActivateFn = () => {
   // SSR: không check, để client tự handle sau khi hydrate
   if (!isPlatformBrowser(platformId)) {
     return true;
-  }
-
-  if (authService.getCurrentUserStatus() === UserStatus.PENDING_VERIFICATION) {
-    return authService
-      .sendRegistrationOtpForCurrentUser()
-      .pipe(map(() => router.createUrlTree(['/auth/verify-otp'])));
   }
 
   if (authService.isAuthenticated()) {

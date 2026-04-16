@@ -1,4 +1,5 @@
-import { Directive, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Directive, inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
@@ -15,26 +16,30 @@ type Entity = { id: string | number };
  * A comprehensive, abstract base component designed for list and detail pages.
  * It provides built-in functionality for data fetching, form handling, pagination,
  * sorting, selection, and lifecycle management, and i18n integration.
+ * Automatically skips initialization on server-side rendering.
  *
  * @template T The main entity type for the component (e.g., User, Product).
  */
 @Directive() // Use @Directive for abstract base classes that are not directly rendered
 export abstract class BaseComponent<T extends Entity> implements OnInit, OnDestroy {
   //================================================================
+  // Platform Check
+  //================================================================
+  protected platformId = inject(PLATFORM_ID);
+
+  //================================================================
   // Abstract & Core Properties
   //================================================================
-  public loading = false; // General loading state for data fetching
+  public loading = false;
 
   //================================================================
   // Injected Services
-  public isSubmitting = false; // Loading state for form submissions
-  public isEditMode = false; // Flag to indicate if the component is in edit mode
-  public currentId: string | number | null = null; // ID of the entity being edited/viewed
   //================================================================
-  public searchForm!: FormGroup; // Form group for search/filter criteria
-  public detailForm!: FormGroup; // Form group for entity creation/editing
-  // Add other common services like NotificationService, MessageService here if needed.
-  // protected notificationService = inject(NotificationService);
+  public isSubmitting = false;
+  public isEditMode = false;
+  public currentId: string | number | null = null;
+  public searchForm!: FormGroup;
+  public detailForm!: FormGroup;
 
   //================================================================
   // State Management
@@ -94,14 +99,37 @@ export abstract class BaseComponent<T extends Entity> implements OnInit, OnDestr
   }
 
   ngOnInit(): void {
-    this.initForms(); // Initialize search and detail forms
-    this.resolveModeAndLoadData(); // Determine mode (list/edit) and load data accordingly
-    this.setupLanguageChangeSubscription(); // Setup subscription for language changes
+    // Skip initialization on server-side rendering
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.initForms();
+    // Only resolve mode and load data if service is provided
+    if (this.service) {
+      this.resolveModeAndLoadData();
+    }
+    this.setupLanguageChangeSubscription();
+    this.onBrowserInit();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Hook called when component initializes in browser environment.
+   * Override this for browser-specific initialization.
+   */
+  protected onBrowserInit(): void {
+    // Default: empty implementation
+  }
+
+  /**
+   * Check if running in browser environment
+   */
+  protected isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
 
   //================================================================
@@ -114,6 +142,7 @@ export abstract class BaseComponent<T extends Entity> implements OnInit, OnDestr
    * updating pagination and data.
    */
   public search(): void {
+    if (!this.service) return; // Skip if service not provided
     if (this.loading) return;
     this.loading = true;
 

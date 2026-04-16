@@ -8,6 +8,7 @@ import { Toast } from '../../../shared/models/toast.model';
 import { ToastService } from '../../../shared/services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LoginRequest } from '../../../models/auth';
+import { BaseComponent } from '../../../shared/components/base/base.component';
 
 @Component({
   selector: 'app-login',
@@ -16,25 +17,35 @@ import { LoginRequest } from '../../../models/auth';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
-  loading = false;
-  errorMessage = '';
-  toast: Toast = {
+export class LoginComponent extends BaseComponent<any> {
+  public override loading = false;
+  public errorMessage = '';
+  public toast: Toast = {
     title: 'common.ui.toast.info',
     type: 'info',
     message: 'common.ui.status.updating',
     visible: false,
   };
-  private fb = inject(FormBuilder);
-  form: FormGroup = this.fb.group({
+  protected override fb = inject(FormBuilder);
+  public form: FormGroup = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
   private authService = inject(AuthService);
-  private router = inject(Router);
+  protected override router = inject(Router);
   private toastService: ToastService = inject(ToastService);
   private translateService = inject(TranslateService);
   private langService = inject(LanguageService);
+
+  protected override service = null as any;
+
+  protected override initForms(): void {
+    // No forms to initialize for login
+  }
+
+  protected override onBrowserInit(): void {
+    // Component is browser-ready
+  }
 
   get usernameError(): string {
     const ctrl = this.form.get('username');
@@ -50,22 +61,17 @@ export class LoginComponent {
     return '';
   }
 
-  get currentLang(): string {
+  get overrideCurrentLang(): string {
     return this.langService.getCurrentLanguage();
   }
 
-  /**
-   * Translates a given key.
-   * @param key The translation key.
-   * @returns The translated string.
-   */
-  translate(key: string): string {
+  translateKey(key: string): string {
     return this.translateService.instant(key);
   }
 
   showToast() {
-    const title = this.translate(this.toast.title);
-    const message = this.translate(this.toast.message);
+    const title = this.translateKey(this.toast.title);
+    const message = this.translateKey(this.toast.message);
     this.toastService.info(title, message);
   }
 
@@ -95,20 +101,20 @@ export class LoginComponent {
         if (response.success) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage = this.translate('common.validation.common.unexpectedError');
+          this.errorMessage = this.translateKey('common.validation.common.unexpectedError');
         }
         this.loading = false;
       },
       error: (error) => {
         this.errorMessage =
-          error?.error.message || this.translate('common.validation.common.unexpectedError');
+          error?.error.message || this.translateKey('common.validation.common.unexpectedError');
         this.loading = false;
       },
     });
   }
 
   switchLang(): void {
-    const next = this.currentLang === 'vi' ? 'en' : 'vi';
+    const next = this.overrideCurrentLang === 'vi' ? 'en' : 'vi';
     this.langService.setLanguage(next);
   }
 }
