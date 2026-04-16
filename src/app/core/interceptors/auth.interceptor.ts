@@ -1,4 +1,5 @@
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -12,10 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ApiEndpoints } from '../../shared/constants/api.constants';
 import { AuthService } from '../services/auth.service'; // Import AuthService
-
-// The key for storing the JWT in localStorage.
-const TOKEN_STORAGE_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
 
 // List of API endpoints that do not require an authentication token.
 const PUBLIC_API_ENDPOINTS: string[] = [
@@ -35,6 +32,12 @@ export const authInterceptor: HttpInterceptorFn = (
   const translateService = inject(TranslateService);
   const router = inject(Router);
   const authService = inject(AuthService); // Inject AuthService
+  const platformId = inject(PLATFORM_ID);
+
+  // Skip token refresh on server-side rendering
+  if (!isPlatformBrowser(platformId)) {
+    return next(req);
+  }
 
   // Ensure currentLang is always a string, defaulting to 'vi' if not set
   const currentLang: string = translateService.currentLang || translateService.defaultLang || 'vi';

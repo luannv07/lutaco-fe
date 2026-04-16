@@ -12,6 +12,11 @@ export class UserService extends BaseService {
   protected readonly apiUrl: string = 'users';
 
   private shouldUpdateCachedUser(user: User): boolean {
+    // Only update cache in browser environment
+    if (!this.isBrowser()) {
+      return false;
+    }
+
     const currentUser = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY);
     if (!currentUser) {
       return true;

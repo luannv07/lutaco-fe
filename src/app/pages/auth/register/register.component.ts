@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { SHARED_COMPONENTS, SHARED_IMPORTS } from '../../../shared/base-imports';
@@ -7,6 +7,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserCreateRequest } from '../../../models/auth';
 import { Subscription } from 'rxjs';
+import { BaseComponent } from '../../../shared/components/base/base.component';
 
 function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -21,19 +22,21 @@ function passwordMatchValidator(group: AbstractControl): ValidationErrors | null
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent implements OnInit, OnDestroy {
-  loading = false;
-  errorMessage = '';
-  genderOptions: { value: string; label: string }[] = [];
+export class RegisterComponent extends BaseComponent<any> {
+  public override loading = false;
+  public errorMessage = '';
+  public genderOptions: { value: string; label: string }[] = [];
 
-  private fb = inject(FormBuilder);
+  protected override fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
+  protected override router = inject(Router);
   private toastService = inject(ToastService);
   private translateService = inject(TranslateService);
   private langSub!: Subscription;
 
-  form: FormGroup = this.fb.group(
+  protected override service = null as any;
+
+  public form: FormGroup = this.fb.group(
     {
       username: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]],
       fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
@@ -46,12 +49,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
     { validators: passwordMatchValidator },
   );
 
-  ngOnInit(): void {
-    this.loadGenderOptions();
+  protected override initForms(): void {
+    // Form initialized in property declaration above
+  }
 
+  protected override onBrowserInit(): void {
+    this.loadGenderOptions();
     this.langSub = this.translateService.onLangChange.subscribe(() => {
       this.loadGenderOptions();
     });
+  }
+
+  override ngOnDestroy(): void {
+    this.langSub?.unsubscribe();
+    super.ngOnDestroy();
   }
 
   private loadGenderOptions(): void {
@@ -70,9 +81,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.langSub?.unsubscribe();
-  }
 
   getError(field: string): string {
     const ctrl = this.form.get(field);
