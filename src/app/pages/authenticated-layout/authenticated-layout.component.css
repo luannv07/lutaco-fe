@@ -1,0 +1,17 @@
+/* Responsive layout adjustment */
+@media (max-width: 1024px) {
+  div.ml-64 {
+    margin-left: 16rem; /* w-64 */
+  }
+}
+
+@media (max-width: 768px) {
+  div.ml-64 {
+    margin-left: 0;
+  }
+
+  app-sidebar {
+    display: none;
+  }
+}
+

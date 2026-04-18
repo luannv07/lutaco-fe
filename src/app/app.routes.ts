@@ -16,19 +16,27 @@ export const routes: Routes = [
     resolve: { translations: translationResolver('auth') },
   },
   {
-    path: 'dashboard',
+    path: '',
     canActivate: [authGuard],
-    loadChildren: () =>
-      import('./pages/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
-    resolve: { translations: translationResolver('dashboard') },
-  },
-  {
-    path: 'users',
-    canActivate: [authGuard],
-    loadChildren: () => import('./pages/users/users.routes').then((m) => m.USERS_ROUTES),
+    loadComponent: () =>
+      import('./pages/authenticated-layout/authenticated-layout.component').then(
+        (m) => m.AuthenticatedLayoutComponent,
+      ),
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./pages/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+        resolve: { translations: translationResolver('dashboard') },
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('./pages/users/users.routes').then((m) => m.USERS_ROUTES),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'auth',
   },
 ];

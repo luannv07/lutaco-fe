@@ -1,5 +1,12 @@
 {
   "common": {
+    "logout": "Logout",
+    "menu": {
+      "dashboard": "Dashboard",
+      "profile": "Profile",
+      "wallets": "Wallets",
+      "transactions": "Transactions"
+    },
     "ui": {
       "buttons": {
         "save": "Save",

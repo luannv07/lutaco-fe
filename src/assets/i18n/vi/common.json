@@ -1,5 +1,12 @@
 {
   "common": {
+    "logout": "Đăng xuất",
+    "menu": {
+      "dashboard": "Tổng quan",
+      "profile": "Hồ sơ cá nhân",
+      "wallets": "Ví",
+      "transactions": "Giao dịch"
+    },
     "ui": {
       "buttons": {
         "save": "Lưu",

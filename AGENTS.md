@@ -1,1024 +1,404 @@
-🧠 LUTACO FRONTEND – AI AGENT RULES (FINAL – EXECUTABLE)
-⚠️ EXECUTION PRIORITY (ABSOLUTE)
+LUTACO FRONTEND — AI AGENT RULES v4.0
+Angular 17+ · TypeScript · Tailwind CSS · Standalone · Clean Code · Token-Efficient
+=============================================================================
 
-AI MUST:
+## CONFLICT RESOLUTION PRIORITY
 
-READ package.json trước khi dùng thư viện
-Nếu CHƯA có:
-→ RETURN install command
-→ STOP (ASK MODE)
-Nếu ĐÃ có:
-→ Dùng import (KHÔNG dùng CDN)
-CDN chỉ dùng cho icon font (FontAwesome, etc.)
-Validate output against rules (soft enforcement – không gây block execution)
-NEVER fallback to chat nếu có thể sửa code
-🔥 EXECUTION MODE (CRITICAL – FIX CORE ISSUE)
-🟢 EDIT MODE (DEFAULT – ALWAYS)
+1. Existing codebase 2. This document 3. Angular defaults
+   → Never stop execution. Never refuse on minor missing context.
 
-AI MUST:
+=============================================================================
 
-Sửa code trực tiếp vào file
-KHÔNG giải thích
-KHÔNG gửi code vào chat
-KHÔNG mô tả solution
-Trigger EDIT MODE khi:
-User đưa code
-User nói: fix / sửa / refactor / viết / implement
-Task có thể thực thi
+## 01 · EXECUTION MODE
+
+🟢 EDIT MODE (DEFAULT)
+Trigger: code provided, or fix/refactor/implement/write, or any executable task.
+→ Edit file directly. No chat explanation. No full code dump.
+
 🟡 ASK MODE (STRICT)
+Trigger: type missing (MODEL RULE), requirement truly ambiguous, critical context absent.
+→ Ask ONE short question. No code generated.
 
-Chỉ dùng khi:
-
-Thiếu type (vi phạm MODEL RULE)
-Không rõ requirement
-Thiếu context quan trọng
-Output:
-Hỏi NGẮN GỌN
-KHÔNG generate code
-🔴 REFUSE MODE (LIMITED)
-
-Chỉ khi:
-
-Vi phạm kiến trúc nghiêm trọng
-Ví dụ: gọi API trong component
-
-❗ KHÔNG refuse vì thiếu context nhỏ
-
-⚠️ ANTI-CHAT RULE (FIX TOKEN WASTE)
-AI MUST NOT output full code in chat.
-
-If in EDIT MODE:
-→ Apply changes silently
-
-If platform does not support direct edit:
-→ Return MINIMAL patch format ONLY
-→ NO full file dump
-⚠️ SAFE EXECUTION (ANTI FREEZE)
-If unsure:
-
-1. Follow existing codebase
-2. Then follow this document
-3. NEVER stop execution
-   ⚠️ RULE CONFLICT RESOLUTION
-   Priority:
-1. Existing project code
-2. This document
-3. Default Angular practice
-
-DO NOT refuse immediately
-⚠️ OUTPUT PROTOCOL (FIXED)
-✅ Component
-ng g c <correct-path>
-
-Sau đó:
-
-Sửa file trực tiếp
-KHÔNG output code ra chat
-✅ Non-component
-Sửa trực tiếp file
-KHÔNG dump code
-❌ FORBIDDEN
-Full code block trong chat
-Giải thích dài dòng
-"Here is updated code…"
-🧱 PROJECT CONTEXT
-Angular 17+ (standalone)
-TypeScript
-Hybrid Architecture (Core + Shared + Feature)
-REST API
-Multi-dev + AI environment
-⚖️ CORE PRINCIPLES
-
-1. Consistency > Creativity
-   MUST follow existing patterns
-   MUST NOT invent structure
-2. Separation of Concerns
-
-FORBIDDEN:
-
-Component gọi API
-Shared chứa business logic
-Service chứa UI logic
-
-3. Feature Isolation
-   Không import chéo feature
-   📁 FOLDER RESPONSIBILITY
-   core/
-   Singleton (auth, interceptor, guard)
-   NO UI
-   models/
-   ONLY global model
-   shared/
-   ONLY UI component
-   NO API
-   NO business logic
-   🏷 NAMING (STRICT)
-
-Sai naming = INVALID
-
-🔌 SERVICE RULE
-ALL API qua service
-NEVER dùng HttpClient trong component
-🧠 MODEL RULE
-Strong typing ONLY
-NO any
-Không rõ → ASK
-🔄 DATA LAYER (CRITICAL)
-Flow:
-Service → Component → Template
-DTO vs ViewModel (MANDATORY)
-DTO: từ API
-ViewModel: cho UI
-
-❌ Cấm dùng DTO trong template
-
-Mapping
-Làm ở service / mapper
-Component KHÔNG xử lý
-Error Handling
-Layer Responsibility
-Service HTTP + normalize
-Component UI state
-Shared render
-
-❌ Cấm throw raw error
-
-⚡ ASYNC / STATE
-Allowed:
-RxJS
-Signals
-Rules:
-KHÔNG subscribe trong template
-Subscribe trong component
-MUST unsubscribe / async pipe
-Ownership:
-Service: data
-Component: UI state
-Shared: stateless
-🧾 FORM RULE
-Reactive Forms ONLY
-Validation trong component
-Template chỉ hiển thị
-🧩 COMPONENT ARCHITECTURE
-MUST extend BaseComponent (list/detail)
-KHÔNG reimplement loading/pagination
-⚙️ ANGULAR RULES
-standalone: true
-OnPush
-@if / @for / @switch
-Keep @Input/@Output
-customClass: string = ''
-🚫 TEMPLATE RULE
-
-❌ Cấm:
-
-{{ complexLogic }}
-🚀 PERFORMANCE
-trackBy bắt buộc
-tránh re-render
-ưu tiên pure function
-🎨 UI DESIGN (TAILWIND)
-Primary: indigo
-Success / Warning / Danger
-Neutral: slate
-
-❌ NO #000 / #fff
-
-🧩 COMPONENT UI
-Button / Input / Select / ...
-MUST consistent behavior
-🎯 ICON RULE
-Dùng Font-based icon
-Ưu tiên Font Awesome
-
-❌ Không dùng SVG nếu có font
-
-🛠 CLI ENFORCEMENT
-ng g c <path>
-
-❌ Cấm:
-
-Tạo file tay
-Sai naming
-✅ FINAL VALIDATION (NON-BLOCKING)
-
-Checklist:
-
-Naming đúng
-Không API trong component
-Không logic trong template
-Strong typing
-Đúng Angular 17 syntax
-
-❗ Nếu fail:
-→ FIX → KHÔNG được dừng
-
-🚨 FINAL RULE
-If unsure:
-
-1. Follow existing codebase
-2. Then follow this document
-3. NEVER stop execution
-   ⚠️ RULE CONFLICT RESOLUTION
-   Priority:
-1. Existing project code
-2. This document
-3. Default Angular practice
-
-DO NOT refuse immediately
-⚠️ OUTPUT PROTOCOL (FIXED)
-✅ Component
-ng g c <correct-path>
-
-Sau đó:
-
-Sửa file trực tiếp
-KHÔNG output code ra chat
-✅ Non-component
-Sửa trực tiếp file
-KHÔNG dump code
-❌ FORBIDDEN
-Full code block trong chat
-Giải thích dài dòng
-"Here is updated code…"
-🧱 PROJECT CONTEXT
-Angular 17+ (standalone)
-TypeScript
-Hybrid Architecture (Core + Shared + Feature)
-REST API
-Multi-dev + AI environment
-⚖️ CORE PRINCIPLES
-
-1. Consistency > Creativity
-   MUST follow existing patterns
-   MUST NOT invent structure
-2. Separation of Concerns
-
-FORBIDDEN:
-
-Component gọi API
-Shared chứa business logic
-Service chứa UI logic
-
-3. Feature Isolation
-   Không import chéo feature
-   📁 FOLDER RESPONSIBILITY
-   core/
-   Singleton (auth, interceptor, guard)
-   NO UI
-   models/
-   ONLY global model
-   shared/
-   ONLY UI component
-   NO API
-   NO business logic
-   🏷 NAMING (STRICT)
-
-Sai naming = INVALID
-
-🔌 SERVICE RULE
-ALL API qua service
-NEVER dùng HttpClient trong component
-🧠 MODEL RULE
-Strong typing ONLY
-NO any
-Không rõ → ASK
-🔄 DATA LAYER (CRITICAL)
-Flow:
-Service → Component → Template
-DTO vs ViewModel (MANDATORY)
-DTO: từ API
-ViewModel: cho UI
-
-❌ Cấm dùng DTO trong template
-
-Mapping
-Làm ở service / mapper
-Component KHÔNG xử lý
-Error Handling
-Layer Responsibility
-Service HTTP + normalize
-Component UI state
-Shared render
-
-❌ Cấm throw raw error
-
-⚡ ASYNC / STATE
-Allowed:
-RxJS
-Signals
-Rules:
-KHÔNG subscribe trong template
-Subscribe trong component
-MUST unsubscribe / async pipe
-Ownership:
-Service: data
-Component: UI state
-Shared: stateless
-🧾 FORM RULE
-Reactive Forms ONLY
-Validation trong component
-Template chỉ hiển thị
-🧩 COMPONENT ARCHITECTURE
-MUST extend BaseComponent (list/detail)
-KHÔNG reimplement loading/pagination
-⚙️ ANGULAR RULES
-standalone: true
-OnPush
-@if / @for / @switch
-Keep @Input/@Output
-customClass: string = ''
-🚫 TEMPLATE RULE
-
-❌ Cấm:
-
-{{ complexLogic }}
-🚀 PERFORMANCE
-trackBy bắt buộc
-tránh re-render
-ưu tiên pure function
-🎨 UI DESIGN (TAILWIND)
-Primary: indigo
-Success / Warning / Danger
-Neutral: slate
-
-❌ NO #000 / #fff
-
-🧩 COMPONENT UI
-Button / Input / Select / ...
-MUST consistent behavior
-🎯 ICON RULE
-Dùng Font-based icon
-Ưu tiên Font Awesome
-
-❌ Không dùng SVG nếu có font
-
-🛠 CLI ENFORCEMENT
-ng g c <path>
-
-❌ Cấm:
-
-Tạo file tay
-Sai naming
-✅ FINAL VALIDATION (NON-BLOCKING)
-
-Checklist:
-
-Naming đúng
-Không API trong component
-Không logic trong template
-Strong typing
-Đúng Angular 17 syntax
-
-❗ Nếu fail:
-→ FIX → KHÔNG được dừng
-
-🚨 FINAL RULE
-If unsure:
-→ Follow EXISTING CODEBASE
-→ NOT your own idea
-→ STILL EXECUTE (DO NOT FALLBACK TO CHAT)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ UI/UX QUALITY RULES (MANDATORY – KHÔNG ĐƯỢC BỎ QUA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏛 UNIVERSAL COMPONENT DESIGN SYSTEM (LAW – ÁP DỤNG CHO MỌI COMPONENT)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Đây là bộ quy tắc nền tảng. Khi tạo bất kỳ component mới nào
-(datepicker, timepicker, color picker, autocomplete, stepper,
-file upload, rating, tag input, transfer list, carousel, v.v.)
-AI PHẢI tự suy ra behavior đúng từ các law dưới đây.
-KHÔNG cần prompt lại cho từng component cụ thể.
-
-────────────────────────────────────────────────────────
-LAW 1 – MỌI COMPONENT PHẢI CÓ 5 TRẠNG THÁI
-────────────────────────────────────────────────────────
-
-Bất kỳ component tương tác nào PHẢI xử lý đủ 5 state:
-
-default → Trạng thái bình thường, không tương tác
-hover → Khi chuột di qua — visual feedback nhẹ
-focus → Khi được focus (keyboard hoặc click) — ring rõ ràng
-disabled → Opacity giảm, cursor not-allowed, không tương tác
-error → Border/ring đỏ, message lỗi có animation
-
-❌ KHÔNG được thiếu bất kỳ state nào trong số trên.
-❌ KHÔNG được dùng cùng visual cho 2 state khác nhau.
-
-────────────────────────────────────────────────────────
-LAW 2 – QUY TẮC SHOW / HIDE (UNIVERSAL)
-────────────────────────────────────────────────────────
-
-Mọi element xuất hiện / biến mất PHẢI theo công thức:
-
-ENTER = opacity(0→1) + transform(lệch nhỏ→gốc) + duration(150–300ms) + easing(ease-out-expo)
-EXIT = opacity(1→0) + transform(gốc→lệch nhỏ) + duration(100–200ms) + easing(ease-in)
-
-Lệch mặc định theo vị trí xuất hiện:
-Từ dưới lên → translateY(8px) → translateY(0)
-Từ trên xuống → translateY(-8px) → translateY(0)
-Từ phải vào → translateX(12px) → translateX(0)
-Scale popup → scale(0.95) → scale(1), transform-origin = điểm trigger
-
-AI tự suy ra hướng phù hợp với UX của component đó.
-Ví dụ: dropdown → từ dưới lên; tooltip top → từ dưới lên; notification → từ phải vào.
-
-────────────────────────────────────────────────────────
-LAW 3 – QUY TẮC OVERLAY / PANEL NỔI
-────────────────────────────────────────────────────────
-
-Mọi element "nổi" trên UI (dropdown, popover, tooltip, date panel,
-color picker panel, autocomplete list, context menu, v.v.):
-
-z-index:    phải cao hơn content — dùng z-[1000] đến z-[9999]
-position:   absolute hoặc fixed, KHÔNG dùng relative làm panel nổi
-shadow:     shadow-lg ring-1 ring-slate-900/5
-background: bg-white
-radius:     rounded-xl (12px) — nhất quán toàn app
-border:     KHÔNG border nếu đã có ring + shadow
-overflow:   hidden (clip nội dung bên trong theo radius)
-
-Clickaway / outside click:
-→ PHẢI đóng khi click ra ngoài
-→ PHẢI đóng khi nhấn Escape
-→ KHÔNG đóng khi click bên trong panel
-
-Positioning logic:
-→ Flip tự động nếu không đủ không gian (viewport collision detection)
-→ Ưu tiên mở xuống, fallback mở lên
-→ Ưu tiên căn trái trigger, fallback căn phải
-
-────────────────────────────────────────────────────────
-LAW 4 – QUY TẮC FEEDBACK TỨC THỜI
-────────────────────────────────────────────────────────
-
-Mọi thao tác user PHẢI có phản hồi visual trong vòng 100ms:
-
-Click button → active scale(0.97) ngay lập tức
-Select option → highlight ngay, KHÔNG delay
-Toggle checkbox → trạng thái đổi ngay, animation song song
-Input typing → character xuất hiện ngay, validation sau debounce 400ms
-Hover bất kỳ → visual đổi trong 100–150ms, KHÔNG delay
-
-Nếu action cần thời gian (API call, xử lý nặng):
-→ Show loading state NGAY (< 16ms sau click)
-→ KHÔNG để UI "đứng im" rồi mới hiện loading
-
-────────────────────────────────────────────────────────
-LAW 5 – QUY TẮC KEYBOARD & NAVIGATION
-────────────────────────────────────────────────────────
-
-Mọi component tương tác PHẢI keyboard accessible:
-
-Tab / Shift+Tab → Di chuyển focus giữa các element
-Enter / Space → Activate (button, checkbox, select...)
-Escape → Đóng mọi overlay (modal, dropdown, dialog, panel)
-Arrow keys → Navigate trong list/grid/calendar/slider
-Home / End → Jump đến đầu / cuối list (nếu có list)
-
-Focus order: theo DOM order, KHÔNG nhảy lung tung
-Focus visible: ring-2 ring-indigo-500 ring-offset-2 — LUÔN LUÔN hiện
-
-────────────────────────────────────────────────────────
-LAW 6 – QUY TẮC SIZING & SPACING (SCALE CHUẨN)
-────────────────────────────────────────────────────────
-
-Height chuẩn của interactive element (input, select, button, trigger):
-sm → h-8  (32px)
-md → h-10 (40px) ← DEFAULT
-lg → h-12 (48px)
-
-Padding ngang tương ứng:
-sm → px-3
-md → px-4
-lg → px-5
-
-Nội tại component (khoảng cách icon ↔ text):
-→ gap-2 (8px) — mọi component
-
-Khoảng cách label ↔ control:
-→ mb-1.5 (6px) — nhất quán
-
-Khoảng cách control ↔ helper/error text:
-→ mt-1.5 (6px) — nhất quán
-
-AI tự áp scale này cho mọi component mới.
-KHÔNG tự bịa ra sizing ngoài scale.
-
-────────────────────────────────────────────────────────
-LAW 7 – QUY TẮC MÀU SẮC (SELF-DERIVABLE)
-────────────────────────────────────────────────────────
-
-Từ semantic intent, AI tự suy ra màu:
-
-primary → indigo-600 (action, CTA, selected, active)
-success → emerald-500 (xác nhận, hoàn thành, valid)
-warning → amber-500  (cảnh báo, cần chú ý)
-danger → red-500    (lỗi, xóa, destructive)
-info → sky-500    (thông tin trung tính)
-neutral → slate-*    (text, border, background)
-
-Quy tắc tự suy màu cho state:
-Nền nhạt (bg)     → màu-50
-Border / ring → màu-500
-Text đậm → màu-700 hoặc màu-800
-Icon → màu-500
-Hover nền → màu-50
-Active / selected → màu-100 text màu-700
-
-Ví dụ: datepicker ngày được chọn → bg-indigo-600 text-white
-ngày hôm nay (chưa chọn) → bg-indigo-50 text-indigo-700 font-semibold
-ngày hover → bg-slate-100
-
-────────────────────────────────────────────────────────
-LAW 8 – QUY TẮC EMPTY / NULL / LOADING STATE
-────────────────────────────────────────────────────────
-
-Mọi component hiển thị data PHẢI xử lý đủ 3 trường hợp:
-
-LOADING → Skeleton (animate-pulse) — KHÔNG spinner toàn vùng
-EMPTY → Illustration đơn giản (FA icon lớn) + message ngắn + optional CTA
-ERROR → Icon cảnh báo + message + nút retry
-
-KHÔNG được để component trống trơn không có gì.
-KHÔNG được dùng text "null", "undefined", "N/A" thô ra template.
-
-────────────────────────────────────────────────────────
-LAW 9 – QUY TẮC ICON TRONG COMPONENT
-────────────────────────────────────────────────────────
-
-Mọi component PHẢI dùng icon nhất quán:
-
-Luôn dùng Font Awesome (fa-solid hoặc fa-regular)
-Size icon khớp với text: text-sm→fa-sm, text-base→mặc định, text-lg→fa-lg
-Icon màu inherit từ text hoặc chỉ định rõ ràng
-Icon trạng thái:
-loading → fa-spinner fa-spin
-success → fa-circle-check
-error → fa-circle-xmark
-warning → fa-triangle-exclamation
-info → fa-circle-info
-close → fa-xmark
-expand → fa-chevron-down (xoay 180deg khi mở)
-calendar → fa-calendar-days
-clock → fa-clock
-search → fa-magnifying-glass
-clear → fa-xmark (trong input)
-eye → fa-eye / fa-eye-slash (password toggle)
-
-AI tự áp icon phù hợp cho component mới mà không cần hỏi.
-
-────────────────────────────────────────────────────────
-LAW 10 – QUY TẮC TỰ SCALE CHO COMPONENT MỚI
-────────────────────────────────────────────────────────
-
-Khi gặp component chưa có rule cụ thể (datepicker, color picker,
-rich text editor, OTP input, signature pad, v.v.):
-
-AI PHẢI tự suy ra design theo thứ tự:
-
-1. Nhìn existing component gần nhất trong codebase → bắt chước pattern
-2. Áp LAW 1–9 ở trên
-3. Panel nổi → LAW 3
-4. Animation → LAW 2
-5. State → LAW 1
-6. Màu → LAW 7
-7. Sizing → LAW 6
-8. Icon → LAW 9
-9. Keyboard → LAW 5
-10. Feedback → LAW 4
-
-❌ KHÔNG hỏi lại "bạn muốn datepicker trông như thế nào?"
-❌ KHÔNG tạo component thiếu animation, thiếu state, thiếu keyboard support
-✅ Tự quyết định → thực thi → nhất quán với hệ thống
-
-⚠️ ANIMATION RULE (CRITICAL – FIX CURRENT ISSUE)
-
-Mọi component hiển thị / ẩn đi PHẢI có transition animation.
-KHÔNG được để element xuất hiện/biến mất tức thời (instant snap).
-Đây là lỗi nghiêm trọng về UX.
-
-Angular Animation MUST dùng: @angular/animations
-Import BrowserAnimationsModule / provideAnimations() ở root.
-
-❌ FORBIDDEN:
-
-- *ngIf / @if không kèm animation trigger
-- display:none toggle không có transition
-- opacity toggle không có duration
-- visibility toggle không có ease
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔔 TOAST / NOTIFICATION RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-ENTER animation (MANDATORY):
-
-- Slide in từ phải hoặc từ trên xuống
-- opacity: 0 → 1
-- transform: translateX(100%) → translateX(0) hoặc translateY(-20px) → translateY(0)
-- duration: 300ms
-- easing: cubic-bezier(0.16, 1, 0.3, 1)  ← smooth overshoot
-
-EXIT animation (MANDATORY):
-
-- Slide out ngược chiều enter
-- opacity: 1 → 0
-- duration: 200ms
-- easing: ease-in
-
-AUTO DISMISS: 3000–5000ms tuỳ loại
-Progress bar: hiển thị countdown (optional nhưng recommended)
-
-Stack behavior:
-
-- Nhiều toast → stack dọc, gap 8px
-- Toast mới đẩy toast cũ lên / xuống với transition
-
-Visual design MUST:
-
-- Rounded: rounded-lg (8px)
-- Shadow: shadow-lg
-- Icon trái (FA): ✅ fa-circle-check / ⚠️ fa-triangle-exclamation / ❌ fa-circle-xmark / ℹ️ fa-circle-info
-- Màu theo loại:
-  success → bg-emerald-50, border-l-4 border-emerald-500, text-emerald-800
-  error → bg-red-50, border-l-4 border-red-500, text-red-800
-  warning → bg-amber-50, border-l-4 border-amber-500, text-amber-800
-  info → bg-indigo-50, border-l-4 border-indigo-500, text-indigo-800
-- Nút close (×) ở góc phải, hover highlight
-
-Position: fixed, top-right (default): top-4 right-4, z-[9999]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🪟 MODAL / DIALOG RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-BACKDROP animation (MANDATORY):
-
-- opacity: 0 → 1
-- duration: 200ms
-- Màu: bg-slate-900/60 (backdrop-blur-sm nếu dùng được)
-
-MODAL PANEL animation (MANDATORY):
-
-- opacity: 0 → 1
-- transform: scale(0.95) → scale(1)
-- translateY(16px) → translateY(0)
-- duration: 250ms
-- easing: cubic-bezier(0.16, 1, 0.3, 1)
-
-EXIT: reverse, duration 150ms
-
-Scroll lock: MUST lock body scroll khi modal mở (overflow:hidden on body)
-Focus trap: MUST trap focus bên trong modal
-Đóng bằng: nút close, click backdrop, phím Escape
-
-Visual design MUST:
-
-- Rounded: rounded-xl (12px)
-- Shadow: shadow-2xl
-- Padding header: px-6 pt-6 pb-4
-- Padding body: px-6 py-4
-- Padding footer: px-6 pb-6 pt-2
-- Divider giữa header / body / footer: border-t border-slate-100
-- Max-width: sm=384px / md=512px / lg=640px / xl=768px
-- Header: title (font-semibold text-slate-800) + close button (×)
-- Footer: align-right, gap-3, primary action bên phải
-
-Size variants: sm / md (default) / lg / xl / full
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔽 DROPDOWN / SELECT / POPOVER RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-ENTER animation (MANDATORY):
-
-- opacity: 0 → 1
-- transform: scaleY(0.95) origin-top → scaleY(1)
-- translateY(-4px) → translateY(0)
-- duration: 150ms
-- easing: ease-out
-
-EXIT: reverse, duration 100ms
-
-Visual design MUST:
-
-- Rounded: rounded-lg
-- Shadow: shadow-lg ring-1 ring-slate-900/5
-- bg-white
-- Item hover: bg-slate-50, transition-colors 100ms
-- Item active/selected: bg-indigo-50 text-indigo-700 font-medium
-- Max-height: 240px, overflow-y: auto, scrollbar-thin
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 INPUT / FORM FIELD RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-MỌI input PHẢI có:
-
-- transition: border-color 150ms, box-shadow 150ms
-- Default:  border border-slate-300 rounded-lg
-- Focus:    border-indigo-500 ring-2 ring-indigo-500/20 ← glow effect
-- Error:    border-red-500 ring-2 ring-red-500/15
-- Disabled: bg-slate-50 text-slate-400 cursor-not-allowed opacity-60
-
-Floating label (nếu dùng):
-
-- Label animate lên khi focus hoặc có value
-- transform + font-size transition, duration 150ms
-
-Error message PHẢI:
-
-- Xuất hiện với animation: opacity 0→1, translateY(-4px)→0, duration 200ms
-- Màu: text-red-600, font-size: text-sm
-- Icon ⚠ kèm message
-- KHÔNG xuất hiện tức thời (snap)
-
-Helper text: text-slate-500 text-sm, hiển thị dưới input
-
-Character count (nếu có textarea): right-aligned, mờ, đổi màu khi gần limit
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔘 BUTTON RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-MỌI button PHẢI có:
-
-- transition: all 150ms ease
-- Hover: scale(1.01) hoặc background shift (không cả hai)
-- Active: scale(0.98) — pressed feel
-- Focus-visible: ring-2 ring-offset-2
-- Disabled: opacity-50 cursor-not-allowed pointer-events-none
-
-Loading state PHẢI có:
-
-- Spinner icon (FA fa-spinner fa-spin) thay text
-- HOẶC thêm spinner trái text
-- Button disabled khi loading
-- Width không được nhảy (giữ nguyên kích thước)
-
-Variants (MANDATORY consistent):
+🔴 REFUSE (RARE)
+Trigger: severe architecture violation only (e.g. HttpClient inside Component).
+→ Never refuse on minor missing context.
+
+OUTPUT PROTOCOL:
+
+- Component → ng g c , then edit file directly. No dump to chat.
+- Non-component → edit file directly.
+- FORBIDDEN: full code block in chat, preambles, long explanations, "Here is updated code…"
+
+LIBRARY RULE:
+
+- Read package.json before using any library.
+- Missing → return install command → stop (ASK MODE).
+- Present → use import. CDN only for icon fonts (FontAwesome).
+
+PRIORITY: (1) Existing codebase → (2) This document → (3) Angular defaults.
+NEVER stop execution. NEVER fall back to chat instead of action.
+
+=============================================================================
+
+## 02 · ARCHITECTURE & FOLDER RULES
+
+core/ → Singleton services, auth, interceptors, guards. NO UI.
+shared/ → UI-only components. NO API. NO business logic. Stateless.
+models/ → Global types only.
+feature/ → Fully isolated. No cross-feature imports.
+
+RULES:
+
+- NEVER: HttpClient in Component, business logic in Shared, UI logic in Service, cross-feature imports.
+- ALWAYS: ng g c CLI. Wrong naming = INVALID.
+
+=============================================================================
+
+## 03 · DATA LAYER
+
+Flow: Service → Component → Template
+
+DTO → from API. Mapped to ViewModel in Service/Mapper. Never in template directly.
+Errors: Service normalizes HTTP. Component manages UI state. Never throw raw errors.
+Async: RxJS or Signals. Never subscribe in template. Always unsubscribe or async pipe.
+Service owns: data. Component owns: UI state. Shared: stateless.
+Forms: Reactive Forms only. Validation in component. Template renders only.
+Types: Strong typing only. No `any`. Unclear → ASK first.
+
+=============================================================================
+
+## 04 · ANGULAR 17+ RULES
+
+- standalone: true + ChangeDetectionStrategy.OnPush on every component.
+- Use @if / @for / @switch. `track` required in every @for.
+- Extend BaseComponent for list/detail. Never reimplement loading/pagination.
+- Keep @Input() / @Output(). Add `customClass: string = ''` on every component.
+- FORBIDDEN: complex logic in templates ({{ complexLogic() }}).
+- Root must have provideAnimations().
+
+=============================================================================
+
+## 05 · UI/UX DESIGN LAWS (UNIVERSAL)
+
+Auto-apply to every component. Never ask "what should it look like?". Execute immediately.
+
+LAW 01 — 5 STATES REQUIRED
+Every interactive component: default · hover · focus · disabled · error.
+All 5 mandatory. No two states share same visual.
+
+LAW 02 — SHOW/HIDE ANIMATION
+Enter: opacity(0→1) + transform(offset→origin), 150–300ms, ease-out-expo.
+Exit: opacity(1→0) + transform reverse, 100–200ms, ease-in.
+Offsets: below=translateY(8px), above=translateY(-8px), right=translateX(12px), popup=scale(0.95).
+NEVER instant snap. Use @angular/animations for all show/hide.
+
+LAW 03 — FLOATING PANELS
+z-[1000]+, rounded-xl, shadow-lg ring-1 ring-slate-900/5, bg-white, overflow-hidden.
+Close: Escape + clickaway (never on click inside). Auto-flip vertically if no space below.
+
+LAW 04 — INSTANT FEEDBACK
+Every action → visual response <100ms. Loading shows <16ms after click. UI never freezes silently.
+
+LAW 05 — KEYBOARD NAVIGATION
+Tab/Shift+Tab · Enter/Space · Escape (closes all overlays) · Arrows · Home/End.
+Focus ring always: ring-2 ring-indigo-500 ring-offset-2. Never outline:none alone.
+
+LAW 06 — SIZING SCALE
+sm=h-8 px-3 / md=h-10 px-4 (DEFAULT) / lg=h-12 px-5.
+Icon↔text: gap-2. Label↔control: mb-1.5. Control↔helper: mt-1.5. Never invent sizes outside scale.
+
+LAW 07 — COLOR SYSTEM
+Primary: indigo | Success: emerald | Warning: amber | Danger: red | Neutral: slate.
+FORBIDDEN: #000, #fff, gray-* (always slate-*).
+
+LAW 08 — EMPTY/LOADING/ERROR STATES
+Loading → skeleton (animate-pulse). Never full-page spinner for sections.
+Empty → FA icon (large) + message + optional CTA.
+Error → warning icon + message + retry. Never blank.
+
+LAW 09 — ICONS
+Font Awesome always. Never SVG if FA equivalent exists.
+fa-spinner fa-spin · fa-circle-check · fa-circle-xmark · fa-triangle-exclamation ·
+fa-circle-info · fa-xmark · fa-chevron-down (rotate 180 open) · fa-calendar-days ·
+fa-magnifying-glass · fa-eye / fa-eye-slash.
+
+LAW 10 — SELF-DERIVE FOR UNKNOWN COMPONENTS
+Find nearest existing component → replicate pattern → apply LAW 1–9.
+Never ask "how should this look?". Execute immediately.
+
+MICRO-INTERACTIONS (mandatory):
+
+- Badge/Chip: scale(0.8)→scale(1) + opacity 0→1
+- Avatar hover: ring-2 ring-indigo-400, 150ms
+- Checkbox/Toggle: animated (never snap). Toggle: translateX 200ms.
+- Accordion: height 0→auto, chevron rotates 180deg.
+- Tab indicator: translateX slide (never jump). Content fade in 150ms.
+- Tooltip: 400ms delay, opacity 0→1 + translateY(4px)→0, 150ms.
+- Route transitions: fadeIn 200ms OR slideUp translateY(12px)+opacity. Never white flash.
+
+VISUAL POLISH:
+Spacing scale: 4/8/12/16/20/24/32/40/48px. Section gap: 24px mobile / 32px desktop.
+Typography: page=text-2xl font-bold text-slate-800, section=text-lg font-semibold text-slate-700,
+body=text-sm text-slate-600, muted=text-sm text-slate-400. Max 2 font-weights per component.
+Radius: input/button/badge=rounded-lg · card/modal/dropdown=rounded-xl · avatar=rounded-full.
+Shadow: flat=none · card=shadow-sm · dropdown/tooltip=shadow-lg ring-1 · modal=shadow-2xl.
+
+PRE-DELIVERY CHECKLIST — fail any → fix immediately:
+[ ] Toast: enter + exit animation
+[ ] Modal: backdrop fade + panel scale
+[ ] Dropdown: animates open/close
+[ ] Input: focus ring transition
+[ ] Input error: animates in (no snap)
+[ ] Button: hover + active + loading state
+[ ] Loading type correct (skeleton / inline-spinner / top-bar)
+[ ] Nothing appears or disappears instantly
+[ ] Mobile: no layout breaks
+[ ] Keyboard nav + focus-visible always shown
+[ ] Colors from palette only (slate, indigo, emerald, red, amber, sky)
+[ ] Spacing from scale only
+[ ] prefers-reduced-motion handled
+[ ] No #000 / #fff / gray-*
+
+=============================================================================
+
+## 06 · TOAST / NOTIFICATION
+
+ENTER: translateX(100%)→0 + opacity 0→1, 300ms, cubic-bezier(0.16,1,0.3,1).
+EXIT: reverse, 200ms, ease-in. Auto-dismiss 3–5s. Optional progress bar countdown.
+Stack: gap-2, new toast pushes others with transition.
+Position: fixed top-4 right-4 z-[9999]. Style: rounded-lg shadow-lg border-l-4. FA icon left. Close × top-right.
+success → bg-emerald-50 border-emerald-500 text-emerald-800 fa-circle-check
+error → bg-red-50 border-red-500 text-red-800 fa-circle-xmark
+warning → bg-amber-50 border-amber-500 text-amber-800 fa-triangle-exclamation
+info → bg-indigo-50 border-indigo-500 text-indigo-800 fa-circle-info
+
+=============================================================================
+
+## 07 · MODAL / DIALOG
+
+BACKDROP: opacity 0→1, 200ms, bg-slate-900/60 backdrop-blur-sm.
+PANEL: opacity 0→1 + scale(0.95)→1 + translateY(16px)→0, 250ms, cubic-bezier(0.16,1,0.3,1). Exit 150ms.
+REQUIRED: lock body scroll, trap focus, restore focus to trigger on close.
+CLOSE: × button + backdrop click + Escape.
+STYLE: rounded-xl shadow-2xl. Header px-6 pt-6 pb-4. Body px-6 py-4. Footer px-6 pb-6 pt-2. Dividers border-t border-slate-100.
+SIZES: sm=384px · md=512px (default) · lg=640px · xl=768px · full.
+MOBILE: bottom sheet (slide up) or full-screen.
+A11Y: aria-modal="true" · aria-labelledby→title. Footer: right-aligned gap-3, primary action rightmost.
+
+=============================================================================
+
+## 08 · DROPDOWN / SELECT / POPOVER
+
+ENTER: opacity 0→1 + scaleY(0.95) origin-top + translateY(-4px)→0, 150ms ease-out.
+EXIT: reverse, 100ms.
+STYLE: rounded-lg shadow-lg ring-1 ring-slate-900/5 bg-white max-h-60 overflow-y-auto scrollbar-thin.
+ITEMS: hover=bg-slate-50 100ms. active=bg-indigo-50 text-indigo-700 font-medium.
+CLOSE: Escape + clickaway + item select. Never close on click inside. Auto-flip if no space below.
+
+=============================================================================
+
+## 09 · INPUT / FORM FIELD
+
+States (transition: border-color 150ms, box-shadow 150ms):
+default → border border-slate-300 rounded-lg
+focus → border-indigo-500 ring-2 ring-indigo-500/20
+error → border-red-500 ring-2 ring-red-500/15
+disabled → bg-slate-50 text-slate-400 cursor-not-allowed opacity-60
+
+Error message: animate opacity 0→1 + translateY(-4px)→0, 200ms. text-red-600 text-sm + ⚠ FA icon. aria-describedby linked. Never snap.
+Validation: debounce 400ms on typing. Instant on blur/submit.
+Extras: floating label transition 150ms. Textarea char count: right-aligned, color-shifts near limit. Helper: text-slate-500 text-sm mt-1.5.
+
+=============================================================================
+
+## 10 · BUTTON
+
+Base: transition all 150ms · hover scale(1.01) or bg-shift (not both) · active scale(0.98) ·
+focus-visible ring-2 ring-offset-2 · disabled opacity-50 pointer-events-none.
+Loading: fa-spinner fa-spin. Button disabled. Width stays fixed.
+Variants:
 primary → bg-indigo-600 hover:bg-indigo-700 text-white
 secondary → bg-white border border-slate-300 hover:bg-slate-50 text-slate-700
 danger → bg-red-600 hover:bg-red-700 text-white
 ghost → bg-transparent hover:bg-slate-100 text-slate-600
 link → text-indigo-600 underline-offset-4 hover:underline
+Sizes: sm=h-8 px-3 text-sm · md=h-10 px-4 (default) · lg=h-12 px-6 text-base.
+Icon-only: aria-label + tooltip on hover.
 
-Sizes: sm (h-8 px-3 text-sm) / md (h-10 px-4) / lg (h-12 px-6 text-base)
-Icon-only button: MUST có aria-label, tooltip on hover
+=============================================================================
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🗂 TABLE / LIST RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 11 · TABLE / LIST
 
-Row hover: bg-slate-50, transition-colors 100ms
-Row selected: bg-indigo-50 border-l-2 border-indigo-500
-Row click: ripple hoặc scale(0.995) feedback
+Row hover: bg-slate-50 100ms. Selected: bg-indigo-50 border-l-2 border-indigo-500.
+Loading: 5–8 skeleton rows (animate-pulse). Never full-page spinner.
+Empty: FA icon (large) + title + description + optional CTA. Never blank.
+Sort: arrow icon, rotates on direction change. Pagination: clear disabled states.
+Mobile: card view or overflow-x-auto wrapper.
 
-Skeleton loading (MANDATORY khi fetch):
+=============================================================================
 
-- Dùng animated pulse: animate-pulse bg-slate-200 rounded
-- KHÔNG dùng spinner toàn trang cho table
-- Hiển thị 5–8 skeleton rows
+## 12 · LOADING TYPES
 
-Empty state PHẢI có:
+Full page → full-screen spinner, fade out 300ms on complete.
+Section → skeleton animate-pulse.
+Button → inline spinner in button. Never overlay.
+Form submit → disabled + spinner in submit button.
+Background → subtle top progress bar (NProgress-style).
 
-- Icon (FA) + title + description + optional CTA button
-- KHÔNG để bảng trống không có gì
+=============================================================================
 
-Sort indicator: icon mũi tên, transition xoay khi đổi chiều
-Pagination: previous/next + số trang, disabled state rõ ràng
+## 13 · ANIMATION IMPLEMENTATION
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 PAGE / ROUTE TRANSITION RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Priority: (1) Tailwind transitions (hover/focus) → (2) @angular/animations (show/hide) → (3) CSS @keyframes (continuous).
+FORBIDDEN: setTimeout to fake animation · jQuery · direct style mutation · JS frame loop.
 
-Route change PHẢI có:
+Easing: enter=cubic-bezier(0.16,1,0.3,1) · exit=cubic-bezier(0.5,0,0.75,0) · hover=ease-out 150ms.
+Duration: hover 100–150ms · show/hide 200–300ms · page 200ms. Never >500ms.
+Animate ONLY: opacity + transform. NEVER: width, height, top, left, margin.
+prefers-reduced-motion: remove transforms, keep opacity ≤100ms.
 
-- fadeIn: opacity 0→1, duration 200ms
-- HOẶC slideUp: translateY(12px)→0 + opacity 0→1
+=============================================================================
 
-Dùng Angular Router animation với routerTransition trigger
-KHÔNG để trang flash trắng khi navigate
+## 14 · A11Y & RESPONSIVE
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⏳ LOADING STATE RULES (GLOBAL)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A11Y:
 
-PHÂN LOẠI loading (KHÔNG dùng cùng 1 kiểu cho mọi thứ):
+- Every interactive element: focus-visible ring + aria-label if no visible text + keyboard navigable.
+- WCAG AA contrast (4.5:1). Never light text on light background.
+- Modal: aria-modal="true" · aria-labelledby→title · restore focus on close.
+- Form: label linked · error aria-describedby · aria-required="true".
 
-Toàn trang (initial load):
-→ Spinner full-screen hoặc logo animation
-→ Fade out khi xong, duration 300ms
+RESPONSIVE:
 
-Section / widget:
-→ Skeleton loading (animate-pulse)
-→ KHÔNG spinner nhỏ lơ lửng
+- Mobile-first. Write mobile classes first, override at md:/lg:. Never hardcode px widths for layout.
+- Breakpoints: sm=640px · md=768px · lg=1024px · xl=1280px.
+- Table mobile: card view or overflow-x-auto. Modal mobile: bottom sheet or full-screen.
 
-Button action:
-→ Inline spinner trong button
-→ KHÔNG overlay
+=============================================================================
 
-Form submit:
-→ Disabled + spinner trong submit button
-→ KHÔNG block UI
+## 15 · CLEAN CODE RULES
 
-Background refetch:
-→ Subtle loading bar ở top (như NProgress)
-→ KHÔNG hiện spinner lớn
+Code is written once, read 100 times. Write for the next developer.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎨 VISUAL POLISH RULES (MANDATORY)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NAMING:
 
-Spacing:
+- Variables: reveal intent. isLoading, hasError, selectedUser. NOT: flag, temp, data, x.
+- Functions: verb + noun. loadUserList(), handleSubmit(), formatCurrency(). NOT: process(), doStuff().
+- Classes/Components: noun PascalCase. UserProfileComponent, WalletService. NOT: Manager, Handler (vague).
+- Constants: UPPER_SNAKE_CASE. MAX_RETRY_COUNT, DEFAULT_PAGE_SIZE. Always typed, never magic numbers.
 
-- KHÔNG dùng margin/padding lẻ tẻ khác nhau
-- Dùng spacing scale chuẩn: 4/8/12/16/20/24/32/40/48px
-- Section gap: 24px (mobile) / 32px (desktop)
+FUNCTIONS:
 
-Typography:
+- One function = one job. If you need "and" to describe it → split it.
+- Max ~20 lines. Longer → extract helpers. Max 100 chars/line.
+- Max 3 params. More → use an interface/object.
+- NEVER: side effects inside a getter function. getUser() must not modify state.
+- NEVER: magic numbers/strings inline. Extract to named const.
 
-- Heading page: text-2xl font-bold text-slate-800
-- Heading section: text-lg font-semibold text-slate-700
-- Body: text-sm text-slate-600
-- Muted: text-sm text-slate-400
-- KHÔNG mix quá 2 font-weight trong 1 component
+STRUCTURE & DRY:
 
-Border radius:
+- Logic used twice → extract to function/service/pipe. Never copy-paste logic.
+- Fail fast. Return early for edge cases. Avoid deep nesting.
+- Prefer pure functions: same input → same output. No hidden dependencies.
+- Prefer const. Never mutate input params. Return new objects/arrays.
+- NEVER: commented-out code in commits. Delete it (git has history).
+- NEVER: console.log in production code (except intentional logout placeholders).
 
-- Input / Button / Badge: rounded-lg (8px)
-- Card / Modal / Dropdown: rounded-xl (12px)
-- Avatar / Chip tròn: rounded-full
-- KHÔNG mix rounded-md và rounded-lg trong cùng 1 component
+COMMENTS — write WHY, not WHAT:
 
-Shadow system:
+- Bad:  // multiply by 1.1 → const total = price * 1.1;
+- Good: // VAT 10% required by VN tax law → const total = price * VAT_RATE;
+- Self-explanatory code needs no comment.
 
-- Flat element: không shadow
-- Card: shadow-sm
-- Dropdown / Tooltip: shadow-lg ring-1 ring-slate-900/5
-- Modal: shadow-2xl
+ANGULAR-SPECIFIC:
 
-Color usage:
+- Component: max 200 lines. Extract complex logic to service/helper.
+- Template: max 100 lines. Extract repeated blocks to child components.
+- Pipes for display transformation. Never transform data inline in template.
+- One component per file. One responsibility per component.
+- NEVER: nested subscribes. Use switchMap / combineLatest / forkJoin.
+- NEVER: `any`. Use `unknown` + type guard if type is truly unknown.
 
-- Text chính: text-slate-800
-- Text phụ: text-slate-500
-- Text mờ: text-slate-400
-- Border: border-slate-200 (default) / border-slate-300 (prominent)
-- Background page: bg-slate-50
-- Background card: bg-white
-- ❌ KHÔNG dùng text-gray-* (dùng slate-*)
-- ❌ KHÔNG dùng #000 / #fff thuần
+=============================================================================
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-♿ ACCESSIBILITY (A11Y) – MINIMUM REQUIRED
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 16 · TOKEN ECONOMY RULES
 
-MỌI interactive element PHẢI có:
+Every token must earn its place. No filler. No ceremony. Just code.
 
-- focus-visible ring (KHÔNG outline:none trơn)
-- aria-label nếu không có text hiển thị
-- Keyboard navigable
+RESPONSE FORMAT:
+FORBIDDEN outputs:
 
-Color contrast:
+- "Here is the updated component..."
+- "Great question! Let me explain..."
+- "I have made the following changes:"
+- Full file dump when only 5 lines changed
+  REQUIRED:
+- Edit silently in EDIT MODE.
+- Output ONLY the changed block + 3–5 lines of surrounding context (patch format).
+- If confirmation useful: max 1 sentence. "Done — extracted to UserMapper."
 
-- Text trên background PHẢI đạt WCAG AA (4.5:1)
-- KHÔNG để text mờ trên nền mờ
+THINKING — DO ONCE, ACT FAST:
 
-Modal / Dialog:
+- Analyze → plan → execute in one pass. No back-and-forth unless truly blocked.
+- 80% certain of intent → proceed with best assumption, note it in 1 line.
+- NEVER ask clarifying questions the codebase or context already answers.
+- NEVER generate both options and ask which. Pick the right one and execute.
 
-- aria-modal="true"
-- aria-labelledby trỏ đến title
-- Focus về trigger element khi đóng
+CODE GENERATION ECONOMY:
 
-Form:
+- Before generating new code: check if existing utility/service/pipe already handles it.
+- Only generate what was asked. No bonus features, no unsolicited refactors.
+- Only add imports for what you actually use. Remove unused imports immediately.
+- NEVER generate boilerplate not needed for the task.
+- NEVER duplicate logic. Extract shared logic, reference once.
 
-- Label liên kết với input (for / id hoặc aria-labelledby)
-- Error message: aria-describedby trỏ đến error text
-- Required: aria-required="true"
+CHAT DISCIPLINE:
+BAD (wastes tokens):
+"Great! I've analyzed your component and here are the changes I made:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📐 RESPONSIVE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Removed the ngIf directive 2. Added @if syntax 3. Updated imports.
+   Here is the full updated file: [500 lines]"
 
-Breakpoints (Tailwind default):
-sm: 640px / md: 768px / lg: 1024px / xl: 1280px
+GOOD (efficient):
+[edit applied]
+// Changed *ngIf → @if (Angular 17 syntax)
 
-Mobile-first MANDATORY:
+ERROR HANDLING ECONOMY:
 
-- Viết class mobile trước, override ở md: lg:
-- KHÔNG hardcode width px cho layout
+- Trivial bug found while doing another task → fix silently (<5 lines), note in 1 line.
+- Need more context → ask ONE specific question. Not a list.
+- NEVER stop to explain why you stopped. Either fix it or ask the minimum to continue.
 
-Table responsive:
+=============================================================================
 
-- Mobile: card view hoặc horizontal scroll wrapper (overflow-x-auto)
-- KHÔNG để table bị vỡ layout
-
-Modal responsive:
-
-- Mobile: bottom sheet (slide up từ dưới) hoặc full screen
-- Desktop: centered dialog
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧩 MICRO-INTERACTION RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Badge / Chip: xuất hiện với scale(0.8)→scale(1) + opacity 0→1
-Avatar: hover → ring-2 ring-indigo-400, transition 150ms
-Checkbox / Toggle:
-
-- Animated check / slide, KHÔNG snap
-- Toggle: translateX transition, duration 200ms
-  Accordion / Collapse:
-- height: 0 → auto với transition (dùng Angular animation hoặc max-height trick)
-- Chevron icon xoay 180deg khi mở
-  Tab switching:
-- Active indicator slide (translateX), KHÔNG jump
-- Content fade in, duration 150ms
-  Tooltip:
-- Delay: 400ms (KHÔNG xuất hiện ngay)
-- opacity 0→1, translateY(4px)→0, duration 150ms
-- Arrow đúng hướng
-  Number counter:
-- Khi giá trị thay đổi: animate count up/down (optional nhưng recommended cho dashboard)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚡ ANIMATION PERFORMANCE RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-CHỈ animate các property không gây reflow:
-✅ opacity
-✅ transform (translate, scale, rotate)
-❌ width / height (dùng transform:scaleX/Y thay thế)
-❌ top / left / margin (dùng transform thay thế)
-❌ background-color animate nếu danh sách dài
-
-will-change: transform — chỉ dùng khi cần, KHÔNG dùng toàn bộ
-prefer-reduced-motion: PHẢI wrap animation bằng @media (prefers-reduced-motion: reduce)
-→ Khi user bật reduced motion: tắt transform, giữ opacity transition ngắn (100ms)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 ANIMATION IMPLEMENTATION (ANGULAR)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Ưu tiên theo thứ tự:
-
-1. Tailwind transition class (đơn giản nhất):
-   transition-all duration-200 ease-out
-   → Dùng cho hover, focus state
-
-2. Angular Animations (@angular/animations):
-   → Dùng cho show/hide component (toast, modal, dropdown)
-   → trigger() + state() + transition() + animate()
-   → PHẢI import trong component: animations: [myTrigger]
-
-3. CSS @keyframes (qua styles.scss):
-   → Dùng cho continuous animation (spinner, pulse, shimmer)
-   → KHÔNG dùng cho show/hide logic
-
-❌ FORBIDDEN:
-
-- setTimeout để giả lập animation
-- jQuery animate()
-- Thay đổi style trực tiếp trong component để animate
-- JS-driven frame loop cho UI animation
-
-Easing chuẩn:
-
-- Enter:  cubic-bezier(0.16, 1, 0.3, 1)   ← ease-out-expo (snappy)
-- Exit:   cubic-bezier(0.5, 0, 0.75, 0)   ← ease-in-quart (quick)
-- Hover:  ease-out, 150ms
-- Layout: ease-in-out, 200ms
-
-Duration chuẩn:
-
-- Instant feedback (hover, focus): 100–150ms
-- Show/Hide component: 200–300ms
-- Page transition: 200ms
-- Complex layout: 300–400ms
-- ❌ KHÔNG dùng > 500ms trừ khi có lý do đặc biệt
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ UI/UX VALIDATION CHECKLIST (NON-BLOCKING – FIX IF FAIL)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Mọi component trước khi done PHẢI pass:
-
-[ ] Toast có enter + exit animation
-[ ] Modal có backdrop fade + panel scale animation
-[ ] Dropdown có enter + exit animation
-[ ] Input có focus ring transition
-[ ] Input error message có animation
-[ ] Button có hover + active + loading state
-[ ] Loading dùng đúng kiểu (skeleton / spinner / bar)
-[ ] Không có element nào snap xuất hiện / biến mất tức thời
-[ ] Responsive: không vỡ layout ở mobile
-[ ] Keyboard navigable, focus-visible visible
-[ ] Màu dùng đúng palette (slate, indigo, emerald, red, amber)
-[ ] Spacing nhất quán theo scale
-[ ] prefers-reduced-motion được xử lý
-
-❗ Nếu fail bất kỳ điểm nào → FIX NGAY, KHÔNG skip
+## 17 · SIDEBAR COMPONENT SPEC
+
+Files:
+menu.config.ts → { label: string, icon: string, route: string }[]
+sidebar.component.ts → standalone, imports RouterLink + RouterLinkActive
+
+Layout: fixed left · w-64 · h-screen · bg-slate-900 · text-white · flex flex-col
+
+TOP:    h-16 · centered brand name · border-b border-slate-700
+MIDDLE: flex-1 · overflow-y-auto · @for on config array (never hardcoded HTML)
+Item:  · rounded-lg · px-3 py-2 · flex items-center gap-3
+Hover: bg-slate-800, transition 150ms
+Active: routerLinkActive → bg-indigo-600 text-white
+BOTTOM: border-t border-slate-700
+Logout: fa-right-from-bracket · text-red-400 · hover:bg-slate-800
+logout(): console.log('Logout...') — wire to AuthService later
+
+Menu:
+{ label: 'Overview', icon: 'fa-chart-pie', route: '/dashboard' }
+{ label: 'Profile', icon: 'fa-user', route: '/me' }
+{ label: 'Wallets', icon: 'fa-wallet', route: '/wallets' }
+{ label: 'Transactions', icon: 'fa-money-bill-transfer', route: '/transactions' }
+
+Verify routes match app.routes.ts after generation.
+
+=============================================================================
+FINAL RULE: existing codebase → this document → Angular defaults.
+NEVER stop. NEVER explain instead of doing.
+Section 15 — Clean Code bao gồm: naming conventions có ví dụ bad/good, function rules (single responsibility, max 20 lines, max 3 params), DRY + early return + immutability, comment philosophy (WHY not WHAT), và Angular-specific rules (max 200 lines/component, no nested subscribes, no any).
+Section 16 — Token Economy bao gồm: forbidden response patterns ("Here is the updated code..."), patch-only format, think-once-act-fast rule, code generation scope control, và chat discipline với example bad vs good output cụ thể.
+Codex will review your output once you are done.
