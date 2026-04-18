@@ -4,8 +4,19 @@
     "menu": {
       "dashboard": "Tổng quan",
       "profile": "Hồ sơ cá nhân",
+      "admin": "Quản trị",
       "wallets": "Ví",
+      "categories": "Danh mục",
       "transactions": "Giao dịch"
+    },
+    "plan": {
+      "label": "Gói",
+      "freemium": "Miễn phí",
+      "premium": "Premium",
+      "upgradeTitle": "Nâng cấp ngay",
+      "upgradeHint": "Mở khóa tính năng cao cấp",
+      "activePremium": "Đang dùng Premium",
+      "live": "Đang bật"
     },
     "ui": {
       "buttons": {
@@ -33,7 +44,8 @@
     "messages": {
       "confirmDelete": "Bạn có chắc chắn muốn xóa mục này không?",
       "success": "Thao tác thành công!",
-      "error": "Có lỗi xảy ra, vui lòng thử lại."
+      "error": "Có lỗi xảy ra, vui lòng thử lại.",
+      "languageChanged": "Ngôn ngữ đã được thay đổi thành công"
     },
 
     "validation": {

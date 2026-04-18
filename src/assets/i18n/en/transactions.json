@@ -1,0 +1,41 @@
+{
+  "transactions": {
+    "title": "Transactions",
+    "subtitle": "Track and filter your financial activities.",
+    "filters": {
+      "title": "Filters",
+      "categoryName": "Category name",
+      "categoryNamePlaceholder": "Enter category name",
+      "walletName": "Wallet name",
+      "walletNamePlaceholder": "Enter wallet name",
+      "fromDate": "From date",
+      "toDate": "To date",
+      "minAmount": "Min amount",
+      "maxAmount": "Max amount",
+      "amountPlaceholder": "Enter amount",
+      "apply": "Apply filters",
+      "reset": "Reset"
+    },
+    "list": {
+      "title": "Transaction list",
+      "total": "Total",
+      "empty": "No transactions found for current filters.",
+      "columns": {
+        "date": "Date",
+        "category": "Category",
+        "wallet": "Wallet",
+        "amount": "Amount",
+        "note": "Note"
+      },
+      "pagination": {
+        "prev": "Previous",
+        "next": "Next",
+        "page": "Page"
+      }
+    },
+    "messages": {
+      "loadError": "Failed to load transactions.",
+      "categoryLoadError": "Failed to load category list."
+    }
+  }
+}

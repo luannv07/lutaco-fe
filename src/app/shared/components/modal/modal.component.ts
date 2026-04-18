@@ -65,10 +65,13 @@ export class ModalComponent {
       'inset-0',
       'z-[9999]',
       'flex',
-      'items-center',
+      'items-start',
+      'md:items-center',
       'justify-center',
       'bg-slate-900/60',
       'backdrop-blur-sm', // Backdrop color and blur
+      'p-3',
+      'sm:p-4',
       'modal-overlay',
     ];
   }
@@ -79,21 +82,23 @@ export class ModalComponent {
       'rounded-xl',
       'shadow-2xl',
       'w-full', // Rounded, shadow, full width
+      'max-h-[calc(100vh-1.5rem)]',
+      'overflow-hidden',
     ];
 
     // Max-width based on size input
     switch (this.size) {
       case 'sm':
-        classes.push('max-w-sm'); // 384px
+        classes.push('max-w-full', 'sm:max-w-sm'); // 384px
         break;
       case 'md':
-        classes.push('max-w-md'); // 512px (default)
+        classes.push('max-w-full', 'sm:max-w-md'); // 512px (default)
         break;
       case 'lg':
-        classes.push('max-w-lg'); // 640px
+        classes.push('max-w-full', 'sm:max-w-lg'); // 640px
         break;
       case 'xl':
-        classes.push('max-w-xl'); // 768px
+        classes.push('max-w-full', 'sm:max-w-xl'); // 768px
         break;
       case 'full':
         classes.push('max-w-full', 'h-full', 'rounded-none'); // Full screen, no rounded corners
@@ -108,19 +113,19 @@ export class ModalComponent {
   }
 
   get modalHeaderClasses(): string[] {
-    return ['flex', 'justify-between', 'items-center', 'px-6', 'pt-6', 'pb-4']; // Padding header
+    return ['flex', 'justify-between', 'items-center', 'gap-3', 'px-4', 'sm:px-6', 'pt-4', 'sm:pt-6', 'pb-3', 'sm:pb-4']; // Padding header
   }
 
   get modalTitleClasses(): string[] {
-    return ['text-xl', 'font-semibold', 'text-slate-800'];
+    return ['text-lg', 'sm:text-xl', 'font-semibold', 'text-slate-800'];
   }
 
   get modalBodyClasses(): string[] {
-    return ['px-6', 'py-4']; // Padding body
+    return ['px-4', 'sm:px-6', 'py-3', 'sm:py-4', 'overflow-y-auto']; // Padding body
   }
 
   get modalFooterClasses(): string[] {
-    return ['flex', 'justify-end', 'gap-3', 'px-6', 'pb-6', 'pt-2', 'border-t', 'border-slate-100']; // Padding footer, divider
+    return ['flex', 'flex-col-reverse', 'sm:flex-row', 'justify-end', 'gap-3', 'px-4', 'sm:px-6', 'pb-4', 'sm:pb-6', 'pt-3', 'border-t', 'border-slate-100']; // Padding footer, divider
   }
 
   get closeButtonClasses(): string[] {

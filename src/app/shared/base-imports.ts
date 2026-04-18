@@ -9,6 +9,8 @@ import { TextareaComponent } from './components/textarea/textarea.component';
 import { BadgeComponent } from './components/badge/badge.component';
 import { CardComponent } from './components/card/card.component';
 import { SelectComponent } from './components/select/select.component';
+import { ComboboxComponent } from './components/combobox/combobox.component';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { TableComponent } from './components/table/table.component';
 
@@ -28,6 +30,8 @@ export const SHARED_COMPONENTS = [
   BadgeComponent,
   CardComponent,
   SelectComponent,
+  ComboboxComponent,
+  DatePickerComponent,
   ModalComponent,
   TableComponent,
 ];

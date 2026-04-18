@@ -1,0 +1,36 @@
+.loading-bar {
+	background: linear-gradient(
+		90deg,
+		#6366f1 0%,
+		#22d3ee 25%,
+		#0ea5e9 50%,
+		#22d3ee 75%,
+		#6366f1 100%
+	);
+	background-size: 200% 100%;
+	box-shadow: 0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(34, 211, 238, 0.4);
+	animation: loading-bar-slide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes loading-bar-slide {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.loading-bar {
+		animation: none;
+		background: linear-gradient(90deg, #6366f1 50%, #22d3ee 50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:host {
+		scroll-behavior: auto;
+	}
+}

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-interface SelectOption {
+export interface SelectOption {
   value: string;
   label: string;
 }
@@ -72,7 +72,6 @@ export class SelectComponent {
       'py-2',
       'border',
       'rounded-lg',
-      'shadow-sm',
       'bg-white',
       'text-slate-700',
       'focus:outline-none',
@@ -83,13 +82,13 @@ export class SelectComponent {
       'duration-150',
       'ease-out', // Transition: border-color 150ms, box-shadow 150ms
       'appearance-none', // Remove default select arrow
-      'pr-8', // Space for custom arrow
+      'pr-10', // Space for custom arrow
     ];
 
     if (this.errorMessage) {
       classes.push('border-red-500', 'ring-2', 'ring-red-500/15'); // Error: border-red-500 ring-2 ring-red-500/15
     } else {
-      classes.push('border-slate-300', 'hover:border-slate-400'); // Default & Hover
+      classes.push('border-slate-300', 'hover:border-indigo-300'); // Default & Hover
     }
 
     if (this.disabled) {
@@ -130,6 +129,8 @@ export class SelectComponent {
       '-translate-y-1/2',
       'pointer-events-none',
       'text-slate-400',
+      'transition-colors',
+      'duration-150',
     ];
   }
 

@@ -5,6 +5,7 @@ export enum LOCAL_STORAGE_KEY {
   TOKEN_STORAGE_KEY = 'access_token',
   REFRESH_TOKEN_KEY = 'refresh_token',
   USER_INFO_KEY = 'user_info',
+  SIDEBAR_COLLAPSED_KEY = 'sidebar_collapsed',
 }
 @Injectable({
   providedIn: 'root',

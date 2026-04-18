@@ -1,0 +1,33 @@
+{
+  "wallets": {
+    "title": "Ví",
+    "subtitle": "Quản lý ví cá nhân và số dư của bạn.",
+    "create": {
+      "title": "Tạo ví mới",
+      "walletName": "Tên ví",
+      "walletNamePlaceholder": "Nhập tên ví",
+      "initialBalance": "Số dư ban đầu",
+      "initialBalancePlaceholder": "Nhập số dư ban đầu",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Mô tả tùy chọn",
+      "submit": "Tạo ví"
+    },
+    "list": {
+      "title": "Danh sách ví",
+      "refresh": "Tải lại",
+      "toggle": "Chuyển trạng thái",
+      "initialBalance": "Số dư ban đầu",
+      "currentBalance": "Số dư hiện tại",
+      "description": "Mô tả",
+      "noDescription": "Chưa có mô tả",
+      "empty": "Chưa có ví nào. Hãy tạo ví đầu tiên của bạn."
+    },
+    "messages": {
+      "loadError": "Không thể tải danh sách ví.",
+      "createSuccess": "Tạo ví thành công.",
+      "createError": "Không thể tạo ví.",
+      "toggleSuccess": "Cập nhật trạng thái ví thành công.",
+      "toggleError": "Không thể cập nhật trạng thái ví."
+    }
+  }
+}

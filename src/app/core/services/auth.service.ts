@@ -62,6 +62,10 @@ export class AuthService extends BaseService {
     return user?.userStatus?.value ?? null;
   }
 
+  getCurrentUser(): User | null {
+    return this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY) || null;
+  }
+
   private buildRegistrationOtpRequest(): SendOtpRequest | null {
     const user = this.localStorageService.get<User>(LOCAL_STORAGE_KEY.USER_INFO_KEY);
     if (!user?.email || !user?.username) {

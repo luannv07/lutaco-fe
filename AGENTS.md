@@ -109,7 +109,7 @@ Icon↔text: gap-2. Label↔control: mb-1.5. Control↔helper: mt-1.5. Never inv
 
 LAW 07 — COLOR SYSTEM
 Primary: indigo | Success: emerald | Warning: amber | Danger: red | Neutral: slate.
-FORBIDDEN: #000, #fff, gray-* (always slate-*).
+FORBIDDEN: #000, #fff, gray-_ (always slate-_).
 
 LAW 08 — EMPTY/LOADING/ERROR STATES
 Loading → skeleton (animate-pulse). Never full-page spinner for sections.
@@ -157,7 +157,7 @@ PRE-DELIVERY CHECKLIST — fail any → fix immediately:
 [ ] Colors from palette only (slate, indigo, emerald, red, amber, sky)
 [ ] Spacing from scale only
 [ ] prefers-reduced-motion handled
-[ ] No #000 / #fff / gray-*
+[ ] No #000 / #fff / gray-\*
 
 =============================================================================
 
@@ -306,8 +306,8 @@ STRUCTURE & DRY:
 
 COMMENTS — write WHY, not WHAT:
 
-- Bad:  // multiply by 1.1 → const total = price * 1.1;
-- Good: // VAT 10% required by VN tax law → const total = price * VAT_RATE;
+- Bad: // multiply by 1.1 → const total = price \* 1.1;
+- Good: // VAT 10% required by VN tax law → const total = price \* VAT_RATE;
 - Self-explanatory code needs no comment.
 
 ANGULAR-SPECIFIC:
@@ -361,7 +361,7 @@ BAD (wastes tokens):
 
 GOOD (efficient):
 [edit applied]
-// Changed *ngIf → @if (Angular 17 syntax)
+// Changed \*ngIf → @if (Angular 17 syntax)
 
 ERROR HANDLING ECONOMY:
 
@@ -379,9 +379,9 @@ sidebar.component.ts → standalone, imports RouterLink + RouterLinkActive
 
 Layout: fixed left · w-64 · h-screen · bg-slate-900 · text-white · flex flex-col
 
-TOP:    h-16 · centered brand name · border-b border-slate-700
+TOP: h-16 · centered brand name · border-b border-slate-700
 MIDDLE: flex-1 · overflow-y-auto · @for on config array (never hardcoded HTML)
-Item:  · rounded-lg · px-3 py-2 · flex items-center gap-3
+Item: · rounded-lg · px-3 py-2 · flex items-center gap-3
 Hover: bg-slate-800, transition 150ms
 Active: routerLinkActive → bg-indigo-600 text-white
 BOTTOM: border-t border-slate-700
@@ -402,3 +402,5 @@ NEVER stop. NEVER explain instead of doing.
 Section 15 — Clean Code bao gồm: naming conventions có ví dụ bad/good, function rules (single responsibility, max 20 lines, max 3 params), DRY + early return + immutability, comment philosophy (WHY not WHAT), và Angular-specific rules (max 200 lines/component, no nested subscribes, no any).
 Section 16 — Token Economy bao gồm: forbidden response patterns ("Here is the updated code..."), patch-only format, think-once-act-fast rule, code generation scope control, và chat discipline với example bad vs good output cụ thể.
 Codex will review your output once you are done.
+nói ngắn gọn, ko giải thích, ko hỏi lại, chỉ code.
+Tận dụng tối đa tailwind, hạn chế việc dùng css thuần

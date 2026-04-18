@@ -1,0 +1,41 @@
+{
+  "transactions": {
+    "title": "Giao dịch",
+    "subtitle": "Theo dõi và lọc các hoạt động tài chính của bạn.",
+    "filters": {
+      "title": "Bộ lọc",
+      "categoryName": "Tên danh mục",
+      "categoryNamePlaceholder": "Nhập tên danh mục",
+      "walletName": "Tên ví",
+      "walletNamePlaceholder": "Nhập tên ví",
+      "fromDate": "Từ ngày",
+      "toDate": "Đến ngày",
+      "minAmount": "Số tiền tối thiểu",
+      "maxAmount": "Số tiền tối đa",
+      "amountPlaceholder": "Nhập số tiền",
+      "apply": "Áp dụng",
+      "reset": "Đặt lại"
+    },
+    "list": {
+      "title": "Danh sách giao dịch",
+      "total": "Tổng",
+      "empty": "Không có giao dịch phù hợp bộ lọc hiện tại.",
+      "columns": {
+        "date": "Ngày",
+        "category": "Danh mục",
+        "wallet": "Ví",
+        "amount": "Số tiền",
+        "note": "Ghi chú"
+      },
+      "pagination": {
+        "prev": "Trước",
+        "next": "Sau",
+        "page": "Trang"
+      }
+    },
+    "messages": {
+      "loadError": "Không thể tải danh sách giao dịch.",
+      "categoryLoadError": "Không thể tải danh sách danh mục."
+    }
+  }
+}

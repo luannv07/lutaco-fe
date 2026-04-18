@@ -1,0 +1,52 @@
+{
+  "categories": {
+    "title": "Danh mục",
+    "subtitle": "Quản lý danh mục giao dịch của bạn.",
+    "types": {
+      "all": "Tất cả loại",
+      "income": "Thu nhập",
+      "expense": "Chi tiêu"
+    },
+    "filters": {
+      "title": "Bộ lọc",
+      "categoryName": "Tên danh mục",
+      "categoryNamePlaceholder": "Nhập tên danh mục",
+      "categoryType": "Loại danh mục",
+      "apply": "Áp dụng",
+      "reset": "Đặt lại"
+    },
+    "create": {
+      "title": "Tạo danh mục",
+      "open": "Danh mục mới",
+      "categoryName": "Tên danh mục",
+      "categoryNamePlaceholder": "Nhập tên danh mục",
+      "parent": "Danh mục cha",
+      "parentPlaceholder": "Chọn danh mục cha",
+      "categoryType": "Loại danh mục",
+      "submit": "Tạo danh mục"
+    },
+    "edit": {
+      "title": "Sửa danh mục"
+    },
+    "list": {
+      "title": "Danh sách danh mục",
+      "items": "mục",
+      "empty": "Không có danh mục nào.",
+      "edit": "Sửa",
+      "columns": {
+        "name": "Tên",
+        "parent": "Cha",
+        "type": "Loại",
+        "createdBy": "Người tạo",
+        "actions": "Hành động"
+      }
+    },
+    "messages": {
+      "loadError": "Không thể tải danh mục.",
+      "createSuccess": "Tạo danh mục thành công.",
+      "createError": "Không thể tạo danh mục.",
+      "updateSuccess": "Cập nhật danh mục thành công.",
+      "updateError": "Không thể cập nhật danh mục."
+    }
+  }
+}

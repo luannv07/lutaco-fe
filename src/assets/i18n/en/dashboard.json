@@ -1,0 +1,27 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "buttons": {
+      "logout": "Logout",
+      "getMe": "Get Me (Must authenticated)",
+      "getPremium": "Get Premium"
+    },
+    "loading": "Loading user data...",
+    "empty": "Click \"Get Me\" to load user information.",
+    "userInfo": {
+      "title": "User Information",
+      "id": "ID",
+      "username": "Username",
+      "fullName": "Full Name",
+      "email": "Email",
+      "gender": "Gender",
+      "userPlan": "User Plan",
+      "userStatus": "User Status",
+      "role": "Role"
+    },
+    "messages": {
+      "logoutSuccess": "Logged out successfully"
+    }
+  }
+}
+

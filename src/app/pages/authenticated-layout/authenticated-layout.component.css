@@ -1,17 +1,15 @@
-/* Responsive layout adjustment */
-@media (max-width: 1024px) {
-  div.ml-64 {
-    margin-left: 16rem; /* w-64 */
-  }
+:host {
+  display: block;
 }
 
-@media (max-width: 768px) {
-  div.ml-64 {
-    margin-left: 0;
-  }
+.app-shell-content {
+  margin-left: var(--sidebar-width, 20rem);
+  transition: margin-left 300ms cubic-bezier(0.16, 1, 0.3, 1), width 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-  app-sidebar {
-    display: none;
+@media (max-width: 767px) {
+  .app-shell-content {
+    margin-left: 0;
   }
 }
 

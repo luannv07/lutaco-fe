@@ -1,30 +1,160 @@
 <div
-  class="fixed left-0 top-0 h-screen w-64 bg-slate-900 text-slate-100 flex flex-col shadow-lg"
+  class="sidebar-panel sticky top-0 hidden h-screen w-80 flex-col text-slate-100 md:flex"
 >
-  <!-- Top: Logo/Brand -->
-  <div class="h-16 border-b border-slate-700 flex items-center justify-center px-4">
-    <h1 class="text-xl font-bold text-indigo-400">LUTACO</h1>
+  <div class="sidebar-glow pointer-events-none absolute inset-0"></div>
+
+  <!-- Top: Collapse + Logo/Brand -->
+  <div class="sidebar-header relative border-b border-white/10 px-3 py-3">
+    <div class="mb-3 flex" [class.justify-end]="!isCollapsed()" [class.justify-center]="isCollapsed()">
+      <button
+        type="button"
+        (click)="toggleCollapse()"
+        class="sidebar-collapse-button flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-200 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+        [attr.aria-label]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+        [attr.title]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      >
+        <i class="fa-solid text-xs transition-transform duration-200" [ngClass]="isCollapsed() ? 'fa-angles-right' : 'fa-angles-left'"></i>
+      </button>
+    </div>
+
+    <button
+      type="button"
+      (click)="refreshPage()"
+      class="flex w-full items-center gap-2.5 rounded-xl p-1 text-left transition-colors duration-200 hover:bg-white/5"
+      [class.justify-center]="isCollapsed()"
+      aria-label="Refresh page"
+      title="Refresh page"
+    >
+      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 text-white text-sm shadow-lg shadow-indigo-950/30 ring-1 ring-white/15">
+        <i class="fa-solid fa-bolt text-xs"></i>
+      </div>
+      <div class="min-w-0 flex-1" [class.hidden]="isCollapsed()">
+        <h1 class="truncate text-xl font-bold tracking-wide text-white">LUTACO</h1>
+        <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Finance tracker</p>
+      </div>
+    </button>
+  </div>
+
+  <!-- User info -->
+  <div class="relative border-b border-white/10 px-3 py-4">
+    @if (!isCollapsed()) {
+      <div class="sidebar-user-card relative cursor-default overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 shadow-lg shadow-slate-950/20">
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.22),transparent_38%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.18),transparent_42%)]"></div>
+
+        <div class="relative z-10 space-y-3">
+          <div class="space-y-1">
+            <p class="truncate text-base font-bold text-white">{{ userDisplayName() }}</p>
+            <p class="truncate text-sm text-slate-300">@{{ userName() }}</p>
+          </div>
+
+          <div class="rounded-xl border border-cyan-400/25 bg-gradient-to-r from-cyan-400/10 to-indigo-400/10 px-3 py-2">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-300">{{ 'common.plan.label' | translate }}</p>
+            <p class="mt-1 text-sm font-bold" [class.text-emerald-200]="isPremium()" [class.text-cyan-100]="!isPremium()">{{ userPlanLabelKey() | translate }}</p>
+          </div>
+
+          @if (!isPremium()) {
+            <button
+              type="button"
+              (click)="goToUpgrade()"
+              class="group/upgrade flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-2.5 text-left text-slate-950 shadow-lg shadow-amber-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-amber-400/40 active:scale-[0.99]"
+            >
+              <div class="flex min-w-0 items-center gap-2">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-950/10 text-slate-950">
+                  <i class="fa-solid fa-crown text-sm"></i>
+                </span>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold leading-none">{{ 'common.plan.upgradeTitle' | translate }}</p>
+                  <p class="mt-1 text-xs font-medium text-slate-900/80">{{ 'common.plan.upgradeHint' | translate }}</p>
+                </div>
+              </div>
+              <i class="fa-solid fa-arrow-right text-sm transition-transform duration-200 group-hover/upgrade:translate-x-0.5"></i>
+            </button>
+          } @else {
+            <div class="rounded-xl border border-emerald-300/35 bg-emerald-100/90 px-3 py-2.5 text-emerald-900 shadow-sm shadow-emerald-500/10">
+              <div class="flex items-start gap-2">
+                <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-200 text-emerald-700">
+                  <i class="fa-solid fa-circle-check text-sm"></i>
+                </span>
+                <div class="min-w-0">
+                  <p class="break-words text-sm font-semibold leading-5">{{ 'common.plan.activePremium' | translate }}</p>
+                  <p class="mt-0.5 text-xs font-semibold text-emerald-700">{{ 'common.plan.live' | translate }}</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="flex justify-center">
+        @if (!isPremium()) {
+          <button
+            type="button"
+            (click)="goToUpgrade()"
+            class="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/35 bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-500 text-slate-950 shadow-lg shadow-amber-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-amber-400/40 active:scale-[0.99]"
+            [attr.aria-label]="'common.plan.upgradeTitle' | translate"
+            [title]="'common.plan.upgradeTitle' | translate"
+          >
+            <i class="fa-solid fa-crown text-lg"></i>
+          </button>
+        } @else {
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-300/40 bg-emerald-100/95 text-emerald-700 shadow-lg shadow-emerald-500/15"
+            [attr.aria-label]="'common.plan.activePremium' | translate"
+            [title]="'common.plan.activePremium' | translate"
+          >
+            <i class="fa-solid fa-circle-check text-lg"></i>
+          </div>
+        }
+      </div>
+    }
   </div>
 
   <!-- Middle: Navigation Menu -->
-  <nav class="flex-1 overflow-y-auto py-6 px-3">
-    <ul class="space-y-2">
+  <nav class="flex-1 overflow-y-auto px-2 py-3">
+    <div class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-600" [class.hidden]="isCollapsed()">
+      {{ navigationLabel() }}
+    </div>
+    <ul class="space-y-1">
       @for (item of menuItems(); track trackByRoute($index, item)) {
         <li>
+          @let itemLabel = getMenuItemLabel(item);
           <a
             [routerLink]="item.route"
             routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="relative flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-150 ease-out
-              text-slate-300 hover:text-white hover:bg-slate-800
-              active:bg-indigo-600 active:text-white active:shadow-lg active:shadow-indigo-600/50"
-            [attr.aria-current]="
-              true
-            "
+            [routerLinkActiveOptions]="{ exact: item.route === '/' || item.route === '/dashboard' }"
+            class="sidebar-nav-item group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 transition-all duration-200 ease-out"
+            [class.justify-center]="isCollapsed()"
+            [class.gap-0]="isCollapsed()"
+            [attr.aria-label]="itemLabel"
+            #routeActive="routerLinkActive"
+            [attr.aria-current]="routeActive.isActive ? 'page' : null"
           >
-            <i [ngClass]="item.icon" class="fa-fw w-5 text-center flex-shrink-0"></i>
-            <span class="text-sm font-medium">
-              {{ getMenuItemLabel(item) }}
+            <span class="sidebar-nav-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm transition-all duration-200">
+              <i [ngClass]="item.icon"></i>
+            </span>
+            <span class="text-base font-medium" [class.hidden]="isCollapsed()">
+              {{ itemLabel }}
+            </span>
+          </a>
+        </li>
+      }
+      @if (isAdmin()) {
+        <li>
+          <a
+            routerLink="/admin"
+            routerLinkActive="active"
+            class="sidebar-nav-item group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 transition-all duration-200 ease-out"
+            [class.justify-center]="isCollapsed()"
+            [class.gap-0]="isCollapsed()"
+            [attr.aria-label]="'common.menu.admin' | translate"
+            #adminActive="routerLinkActive"
+            [attr.aria-current]="adminActive.isActive ? 'page' : null"
+          >
+            <span class="sidebar-nav-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm transition-all duration-200">
+              <i class="fa-solid fa-shield-halved"></i>
+            </span>
+            <span class="text-base font-medium" [class.hidden]="isCollapsed()">
+              {{ 'common.menu.admin' | translate }}
             </span>
           </a>
         </li>
@@ -33,21 +163,24 @@
   </nav>
 
   <!-- Bottom: User Actions -->
-  <div class="border-t border-slate-700 p-4 space-y-3">
-    <!-- Language Switcher -->
-    <app-language-switcher></app-language-switcher>
+  <div class="relative border-t border-white/10 px-3 py-3">
+    <div class="mb-2.5">
+      <app-language-switcher [compact]="isCollapsed()"></app-language-switcher>
+    </div>
 
     <!-- Logout Button -->
     <button
       (click)="logout()"
-      class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-150 ease-out
-        text-red-400 hover:text-red-300 hover:bg-slate-800
-        active:scale-95 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+      class="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2.5 text-red-300 transition-all duration-200 hover:border-red-400/20 hover:bg-red-500/10 hover:text-red-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      [class.justify-center]="isCollapsed()"
+      [class.gap-0]="isCollapsed()"
       [title]="'common.logout' | translate"
       [attr.aria-label]="'common.logout' | translate"
     >
-      <i class="fa-solid fa-right-from-bracket fa-fw w-5 text-center"></i>
-      <span class="text-sm font-medium">
+      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-500/15 text-red-300 transition-colors duration-200 group-hover:bg-red-500/25 group-hover:text-red-200">
+        <i class="fa-solid fa-right-from-bracket text-sm"></i>
+      </span>
+      <span class="text-base font-medium" [class.hidden]="isCollapsed()">
         {{ 'common.logout' | translate }}
       </span>
     </button>

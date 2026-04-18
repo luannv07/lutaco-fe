@@ -1,0 +1,33 @@
+{
+  "wallets": {
+    "title": "Wallets",
+    "subtitle": "Manage your personal wallets and balances.",
+    "create": {
+      "title": "Create new wallet",
+      "walletName": "Wallet name",
+      "walletNamePlaceholder": "Enter wallet name",
+      "initialBalance": "Initial balance",
+      "initialBalancePlaceholder": "Enter initial balance",
+      "description": "Description",
+      "descriptionPlaceholder": "Optional description",
+      "submit": "Create wallet"
+    },
+    "list": {
+      "title": "My wallets",
+      "refresh": "Refresh",
+      "toggle": "Toggle",
+      "initialBalance": "Initial balance",
+      "currentBalance": "Current balance",
+      "description": "Description",
+      "noDescription": "No description yet",
+      "empty": "No wallet found. Create your first wallet to get started."
+    },
+    "messages": {
+      "loadError": "Failed to load wallets.",
+      "createSuccess": "Wallet created successfully.",
+      "createError": "Unable to create wallet.",
+      "toggleSuccess": "Wallet status updated successfully.",
+      "toggleError": "Unable to update wallet status."
+    }
+  }
+}

@@ -25,6 +25,12 @@ export const SIDEBAR_MENU_CONFIG: MenuItemConfig[] = [
     translationKey: 'common.menu.wallets',
   },
   {
+    label: 'Categories',
+    icon: 'fa-solid fa-tags',
+    route: '/categories',
+    translationKey: 'common.menu.categories',
+  },
+  {
     label: 'Transactions',
     icon: 'fa-solid fa-money-bill-transfer',
     route: '/transactions',

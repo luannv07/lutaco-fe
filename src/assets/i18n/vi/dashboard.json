@@ -1,0 +1,27 @@
+{
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "buttons": {
+      "logout": "Đăng xuất",
+      "getMe": "Lấy thông tin cá nhân (Phải xác thực)",
+      "getPremium": "Nâng cấp thành viên"
+    },
+    "loading": "Đang tải dữ liệu người dùng...",
+    "empty": "Nhấn \"Lấy thông tin cá nhân\" để tải dữ liệu người dùng.",
+    "userInfo": {
+      "title": "Thông tin người dùng",
+      "id": "ID",
+      "username": "Tên đăng nhập",
+      "fullName": "Họ tên",
+      "email": "Email",
+      "gender": "Giới tính",
+      "userPlan": "Gói người dùng",
+      "userStatus": "Trạng thái",
+      "role": "Vai trò"
+    },
+    "messages": {
+      "logoutSuccess": "Đã đăng xuất thành công"
+    }
+  }
+}
+

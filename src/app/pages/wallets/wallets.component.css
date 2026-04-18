@@ -1,0 +1,9 @@
+:host {
+	display: block;
+}
+
+input:disabled,
+textarea:disabled {
+	cursor: not-allowed;
+	opacity: 0.6;
+}

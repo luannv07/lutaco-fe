@@ -1,9 +1,11 @@
-<app-sidebar></app-sidebar>
+<div class="min-h-screen bg-slate-50">
+  <app-sidebar></app-sidebar>
 
-<!-- Main content area -->
-<div class="ml-64 min-h-screen bg-slate-50">
-  <div class="p-8">
-    <router-outlet />
-  </div>
+  <!-- Main content area -->
+  <main class="app-shell-content min-w-0 bg-slate-50">
+    <div class="p-4 sm:p-6 lg:p-8">
+      <router-outlet />
+    </div>
+  </main>
 </div>
 

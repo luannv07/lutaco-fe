@@ -13,12 +13,19 @@ export type ToastType = 'success' | 'warning' | 'error' | 'info';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('toastAnimation', [
-      state('void', style({ opacity: 0, transform: 'translateX({{ exitTransform }})' }), {
-        params: { exitTransform: '100%' },
-      }),
-      state('visible', style({ opacity: 1, transform: 'translateX(0)' })),
-      transition('void => visible', [animate('300ms cubic-bezier(0.16, 1, 0.3, 1)')]),
-      transition('visible => void', [animate('200ms ease-in')]),
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translate3d({{ offsetX }}, 0, 0) scale(0.96)' }),
+        animate(
+          '280ms cubic-bezier(0.16, 1, 0.3, 1)',
+          style({ opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' }),
+        ),
+      ], { params: { offsetX: '16px' } }),
+      transition(':leave', [
+        animate(
+          '180ms cubic-bezier(0.4, 0, 1, 1)',
+          style({ opacity: 0, transform: 'translate3d({{ offsetX }}, 0, 0) scale(0.98)' }),
+        ),
+      ], { params: { offsetX: '16px' } }),
     ]),
   ],
 })
@@ -83,11 +90,11 @@ export class ToastComponent {
         return 'fa-solid fa-circle-info';
     }
   }
-  getAnimationParams(): { exitTransform: string } {
+  getAnimationParams(): { offsetX: string } {
     if (this.position === 'top-left' || this.position === 'bottom-left') {
-      return { exitTransform: '-100%' };
+      return { offsetX: '-16px' };
     }
-    return { exitTransform: '100%' };
+    return { offsetX: '16px' };
   }
   onClose(): void {
     this.close.emit();

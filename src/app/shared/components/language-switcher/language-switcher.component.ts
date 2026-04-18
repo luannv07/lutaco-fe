@@ -1,12 +1,9 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { ToastService } from '../../services/toast.service';
 
 interface Language {
   code: string;
@@ -22,29 +19,35 @@ interface Language {
   imports: [CommonModule, FontAwesomeModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LanguageSwitcherComponent {
+export class LanguageSwitcherComponent implements OnInit {
   private translateService = inject(TranslateService);
+  private langService = inject(LanguageService);
+  private toastService = inject(ToastService);
+
+  @Input() compact = false;
 
   languages: Language[] = [
     { code: 'en', label: 'EN', icon: 'fa-solid fa-globe' },
     { code: 'vi', label: 'VI', icon: 'fa-solid fa-globe' },
   ];
 
-  currentLang = signal<string>(this.translateService.currentLang || 'en');
-  showDropdown = signal<boolean>(false);
+  currentLang = signal<string>(this.langService.currentLang());
 
-  switchLanguage(langCode: string): void {
-    this.translateService.use(langCode);
-    this.currentLang.set(langCode);
-    this.showDropdown.set(false);
+  ngOnInit(): void {
+    this.currentLang.set(this.langService.currentLang());
+    this.translateService.onLangChange.subscribe(() => {
+      this.currentLang.set(this.langService.currentLang());
+    });
   }
 
-  toggleDropdown(): void {
-    this.showDropdown.update((val) => !val);
-  }
-
-  closeDropdown(): void {
-    this.showDropdown.set(false);
+  toggleLanguage(): void {
+    const newLang = this.currentLang() === 'vi' ? 'en' : 'vi';
+    this.langService.setLanguage(newLang).then(() => {
+      const message = this.translateService.instant('common.messages.languageChanged');
+      this.toastService.success(message);
+    }).catch((err) => {
+      console.error('[LanguageSwitcher] setLanguage error:', err);
+    });
   }
 
   trackByLang(_index: number, lang: Language): string {

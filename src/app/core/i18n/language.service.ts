@@ -1,4 +1,4 @@
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslationLoaderService } from './translation-loader.service';
@@ -11,12 +11,13 @@ const LANG_STORAGE_KEY = 'current_lang';
 export const LANGUAGE_CONFIG = {
   supported: ['en', 'vi'],
   default: 'en',
-  translationModules: ['common', 'dashboard', 'auth'],
+  translationModules: ['common', 'dashboard', 'auth', 'wallets', 'categories', 'transactions'],
 };
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
   public readonly availableLangs = LANGUAGE_CONFIG.supported;
+  public readonly isLanguageReady = signal(false);
   private translate = inject(TranslateService);
   public currentLang = toSignal(
     this.translate.onLangChange.pipe(
@@ -33,7 +34,8 @@ export class LanguageService {
   private langChangeSubscription: any;
 
   constructor() {
-    this.initLanguage();
+    this.translate.addLangs(LANGUAGE_CONFIG.supported);
+    this.subscribeToLanguageChanges();
   }
 
   /**
@@ -103,7 +105,7 @@ export class LanguageService {
       this.langChangeSubscription.unsubscribe();
     }
 
-    this.langChangeSubscription = this.translate.onLangChange.subscribe(async () => {
+    this.langChangeSubscription = this.translate.onLangChange.subscribe(async (event: any) => {
       await this.reloadForLanguage();
     });
   }
@@ -131,35 +133,43 @@ export class LanguageService {
   }
 
   /**
-   * Load modules for CURRENT + FALLBACK language (dual-language preload)
-   * Used by route resolvers to preload translations before route activation
-   */
+    * Load modules for CURRENT + FALLBACK language (dual-language preload)
+    * Used by route resolvers to preload translations before route activation
+    */
   public preloadModules(modules: string[]): Observable<void> {
-    const promises: Promise<void>[] = [];
-
-    // Load TẤT CẢ supported languages, không chỉ current + fallback
-    for (const lang of LANGUAGE_CONFIG.supported) {
-      for (const module of modules) {
-        promises.push(this.loadLanguageModule(lang, module));
-      }
-    }
-
-    return from(Promise.all(promises).then(() => undefined));
+    const currentLang = this.getCurrentLanguage();
+    const fallbackLang = LANGUAGE_CONFIG.default;
+    return from(this.preloadLanguagePair(currentLang, fallbackLang, modules));
   }
 
   /**
-   * Switch language - uses config-driven fallback
-   */
-  public setLanguage(lang: string): void {
+    * Switch language - uses config-driven fallback
+    */
+  public async setLanguage(lang: string): Promise<void> {
     // Validate language against config
     if (!LANGUAGE_CONFIG.supported.includes(lang)) {
       lang = LANGUAGE_CONFIG.default;
     }
 
-    this.translate.use(lang);
+    this.isLanguageReady.set(false);
 
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(LANG_STORAGE_KEY, lang);
+    try {
+      // Load translations for new language first
+      await this.preloadLanguagePair(
+        lang,
+        LANGUAGE_CONFIG.default,
+        LANGUAGE_CONFIG.translationModules,
+      );
+
+      // Then switch
+      this.translate.use(lang);
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem(LANG_STORAGE_KEY, lang);
+      }
+      this.isLanguageReady.set(true);
+    } catch (error) {
+      this.isLanguageReady.set(true);
+      throw error;
     }
   }
 
@@ -183,13 +193,6 @@ export class LanguageService {
 
     // 3. Default from config
     return LANGUAGE_CONFIG.default;
-  }
-
-  private initLanguage(): void {
-    const defaultLang = this.getCurrentLanguage();
-
-    this.translate.addLangs(LANGUAGE_CONFIG.supported);
-    this.setLanguage(defaultLang);
   }
 
   ngOnDestroy(): void {

@@ -6,6 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { requestTimeoutInterceptor } from './core/interceptors/request-timeout.interceptor';
+import { uiStateInterceptor } from './core/interceptors/ui-state.interceptor';
 import { TranslationLoaderService } from './core/i18n/translation-loader.service';
 import { LanguageService } from './core/i18n/language.service';
 
@@ -15,10 +16,9 @@ export function createTranslateLoader(http: HttpClient) {
 
 // Factory function for APP_INITIALIZER
 export function initializeApp(langService: LanguageService) {
-  return () => {
+  return async () => {
     const lang = langService.getCurrentLanguage();
-    // Load 'common' translations on startup
-    return langService.loadTranslationModules(lang, ['common']);
+    await langService.setLanguage(lang);
   };
 }
 
@@ -27,7 +27,10 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, requestTimeoutInterceptor]), withFetch()),
+    provideHttpClient(
+      withInterceptors([uiStateInterceptor, authInterceptor, requestTimeoutInterceptor]),
+      withFetch(),
+    ),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,

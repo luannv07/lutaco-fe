@@ -1,0 +1,52 @@
+{
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Manage your transaction categories.",
+    "types": {
+      "all": "All types",
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "filters": {
+      "title": "Filters",
+      "categoryName": "Category name",
+      "categoryNamePlaceholder": "Enter category name",
+      "categoryType": "Category type",
+      "apply": "Apply filters",
+      "reset": "Reset"
+    },
+    "create": {
+      "title": "Create category",
+      "open": "New category",
+      "categoryName": "Category name",
+      "categoryNamePlaceholder": "Enter category name",
+      "parent": "Parent category",
+      "parentPlaceholder": "Select parent category",
+      "categoryType": "Category type",
+      "submit": "Create category"
+    },
+    "edit": {
+      "title": "Edit category"
+    },
+    "list": {
+      "title": "Category list",
+      "items": "items",
+      "empty": "No categories found.",
+      "edit": "Edit",
+      "columns": {
+        "name": "Name",
+        "parent": "Parent",
+        "type": "Type",
+        "createdBy": "Created by",
+        "actions": "Actions"
+      }
+    },
+    "messages": {
+      "loadError": "Failed to load categories.",
+      "createSuccess": "Category created successfully.",
+      "createError": "Failed to create category.",
+      "updateSuccess": "Category updated successfully.",
+      "updateError": "Failed to update category."
+    }
+  }
+}

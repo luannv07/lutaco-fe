@@ -33,6 +33,30 @@ export const routes: Routes = [
         path: 'users',
         loadChildren: () => import('./pages/users/users.routes').then((m) => m.USERS_ROUTES),
       },
+      {
+        path: 'admin',
+        loadComponent: () => import('./pages/admin/admin.component').then((m) => m.AdminComponent),
+      },
+      {
+        path: 'wallets',
+        loadComponent: () =>
+          import('./pages/wallets/wallets.component').then((m) => m.WalletsComponent),
+        resolve: { translations: translationResolver('wallets') },
+      },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./pages/categories/categories.component').then((m) => m.CategoriesComponent),
+        resolve: { translations: translationResolver('categories') },
+      },
+      {
+        path: 'transactions',
+        loadComponent: () =>
+          import('./pages/transactions/transactions.component').then(
+            (m) => m.TransactionsComponent,
+          ),
+        resolve: { translations: translationResolver('transactions') },
+      },
     ],
   },
   {

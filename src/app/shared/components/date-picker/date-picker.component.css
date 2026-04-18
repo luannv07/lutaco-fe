@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  pointer-events: none;
+}
+
+input[type='date']::-webkit-clear-button {
+  display: none;
+}
