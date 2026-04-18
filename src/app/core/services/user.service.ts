@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../../shared/services/base.service';
 import { Observable, tap } from 'rxjs';
-import { User } from '../../models/user';
+import { User, UserUpdateRequest } from '../../models/user';
 import { BaseResponse } from '../../models/base-response';
 import { LOCAL_STORAGE_KEY } from './local-storage.service';
 
@@ -35,6 +35,16 @@ export class UserService extends BaseService {
 
   getMySelf(): Observable<BaseResponse<User>> {
     return this.http.get<BaseResponse<User>>(`${this.baseUrl}/${this.apiUrl}/me`).pipe(
+      tap((response: BaseResponse<User>) => {
+        if (response && response.data && this.shouldUpdateCachedUser(response.data)) {
+          this.localStorageService.set(LOCAL_STORAGE_KEY.USER_INFO_KEY, response.data);
+        }
+      }),
+    );
+  }
+
+  updateMyProfile(userId: string, updateRequest: UserUpdateRequest): Observable<BaseResponse<User>> {
+    return this.update(userId, updateRequest).pipe(
       tap((response: BaseResponse<User>) => {
         if (response && response.data && this.shouldUpdateCachedUser(response.data)) {
           this.localStorageService.set(LOCAL_STORAGE_KEY.USER_INFO_KEY, response.data);

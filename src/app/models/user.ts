@@ -15,3 +15,9 @@ export interface User {
   updatedBy: string;
   updatedDate: string;
 }
+
+export interface UserUpdateRequest {
+  fullName?: string;
+  address?: string;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER';
+}
