@@ -1,0 +1,68 @@
+{
+  "payment": {
+    "title": "PayOS Premium Payment",
+    "subtitle": "Create a premium payment link and view PayOS transaction history.",
+    "create": {
+      "title": "Create Premium Transaction",
+      "description": "Call POST /api/v1/payment/premium-user to create a new payment link.",
+      "createButton": "Create Payment",
+      "checkoutButton": "Open Checkout",
+      "info": "Payment Link Info",
+      "qrCode": "QR Payload"
+    },
+    "history": {
+      "title": "PayOS Order History",
+      "description": "Data is loaded from GET /api/v1/payment/users/{userId}, default sorted by newest.",
+      "empty": "No PayOS transactions yet.",
+      "filters": {
+        "status": "Status",
+        "statusPlaceholder": "Select status",
+        "orderCode": "Order code",
+        "orderCodePlaceholder": "Enter order code",
+        "clear": "Clear filters"
+      },
+      "statuses": {
+        "all": "All",
+        "pending": "PENDING",
+        "paid": "PAID",
+        "expired": "EXPIRED",
+        "cancelled": "CANCELLED"
+      },
+      "columns": {
+        "orderCode": "Order Code",
+        "paymentLinkId": "Payment Link ID",
+        "amount": "Amount",
+        "status": "Status",
+        "type": "Type",
+        "createdDate": "Created Date",
+        "paidAt": "Paid At"
+      },
+      "pagination": {
+        "prev": "Previous",
+        "next": "Next",
+        "page": "Page"
+      }
+    },
+    "fields": {
+      "id": "ID",
+      "orderCode": "Order Code",
+      "amount": "Amount",
+      "amountPaid": "Paid",
+      "amountRemaining": "Remaining",
+      "bank": "Bank BIN",
+      "accountNumber": "Account Number",
+      "accountName": "Account Name",
+      "description": "Description",
+      "paymentLinkId": "Payment Link ID",
+      "createdAt": "Created At"
+    },
+    "messages": {
+      "createSuccess": "Created PayOS payment successfully.",
+      "createError": "Failed to create PayOS payment.",
+      "alreadyPremium": "You are already a Premium user.",
+      "historyError": "Failed to fetch PayOS transaction history.",
+      "checkoutMissing": "Checkout URL is not available for this transaction.",
+      "qrBuildError": "Cannot render QR image from current payload."
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "payment": {
+    "title": "Thanh toán Premium PayOS",
+    "subtitle": "Tạo link thanh toán nâng cấp Premium và xem lịch sử giao dịch PayOS.",
+    "create": {
+      "title": "Tạo giao dịch nâng cấp",
+      "description": "Gọi POST /api/v1/payment/premium-user để tạo link thanh toán.",
+      "createButton": "Tạo thanh toán",
+      "checkoutButton": "Mở trang thanh toán",
+      "info": "Thông tin link thanh toán",
+      "qrCode": "Dữ liệu QR"
+    },
+    "history": {
+      "title": "Lịch sử tạo đơn PayOS",
+      "description": "Dữ liệu lấy từ GET /api/v1/payment/users/{userId}, mặc định hiển thị mới nhất.",
+      "empty": "Chưa có giao dịch PayOS nào.",
+      "filters": {
+        "status": "Trạng thái",
+        "statusPlaceholder": "Chọn trạng thái",
+        "orderCode": "Mã đơn hàng",
+        "orderCodePlaceholder": "Nhập mã đơn hàng",
+        "clear": "Xóa lọc"
+      },
+      "statuses": {
+        "all": "Tất cả",
+        "pending": "PENDING",
+        "paid": "PAID",
+        "expired": "EXPIRED",
+        "cancelled": "CANCELLED"
+      },
+      "columns": {
+        "orderCode": "Mã đơn hàng",
+        "paymentLinkId": "Payment Link ID",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "type": "Loại",
+        "createdDate": "Thời gian tạo",
+        "paidAt": "Thời gian thanh toán"
+      },
+      "pagination": {
+        "prev": "Trang trước",
+        "next": "Trang sau",
+        "page": "Trang"
+      }
+    },
+    "fields": {
+      "id": "ID",
+      "orderCode": "Mã đơn hàng",
+      "amount": "Số tiền",
+      "amountPaid": "Đã thanh toán",
+      "amountRemaining": "Còn lại",
+      "bank": "Mã ngân hàng BIN",
+      "accountNumber": "Số tài khoản",
+      "accountName": "Tên tài khoản",
+      "description": "Nội dung",
+      "paymentLinkId": "Mã payment link",
+      "createdAt": "Thời gian tạo"
+    },
+    "messages": {
+      "createSuccess": "Tạo thanh toán PayOS thành công.",
+      "createError": "Tạo thanh toán PayOS thất bại.",
+      "alreadyPremium": "Bạn đã là Premium rồi.",
+      "historyError": "Lấy lịch sử giao dịch PayOS thất bại.",
+      "checkoutMissing": "Không tìm thấy liên kết thanh toán cho giao dịch này.",
+      "qrBuildError": "Không thể dựng ảnh QR từ chuỗi hiện tại."
+    }
+  }
+}
