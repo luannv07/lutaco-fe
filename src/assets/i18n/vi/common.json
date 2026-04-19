@@ -1,6 +1,9 @@
 {
   "common": {
     "logout": "Đăng xuất",
+    "user": {
+      "role": "Vai trò"
+    },
     "menu": {
       "dashboard": "Tổng quan",
       "profile": "Hồ sơ cá nhân",

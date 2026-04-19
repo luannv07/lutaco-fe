@@ -23,7 +23,10 @@ export class CategoriesComponent extends BaseComponent<Category> {
   private readonly cdr = inject(ChangeDetectorRef);
   protected override fb = inject(FormBuilder);
 
+  protected readonly TABLE_MAX_HEIGHT = 'max-h-[600px]';
+
   public categories: Category[] = [];
+  public flatCategories: Category[] = [];
   public categoryOptions: ComboboxOption[] = [];
   public createParentOptions: ComboboxOption[] = [];
   public editParentOptions: ComboboxOption[] = [];
@@ -33,7 +36,10 @@ export class CategoriesComponent extends BaseComponent<Category> {
   public editingCategoryId: string | null = null;
   public isCreateModalOpen = false;
   public isEditModalOpen = false;
-
+  public isDeletingCategoryId: string | null = null;
+  public isConfirmingDeleteCategoryId: string | null = null;
+  public loadedChildrenIds = new Set<string>();
+  public expandedParentIds = new Set<string>();
   public readonly categoryTypeOptions: ComboboxOption[] = [
     { value: 'INCOME', label: this.translateService.instant('categories.types.income') },
     { value: 'EXPENSE', label: this.translateService.instant('categories.types.expense') },
@@ -77,6 +83,9 @@ export class CategoriesComponent extends BaseComponent<Category> {
     }
 
     this.isLoadingCategories = true;
+    // Reset expand/load state when loading new data
+    this.expandedParentIds.clear();
+    this.loadedChildrenIds.clear();
     const filter = this.buildFilter();
 
     this.categoryService
@@ -91,8 +100,9 @@ export class CategoriesComponent extends BaseComponent<Category> {
       .subscribe({
         next: (response) => {
           if (response.success && response.data?.content) {
-            this.categories = this.flattenCategories(response.data.content);
-            this.categoryOptions = this.toCategoryOptions(this.categories);
+            this.categories = response.data.content;
+            this.flatCategories = this.flattenCategories(this.categories);
+            this.categoryOptions = this.toCategoryOptions(this.flatCategories);
             this.createParentOptions = this.getParentOptions();
             this.editParentOptions = this.editingCategoryId
               ? this.getParentOptions(this.editingCategoryId)
@@ -102,6 +112,7 @@ export class CategoriesComponent extends BaseComponent<Category> {
           }
 
           this.categories = [];
+          this.flatCategories = [];
           this.categoryOptions = [];
           this.createParentOptions = [];
           this.editParentOptions = [];
@@ -116,6 +127,7 @@ export class CategoriesComponent extends BaseComponent<Category> {
             this.translateService.instant('categories.messages.loadError');
           this.toastService.error(message);
           this.categories = [];
+          this.flatCategories = [];
           this.categoryOptions = [];
           this.createParentOptions = [];
           this.editParentOptions = [];
@@ -149,11 +161,7 @@ export class CategoriesComponent extends BaseComponent<Category> {
 
   protected closeCreateModal(): void {
     this.isCreateModalOpen = false;
-    this.createForm.reset({
-      categoryName: '',
-      parentId: '',
-      categoryType: 'EXPENSE',
-    });
+    this.createForm.reset();
     this.refreshView();
   }
 
@@ -232,11 +240,7 @@ export class CategoriesComponent extends BaseComponent<Category> {
   protected cancelEdit(): void {
     this.editingCategoryId = null;
     this.isEditModalOpen = false;
-    this.editForm.reset({
-      categoryName: '',
-      parentId: '',
-      categoryType: 'EXPENSE',
-    });
+    this.editForm.reset();
     this.editParentOptions = this.getParentOptions();
     this.refreshView();
   }
@@ -281,6 +285,109 @@ export class CategoriesComponent extends BaseComponent<Category> {
       });
   }
 
+  protected confirmDeleteCategory(categoryId: string): void {
+    this.isConfirmingDeleteCategoryId = categoryId;
+    this.refreshView();
+  }
+
+  protected cancelDeleteCategory(): void {
+    this.isConfirmingDeleteCategoryId = null;
+    this.refreshView();
+  }
+
+  protected deleteCategory(categoryId: string): void {
+    if (this.isDeletingCategoryId) {
+      return;
+    }
+
+    this.isDeletingCategoryId = categoryId;
+    this.isConfirmingDeleteCategoryId = null;
+
+    this.categoryService
+      .disableCategory(categoryId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isDeletingCategoryId = null;
+          this.refreshView();
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.toastService.success(this.translateService.instant('categories.messages.deleteSuccess'));
+            this.loadCategories();
+            return;
+          }
+
+          this.toastService.error(
+            response.message || this.translateService.instant('categories.messages.deleteError'),
+          );
+        },
+        error: (error: unknown) => {
+          const message =
+            (error as { error?: { message?: string } })?.error?.message ||
+            this.translateService.instant('categories.messages.deleteError');
+          this.toastService.error(message);
+        },
+      });
+  }
+
+  protected toggleExpandParent(parentId: string): void {
+    const parent = this.categories.find((c) => c.id === parentId);
+    if (!parent) {
+      return;
+    }
+
+    if (this.expandedParentIds.has(parentId)) {
+      this.expandedParentIds.delete(parentId);
+    } else {
+      this.expandedParentIds.add(parentId);
+      // Load children when expanding if not already loaded
+      if (parent.hasChildren && !this.loadedChildrenIds.has(parentId)) {
+        this.loadChildren(parent);
+      }
+    }
+    this.cdr.markForCheck();
+  }
+
+  protected expandAll(): void {
+    this.parentCategories.forEach((parent) => {
+      if (parent.hasChildren && !this.expandedParentIds.has(parent.id)) {
+        this.expandedParentIds.add(parent.id);
+        if (!this.loadedChildrenIds.has(parent.id)) {
+          this.loadChildren(parent);
+        }
+      }
+    });
+    this.cdr.markForCheck();
+  }
+
+  protected collapseAll(): void {
+    this.expandedParentIds.clear();
+    this.cdr.markForCheck();
+  }
+
+  protected toggleExpandCollapseAll(): void {
+    if (this.areAllParentsExpanded()) {
+      this.collapseAll();
+    } else {
+      this.expandAll();
+    }
+  }
+
+  protected areAllParentsExpanded(): boolean {
+    const parentsWithChildren = this.parentCategories.filter((p) => p.hasChildren);
+    if (parentsWithChildren.length === 0) {
+      return false;
+    }
+    return parentsWithChildren.every((parent) => this.expandedParentIds.has(parent.id));
+  }
+
+  protected isParentExpanded(parentId: string): boolean {
+    return this.expandedParentIds.has(parentId);
+  }
+
   protected getTypeBadgeClass(typeValue: string | undefined): string {
     return typeValue === 'INCOME'
       ? 'bg-emerald-100 text-emerald-700'
@@ -289,6 +396,51 @@ export class CategoriesComponent extends BaseComponent<Category> {
 
   protected trackByCategoryId(_index: number, category: Category): string {
     return category.id;
+  }
+
+  protected get parentCategories(): Category[] {
+    const parentItems = this.categories.filter((category) => !category.parentId);
+    if (parentItems.length > 0) {
+      return this.sortCategoriesByName(parentItems);
+    }
+
+    return this.sortCategoriesByName(this.categories);
+  }
+
+  protected getTotalCategoryCount(): number {
+    return this.flatCategories.length;
+  }
+
+  protected getChildren(category: Category): Category[] {
+    if (category.hasChildren && !this.loadedChildrenIds.has(category.id) && (!category.children || category.children.length === 0)) {
+      this.loadChildren(category);
+    }
+    return this.sortCategoriesByName(category.children || []);
+  }
+
+  protected loadChildren(category: Category): void {
+    if (this.loadedChildrenIds.has(category.id)) {
+      return;
+    }
+
+    this.categoryService
+      .getChildrenCategories(category.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const categoryInList = this.categories.find((c) => c.id === category.id);
+            if (categoryInList) {
+              categoryInList.children = response.data;
+            }
+            this.loadedChildrenIds.add(category.id);
+            this.cdr.markForCheck();
+          }
+        },
+        error: () => {
+          // Silently handle error
+        },
+      });
   }
 
   private refreshView(): void {
@@ -323,7 +475,9 @@ export class CategoriesComponent extends BaseComponent<Category> {
   }
 
   private getParentOptions(excludedCategoryId?: string): ComboboxOption[] {
-    return this.categoryOptions.filter((option) => option.value !== excludedCategoryId);
+    return this.parentCategories
+      .filter((category) => category.id !== excludedCategoryId)
+      .map((category) => ({ value: category.id, label: category.categoryName }));
   }
 
   private normalizeCategoryType(value?: string | null): CategoryType | undefined {
@@ -341,5 +495,11 @@ export class CategoriesComponent extends BaseComponent<Category> {
     });
 
     return flattened;
+  }
+
+  private sortCategoriesByName(categories: Category[]): Category[] {
+    return [...categories].sort((first, second) =>
+      first.categoryName.localeCompare(second.categoryName),
+    );
   }
 }

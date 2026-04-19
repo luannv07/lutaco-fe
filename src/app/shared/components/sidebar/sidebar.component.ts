@@ -18,6 +18,7 @@ import { LocalStorageService, LOCAL_STORAGE_KEY } from '../../../core/services/l
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 import { User } from '../../../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -50,6 +51,7 @@ export class SidebarComponent implements OnInit {
   readonly navigationLabel = computed(() => 'Navigation');
   readonly userDisplayName = computed(() => this.currentUser()?.fullName || this.currentUser()?.username || 'User');
   readonly userRole = computed(() => this.currentUser()?.roleName || 'Member');
+  readonly userRoleLabel = computed(() => this.translateService.instant('common.user.role'));
   readonly userName = computed(() => this.currentUser()?.username || 'user');
   readonly userPlanKey = computed(() => (this.currentUser()?.userPlan?.value || 'freemium').toLowerCase());
   readonly isPremium = computed(() => this.userPlanKey() === 'premium');
@@ -63,29 +65,37 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentLang.set(this.translateService.currentLang || 'en');
-    this.currentUser.set(this.authService.getCurrentUser());
+    this.syncCurrentUser();
     this.restoreSidebarState();
     this.syncSidebarWidth();
+
+    fromEvent(window, 'user-info-updated')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.syncCurrentUser();
+      });
+
     this.translateService.onLangChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event: any) => {
         this.currentLang.set(event.lang || this.translateService.currentLang);
+        this.syncCurrentUser();
       });
   }
 
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        // Navigation happens in auth service or guard
+        this.router.navigate(['/auth/login']);
       },
       error: () => {
-        // Error is handled in auth service
+        this.router.navigate(['/auth/login']);
       },
     });
   }
 
   goToUpgrade(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/payment']);
   }
 
   refreshPage(): void {
@@ -110,6 +120,10 @@ export class SidebarComponent implements OnInit {
       '--sidebar-width',
       this.isCollapsed() ? '5.5rem' : '20rem',
     );
+  }
+
+  private syncCurrentUser(): void {
+    this.currentUser.set(this.authService.getCurrentUser());
   }
 
   getMenuItemLabel(item: MenuItemConfig): string {

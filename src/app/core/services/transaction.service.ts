@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/base-response';
 import { Page } from '../../models/page';
-import { Transaction, TransactionFilter } from '../../models/transaction';
+import { Transaction, TransactionCreateRequest, TransactionFilter } from '../../models/transaction';
 import { BaseService } from '../../shared/services/base.service';
 
 @Injectable({
@@ -28,5 +28,9 @@ export class TransactionService extends BaseService {
     });
 
     return this.http.get<BaseResponse<Page<Transaction>>>(`${this.baseUrl}/${this.apiUrl}`, { params });
+  }
+
+  createTransaction(request: TransactionCreateRequest): Observable<BaseResponse<Transaction>> {
+    return this.http.post<BaseResponse<Transaction>>(`${this.baseUrl}/${this.apiUrl}`, request);
   }
 }

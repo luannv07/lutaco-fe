@@ -4,9 +4,14 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
+  OnDestroy,
   Output,
+  PLATFORM_ID,
+  SimpleChanges,
+  inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -48,12 +53,14 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ],
 })
 export class ModalComponent {
+  private readonly platformId = inject(PLATFORM_ID);
+
   @Input() isOpen: boolean = false;
   @Input() title: string = '';
   @Input() customClass: string = '';
   @Input() closeOnOverlayClick: boolean = true;
   @Input() closeOnEscape: boolean = true;
-  @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md'; // New input for size
+  @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'lg';
   @Input() showFooter: boolean = false; // New input for footer visibility
 
   @Output() closeEvent = new EventEmitter<void>();
@@ -65,13 +72,14 @@ export class ModalComponent {
       'inset-0',
       'z-[9999]',
       'flex',
-      'items-start',
-      'md:items-center',
+      'items-center',
       'justify-center',
+      'overflow-y-auto',
       'bg-slate-900/60',
       'backdrop-blur-sm', // Backdrop color and blur
       'p-3',
       'sm:p-4',
+      'md:p-6',
       'modal-overlay',
     ];
   }
@@ -81,9 +89,14 @@ export class ModalComponent {
       'bg-white',
       'rounded-xl',
       'shadow-2xl',
+      'border',
+      'border-slate-100',
       'w-full', // Rounded, shadow, full width
       'max-h-[calc(100vh-1.5rem)]',
-      'overflow-hidden',
+      'md:max-h-[calc(100vh-3rem)]',
+      'flex',
+      'flex-col',
+      'overflow-visible',
     ];
 
     // Max-width based on size input
@@ -92,13 +105,13 @@ export class ModalComponent {
         classes.push('max-w-full', 'sm:max-w-sm'); // 384px
         break;
       case 'md':
-        classes.push('max-w-full', 'sm:max-w-md'); // 512px (default)
+        classes.push('max-w-full', 'sm:max-w-lg');
         break;
       case 'lg':
-        classes.push('max-w-full', 'sm:max-w-lg'); // 640px
+        classes.push('max-w-full', 'sm:max-w-2xl');
         break;
       case 'xl':
-        classes.push('max-w-full', 'sm:max-w-xl'); // 768px
+        classes.push('max-w-full', 'sm:max-w-4xl');
         break;
       case 'full':
         classes.push('max-w-full', 'h-full', 'rounded-none'); // Full screen, no rounded corners
@@ -113,7 +126,19 @@ export class ModalComponent {
   }
 
   get modalHeaderClasses(): string[] {
-    return ['flex', 'justify-between', 'items-center', 'gap-3', 'px-4', 'sm:px-6', 'pt-4', 'sm:pt-6', 'pb-3', 'sm:pb-4']; // Padding header
+    return [
+      'flex',
+      'justify-between',
+      'items-center',
+      'gap-3',
+      'px-4',
+      'sm:px-6',
+      'pt-4',
+      'sm:pt-6',
+      'pb-3',
+      'sm:pb-4',
+      'shrink-0',
+    ];
   }
 
   get modalTitleClasses(): string[] {
@@ -121,11 +146,51 @@ export class ModalComponent {
   }
 
   get modalBodyClasses(): string[] {
-    return ['px-4', 'sm:px-6', 'py-3', 'sm:py-4', 'overflow-y-auto']; // Padding body
+    return [
+      'px-4',
+      'sm:px-6',
+      'py-6',
+      'sm:py-7',
+      'overflow-visible',
+      'flex-1',
+      'min-h-0',
+      'space-y-5',
+    ];
   }
 
   get modalFooterClasses(): string[] {
-    return ['flex', 'flex-col-reverse', 'sm:flex-row', 'justify-end', 'gap-3', 'px-4', 'sm:px-6', 'pb-4', 'sm:pb-6', 'pt-3', 'border-t', 'border-slate-100']; // Padding footer, divider
+    return [
+      'flex',
+      'flex-col-reverse',
+      'sm:flex-row',
+      'sm:flex-wrap',
+      'justify-end',
+      'items-stretch',
+      'sm:items-center',
+      'gap-3',
+      'sm:gap-3',
+      'px-4',
+      'sm:px-6',
+      'pb-4',
+      'sm:pb-6',
+      'pt-4',
+      'border-t',
+      'border-slate-100',
+      '[&>*]:w-full',
+      'sm:[&>*]:w-auto',
+      '[&>[modal-footer]]:w-full',
+      '[&>[modal-footer]]:flex',
+      '[&>[modal-footer]]:flex-col-reverse',
+      '[&>[modal-footer]]:items-stretch',
+      '[&>[modal-footer]]:gap-3',
+      'sm:[&>[modal-footer]]:flex-row',
+      'sm:[&>[modal-footer]]:justify-end',
+      'sm:[&>[modal-footer]]:items-center',
+      'sm:[&>[modal-footer]]:gap-3',
+      '[&>[modal-footer]>*]:w-full',
+      'sm:[&>[modal-footer]>*]:w-auto',
+      'shrink-0',
+    ];
   }
 
   get closeButtonClasses(): string[] {
@@ -147,6 +212,16 @@ export class ModalComponent {
     this.closeEvent.emit();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isOpen']) {
+      this.syncBodyScrollLock();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.toggleBodyScrollLock(false);
+  }
+
   onOverlayClick(event: MouseEvent): void {
     if (
       this.closeOnOverlayClick &&
@@ -162,5 +237,17 @@ export class ModalComponent {
     if (this.isOpen && this.closeOnEscape) {
       this.onClose();
     }
+  }
+
+  private syncBodyScrollLock(): void {
+    this.toggleBodyScrollLock(this.isOpen);
+  }
+
+  private toggleBodyScrollLock(shouldLock: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    document.body.classList.toggle('overflow-hidden', shouldLock);
   }
 }

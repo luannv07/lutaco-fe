@@ -21,7 +21,8 @@ export class TranslationLoaderService implements TranslateLoader {
   // List of modules to load by default when the application starts.
   // These are typically common or core translations.
   private readonly initialModules: TranslationModuleConfig[] = [
-    { name: 'common', fileName: 'common' }, // Chỉ load common lúc khởi động
+    { name: 'common', fileName: 'common' },
+    { name: 'profile', fileName: 'profile' },
   ];
 
   private cache = new Map<string, any>();

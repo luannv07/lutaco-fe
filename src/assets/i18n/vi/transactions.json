@@ -19,6 +19,8 @@
     "list": {
       "title": "Danh sách giao dịch",
       "total": "Tổng",
+      "sync": "Sync",
+      "create": "Tạo giao dịch mới",
       "empty": "Không có giao dịch phù hợp bộ lọc hiện tại.",
       "columns": {
         "date": "Ngày",
@@ -33,9 +35,60 @@
         "page": "Trang"
       }
     },
+    "create": {
+      "title": "Tạo giao dịch mới",
+      "category": "Danh mục",
+      "categoryPlaceholder": "Chọn danh mục",
+      "wallet": "Ví",
+      "walletPlaceholder": "Chọn ví",
+      "amount": "Số tiền",
+      "amountPlaceholder": "Nhập số tiền",
+      "transactionDate": "Thời gian giao dịch",
+      "note": "Ghi chú",
+      "notePlaceholder": "Nhập ghi chú (không bắt buộc)",
+      "submit": "Tạo giao dịch"
+    },
+    "recurring": {
+      "title": "Giao dịch định kỳ",
+      "createExpense": "Đóng tiền định kỳ",
+      "createIncome": "Thu nhập định kỳ",
+      "createTitle": "Tạo giao dịch định kỳ",
+      "sourceTransaction": "Giao dịch gốc",
+      "sourceTransactionPlaceholder": "Chọn giao dịch làm mẫu",
+      "type": "Chu kỳ lặp",
+      "startDate": "Ngày bắt đầu",
+      "submit": "Tạo định kỳ",
+      "delete": "Xóa",
+      "filterType": "Lọc theo chu kỳ",
+      "apply": "Áp dụng",
+      "reset": "Đặt lại",
+      "empty": "Chưa có giao dịch định kỳ nào.",
+      "columns": {
+        "source": "Giao dịch gốc",
+        "type": "Chu kỳ",
+        "startDate": "Bắt đầu",
+        "nextDate": "Lần tiếp theo",
+        "actions": "Hành động"
+      },
+      "types": {
+        "all": "Tất cả chu kỳ",
+        "daily": "Hàng ngày",
+        "weekly": "Hàng tuần",
+        "monthly": "Hàng tháng",
+        "yearly": "Hàng năm"
+      }
+    },
     "messages": {
       "loadError": "Không thể tải danh sách giao dịch.",
-      "categoryLoadError": "Không thể tải danh sách danh mục."
+      "categoryLoadError": "Không thể tải danh sách danh mục.",
+      "walletLoadError": "Không thể tải danh sách ví.",
+      "createSuccess": "Tạo giao dịch thành công.",
+      "createError": "Không thể tạo giao dịch.",
+      "recurringLoadError": "Không thể tải danh sách giao dịch định kỳ.",
+      "recurringCreateSuccess": "Tạo giao dịch định kỳ thành công.",
+      "recurringCreateError": "Không thể tạo giao dịch định kỳ.",
+      "recurringDeleteSuccess": "Xóa giao dịch định kỳ thành công.",
+      "recurringDeleteError": "Không thể xóa giao dịch định kỳ."
     }
   }
 }

@@ -28,11 +28,22 @@
     "edit": {
       "title": "Sửa danh mục"
     },
+    "delete": {
+      "title": "Xóa danh mục",
+      "confirm": "Bạn chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác.",
+      "submit": "Xóa"
+    },
     "list": {
       "title": "Danh sách danh mục",
       "items": "mục",
       "empty": "Không có danh mục nào.",
+      "noChildren": "Chưa có danh mục con.",
+      "expandAll": "Mở rộng tất cả",
+      "collapseAll": "Thu gọn tất cả",
+      "parentMeta": "Danh mục cha • Tạo bởi: {{createdBy}}",
+      "childMeta": "Danh mục con • Tạo bởi: {{createdBy}}",
       "edit": "Sửa",
+      "delete": "Xóa",
       "columns": {
         "name": "Tên",
         "parent": "Cha",
@@ -46,7 +57,9 @@
       "createSuccess": "Tạo danh mục thành công.",
       "createError": "Không thể tạo danh mục.",
       "updateSuccess": "Cập nhật danh mục thành công.",
-      "updateError": "Không thể cập nhật danh mục."
+      "updateError": "Không thể cập nhật danh mục.",
+      "deleteSuccess": "Xóa danh mục thành công.",
+      "deleteError": "Không thể xóa danh mục."
     }
   }
 }

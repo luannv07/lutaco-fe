@@ -28,11 +28,22 @@
     "edit": {
       "title": "Edit category"
     },
+    "delete": {
+      "title": "Delete category",
+      "confirm": "Are you sure you want to delete this category? This action cannot be undone.",
+      "submit": "Delete"
+    },
     "list": {
       "title": "Category list",
       "items": "items",
       "empty": "No categories found.",
+      "noChildren": "No child categories yet.",
+      "expandAll": "Expand all",
+      "collapseAll": "Collapse all",
+      "parentMeta": "Parent category • Created by: {{createdBy}}",
+      "childMeta": "Child category • Created by: {{createdBy}}",
       "edit": "Edit",
+      "delete": "Delete",
       "columns": {
         "name": "Name",
         "parent": "Parent",
@@ -46,7 +57,9 @@
       "createSuccess": "Category created successfully.",
       "createError": "Failed to create category.",
       "updateSuccess": "Category updated successfully.",
-      "updateError": "Failed to update category."
+      "updateError": "Failed to update category.",
+      "deleteSuccess": "Category deleted successfully.",
+      "deleteError": "Failed to delete category."
     }
   }
 }

@@ -1,26 +1,69 @@
 {
   "dashboard": {
     "title": "Dashboard",
+    "subtitle": "Financial overview and important notices in one place.",
+    "overview": {
+      "totalIncome": "Total Income",
+      "totalExpense": "Total Expense",
+      "balance": "Net Balance",
+      "walletCount": "Wallet Count"
+    },
     "buttons": {
       "logout": "Logout",
-      "getMe": "Get Me (Must authenticated)",
-      "getPremium": "Get Premium"
+      "refresh": "Refresh",
+      "wallets": "Wallets",
+      "transactions": "Transactions"
     },
     "loading": "Loading user data...",
-    "empty": "Click \"Get Me\" to load user information.",
-    "userInfo": {
-      "title": "User Information",
-      "id": "ID",
-      "username": "Username",
-      "fullName": "Full Name",
-      "email": "Email",
-      "gender": "Gender",
-      "userPlan": "User Plan",
-      "userStatus": "User Status",
-      "role": "Role"
+    "empty": "No dashboard data is available.",
+    "notices": {
+      "title": "System Notices",
+      "subtitle": "Insights and alerts generated from your financial activity.",
+      "empty": "No alerts for the current period."
+    },
+    "wallets": {
+      "title": "Wallet Snapshot",
+      "subtitle": "Highlighted wallet balances for the current period.",
+      "empty": "No wallet data to display."
+    },
+    "period": {
+      "current": "Current period"
+    },
+    "insights": {
+      "levels": {
+        "WARN": "Warning",
+        "DANGER": "Critical",
+        "SUCCESS": "Positive"
+      },
+      "codes": {
+        "EXPENSE_INCREASE": "Expenses increased by {{value}}{{unit}} compared to previous period.",
+        "EXPENSE_DECREASE": "Expenses decreased by {{value}}{{unit}} compared to previous period.",
+        "INCOME_INCREASE": "Income increased by {{value}}{{unit}} compared to previous period.",
+        "INCOME_DECREASE": "Income decreased by {{value}}{{unit}} compared to previous period.",
+        "NEGATIVE_BALANCE": "Your balance is negative. Please review your spending plan.",
+        "LOW_BALANCE": "Your balance is low. Consider adding reserve funds.",
+        "CATEGORY_OVER_SPENDING": "A category is exceeding its normal spending range.",
+        "CATEGORY_DOMINANT": "One category is dominating your current spending.",
+        "DEFAULT": "There is a new financial update for the current period."
+      }
     },
     "messages": {
-      "logoutSuccess": "Logged out successfully"
+      "logoutSuccess": "Logged out successfully",
+      "summaryLoadError": "Unable to load dashboard summary."
+    },
+    "ai": {
+      "title": "AI Chat Demo",
+      "subtitle": "Demo area for trying quick prompts with the AI assistant.",
+      "promptLabel": "Prompt",
+      "promptPlaceholder": "Example: Give me personal expense management tips",
+      "enterHint": "Press Enter to send",
+      "askButton": "Send",
+      "clearButton": "Clear",
+      "answerLabel": "Response",
+      "messages": {
+        "empty": "API returned empty data.",
+        "error": "Failed to call AI chat."
+      }
     }
   }
 }

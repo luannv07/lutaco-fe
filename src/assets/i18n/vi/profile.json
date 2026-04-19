@@ -1,0 +1,65 @@
+{
+  "profile": {
+    "header": {
+      "label": "Cài đặt tài khoản",
+      "title": "Hồ sơ cá nhân",
+      "subtitle": "Quản lý thông tin cá nhân, chi tiết tài khoản và cài đặt bảo mật của bạn."
+    },
+    "welcome": "Chào mừng bạn quay lại",
+    "email": "Email",
+    "status": "Trạng thái tài khoản",
+    "plan": "Gói hiện tại",
+    "memberSince": "Thành viên từ",
+    "fullName": "Họ và tên",
+    "username": "Tên đăng nhập",
+    "role": "Vai trò",
+    "gender": "Giới tính",
+    "address": "Địa chỉ",
+    "createdBy": "Được tạo bởi",
+    "selectGender": "Chọn giới tính",
+    "save": "Lưu thay đổi",
+    "saving": "Đang lưu...",
+    "cancel": "Hủy",
+    "editProfile": {
+      "label": "Thông tin tài khoản",
+      "title": "Thông tin tài khoản của bạn",
+      "button": "Chỉnh sửa hồ sơ"
+    },
+    "password": {
+      "label": "Bảo mật",
+      "title": "Đổi mật khẩu",
+      "button": "Đổi mật khẩu",
+      "current": "Mật khẩu hiện tại",
+      "currentPlaceholder": "Nhập mật khẩu hiện tại",
+      "new": "Mật khẩu mới",
+      "newPlaceholder": "Nhập mật khẩu mới",
+      "confirm": "Xác nhận mật khẩu mới",
+      "confirmPlaceholder": "Xác nhận mật khẩu mới",
+      "change": "Đổi mật khẩu",
+      "securityTip": "Bảo vệ tài khoản của bạn",
+      "securityInfo": "Chúng tôi khuyến nghị sử dụng mật khẩu mạnh với sự kết hợp của chữ hoa, chữ thường, số và ký tự đặc biệt."
+    },
+    "genders": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
+    },
+    "messages": {
+      "loadError": "Không thể tải thông tin hồ sơ. Vui lòng thử lại.",
+      "updateSuccess": "Hồ sơ đã cập nhật thành công.",
+      "updateError": "Không thể cập nhật hồ sơ. Vui lòng thử lại.",
+      "passwordChangeSuccess": "Mật khẩu đã thay đổi thành công. Vui lòng đăng nhập lại.",
+      "passwordChangeError": "Không thể thay đổi mật khẩu. Vui lòng thử lại.",
+      "passwordMismatch": "Mật khẩu không khớp.",
+      "userNotFound": "Không tìm thấy người dùng. Vui lòng làm mới và thử lại."
+    },
+    "error": {
+      "title": "Có lỗi xảy ra",
+      "retry": "Thử lại"
+    }
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc.",
+    "minLength": "Độ dài tối thiểu là {{length}} ký tự."
+  }
+}

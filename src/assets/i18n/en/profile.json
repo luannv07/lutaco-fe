@@ -1,0 +1,65 @@
+{
+  "profile": {
+    "header": {
+      "label": "Account Settings",
+      "title": "My Profile",
+      "subtitle": "Manage your personal information, account details, and security settings."
+    },
+    "welcome": "Welcome back",
+    "email": "Email",
+    "status": "Account Status",
+    "plan": "Current Plan",
+    "memberSince": "Member Since",
+    "fullName": "Full name",
+    "username": "Username",
+    "role": "Role",
+    "gender": "Gender",
+    "address": "Address",
+    "createdBy": "Created by",
+    "selectGender": "Select your gender",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "editProfile": {
+      "label": "Account Information",
+      "title": "Your account information",
+      "button": "Edit profile"
+    },
+    "password": {
+      "label": "Security",
+      "title": "Change password",
+      "button": "Change password",
+      "current": "Current password",
+      "currentPlaceholder": "Enter your current password",
+      "new": "New password",
+      "newPlaceholder": "Enter your new password",
+      "confirm": "Confirm new password",
+      "confirmPlaceholder": "Confirm your new password",
+      "change": "Change password",
+      "securityTip": "Keep your account secure",
+      "securityInfo": "We recommend using a strong password with a mix of uppercase, lowercase, numbers, and special characters."
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "messages": {
+      "loadError": "Failed to load profile information. Please try again.",
+      "updateSuccess": "Profile updated successfully.",
+      "updateError": "Failed to update profile. Please try again.",
+      "passwordChangeSuccess": "Password changed successfully. Please log in again.",
+      "passwordChangeError": "Failed to change password. Please try again.",
+      "passwordMismatch": "Passwords do not match.",
+      "userNotFound": "User not found. Please refresh and try again."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "retry": "Retry"
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "minLength": "Minimum length is {{length}} characters."
+  }
+}

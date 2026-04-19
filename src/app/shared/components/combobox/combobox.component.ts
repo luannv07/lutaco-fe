@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 
@@ -34,7 +44,7 @@ export interface ComboboxOption {
     ]),
   ],
 })
-export class ComboboxComponent {
+export class ComboboxComponent implements OnChanges {
   @Input() label = '';
   @Input() placeholder = '';
   @Input() value = '';
@@ -105,7 +115,7 @@ export class ComboboxComponent {
     }
 
     this.focusEvent.emit(event);
-    this.query = this.getLabelByValue(this.value);
+    this.query = '';
     this.openPanel();
   }
 
@@ -227,6 +237,12 @@ export class ComboboxComponent {
     this.value = '';
     this.valueChange.emit('');
     this.openPanel();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] || changes['options']) {
+      this.syncQueryFromValue();
+    }
   }
 
   private openPanel(): void {

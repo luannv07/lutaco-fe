@@ -40,6 +40,7 @@ export class TableComponent implements OnChanges {
   @Input() pageSize = 10;
   @Input() loading = false;
   @Input() selectable = false;
+  @Input() showIndex = true;
   @Input() customClass = '';
   @Output() rowClick = new EventEmitter<any>();
   @Output() selectionChange = new EventEmitter<any[]>();
@@ -259,9 +260,31 @@ export class TableComponent implements OnChanges {
 
   fmt(col: TableColumn, val: any) {
     if (col.type === 'currency')
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-    if (col.type === 'date') return new Date(val).toLocaleDateString('vi-VN');
+      return `${new Intl.NumberFormat('vi-VN').format(val ?? 0)} đ`;
+    if (col.type === 'date') {
+      const parsedDate = this.parseUtcDate(val);
+      return parsedDate
+        ? parsedDate.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+        : '—';
+    }
     return val ?? '—';
+  }
+
+  private parseUtcDate(value: unknown): Date | null {
+    if (value instanceof Date) {
+      return Number.isNaN(value.getTime()) ? null : value;
+    }
+
+    if (typeof value !== 'string' || !value.trim()) {
+      return null;
+    }
+
+    const hasTimezone = /Z|[+-]\d{2}:\d{2}$/.test(value);
+    const hasTime = value.includes('T');
+    const normalizedValue = hasTime && !hasTimezone ? `${value}Z` : value;
+    const date = new Date(normalizedValue);
+
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 
   amtCls(col: TableColumn, val: any) {
@@ -277,7 +300,11 @@ export class TableComponent implements OnChanges {
   }
 
   colSpan() {
-    return this.columns.length + (this.selectable ? 1 : 0);
+    return this.columns.length + (this.selectable ? 1 : 0) + (this.showIndex ? 1 : 0);
+  }
+
+  getRowNumber(index: number): number {
+    return (this.page - 1) * this.size + index + 1;
   }
 
   sortIconClasses(columnKey: string): string {

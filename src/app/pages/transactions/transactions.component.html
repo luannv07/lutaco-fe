@@ -105,9 +105,24 @@
   <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 md:p-6">
     <div class="mb-4 flex items-center justify-between">
       <h2 class="text-lg font-semibold text-slate-700">{{ 'transactions.list.title' | translate }}</h2>
-      <span class="text-sm text-slate-500">
-        {{ 'transactions.list.total' | translate }}: {{ totalItems }}
-      </span>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-slate-500">
+          {{ 'transactions.list.total' | translate }}: {{ totalItems }}
+        </span>
+        <app-button
+          [label]="'transactions.list.sync' | translate"
+          buttonType="secondary"
+          iconClass="fa-solid fa-rotate"
+          [disabled]="isLoadingTransactions"
+          (clickEvent)="syncTransactions()"
+        />
+        <app-button
+          [label]="'transactions.list.create' | translate"
+          iconClass="fa-solid fa-plus"
+          [disabled]="isLoadingTransactions"
+          (clickEvent)="openCreateTransaction()"
+        />
+      </div>
     </div>
 
     @if (isLoadingTransactions) {
@@ -126,17 +141,44 @@
         <table class="min-w-full divide-y divide-slate-200 text-left">
           <thead>
             <tr class="text-xs uppercase tracking-wide text-slate-500">
-              <th class="px-4 py-3">{{ 'transactions.list.columns.date' | translate }}</th>
-              <th class="px-4 py-3">{{ 'transactions.list.columns.category' | translate }}</th>
-              <th class="px-4 py-3">{{ 'transactions.list.columns.wallet' | translate }}</th>
-              <th class="px-4 py-3">{{ 'transactions.list.columns.amount' | translate }}</th>
-              <th class="px-4 py-3">{{ 'transactions.list.columns.note' | translate }}</th>
+              <th class="w-16 px-4 py-3">STT</th>
+              <th class="px-4 py-3">
+                <button type="button" class="inline-flex items-center gap-1" (click)="sortBy('transactionDate')">
+                  {{ 'transactions.list.columns.date' | translate }}
+                  <i [class]="getSortIconClass('transactionDate')"></i>
+                </button>
+              </th>
+              <th class="px-4 py-3">
+                <button type="button" class="inline-flex items-center gap-1" (click)="sortBy('categoryName')">
+                  {{ 'transactions.list.columns.category' | translate }}
+                  <i [class]="getSortIconClass('categoryName')"></i>
+                </button>
+              </th>
+              <th class="px-4 py-3">
+                <button type="button" class="inline-flex items-center gap-1" (click)="sortBy('walletName')">
+                  {{ 'transactions.list.columns.wallet' | translate }}
+                  <i [class]="getSortIconClass('walletName')"></i>
+                </button>
+              </th>
+              <th class="px-4 py-3">
+                <button type="button" class="inline-flex items-center gap-1" (click)="sortBy('amount')">
+                  {{ 'transactions.list.columns.amount' | translate }}
+                  <i [class]="getSortIconClass('amount')"></i>
+                </button>
+              </th>
+              <th class="px-4 py-3">
+                <button type="button" class="inline-flex items-center gap-1" (click)="sortBy('note')">
+                  {{ 'transactions.list.columns.note' | translate }}
+                  <i [class]="getSortIconClass('note')"></i>
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 bg-white text-sm text-slate-700">
-            @for (transaction of transactions; track trackByTransactionId($index, transaction)) {
+            @for (transaction of sortedTransactions; track trackByTransactionId($index, transaction)) {
               <tr class="transition-colors duration-100 hover:bg-slate-50">
-                <td class="px-4 py-3">{{ transaction.transactionDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td class="px-4 py-3 text-slate-500">{{ getRowNumber($index) }}</td>
+                <td class="px-4 py-3">{{ transaction.transactionDate | date: 'dd/MM/yyyy HH:mm' : '+0700' }}</td>
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
                     <span
@@ -149,7 +191,7 @@
                   </div>
                 </td>
                 <td class="px-4 py-3">{{ transaction.walletName }}</td>
-                <td class="px-4 py-3 font-semibold">{{ transaction.amount | number }}</td>
+                <td class="px-4 py-3 font-semibold">{{ transaction.amount | number }} đ</td>
                 <td class="px-4 py-3 text-slate-500">{{ transaction.note || '-' }}</td>
               </tr>
             }
@@ -176,4 +218,251 @@
       </div>
     }
   </div>
+
+  <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 md:p-6">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <h2 class="text-lg font-semibold text-slate-700">{{ 'transactions.recurring.title' | translate }}</h2>
+      <div class="flex flex-wrap items-center gap-2">
+        <app-button
+          [label]="'transactions.recurring.createExpense' | translate"
+          buttonType="secondary"
+          iconClass="fa-solid fa-file-invoice-dollar"
+          [disabled]="isCreatingRecurringTransaction"
+          (clickEvent)="openCreateRecurring('EXPENSE')"
+        />
+        <app-button
+          [label]="'transactions.recurring.createIncome' | translate"
+          iconClass="fa-solid fa-hand-holding-dollar"
+          [disabled]="isCreatingRecurringTransaction"
+          (clickEvent)="openCreateRecurring('INCOME')"
+        />
+      </div>
+    </div>
+
+    <form class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-end" [formGroup]="recurringFilterForm" (ngSubmit)="applyRecurringFilters()">
+      <div>
+        <app-combobox
+          id="recurringFrequentType"
+          [label]="'transactions.recurring.filterType' | translate"
+          [value]="recurringFilterForm.get('frequentType')?.value || ''"
+          [options]="recurringFilterTypeOptions"
+          [allowCustomValue]="false"
+          [disabled]="isLoadingRecurringTransactions"
+          (valueChange)="onRecurringFilterTypeChange($event)"
+        />
+      </div>
+      <app-button
+        [label]="'transactions.recurring.apply' | translate"
+        iconClass="fa-solid fa-filter"
+        [disabled]="isLoadingRecurringTransactions"
+        type="submit"
+      />
+      <app-button
+        [label]="'transactions.recurring.reset' | translate"
+        buttonType="secondary"
+        iconClass="fa-solid fa-rotate-left"
+        [disabled]="isLoadingRecurringTransactions"
+        (clickEvent)="clearRecurringFilters()"
+      />
+    </form>
+
+    @if (isLoadingRecurringTransactions) {
+      <div class="mt-4 space-y-2">
+        @for (_item of [1, 2, 3]; track $index) {
+          <div class="h-12 animate-pulse rounded-lg bg-slate-100"></div>
+        }
+      </div>
+    } @else if (recurringTransactions.length === 0) {
+      <div class="mt-4 rounded-xl border border-dashed border-slate-300 p-6 text-center">
+        <i class="fa-solid fa-calendar-days text-3xl text-slate-300"></i>
+        <p class="mt-2 text-sm text-slate-500">{{ 'transactions.recurring.empty' | translate }}</p>
+      </div>
+    } @else {
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-left">
+          <thead>
+            <tr class="text-xs uppercase tracking-wide text-slate-500">
+              <th class="px-3 py-2">{{ 'transactions.recurring.columns.source' | translate }}</th>
+              <th class="px-3 py-2">{{ 'transactions.recurring.columns.type' | translate }}</th>
+              <th class="px-3 py-2">{{ 'transactions.recurring.columns.startDate' | translate }}</th>
+              <th class="px-3 py-2">{{ 'transactions.recurring.columns.nextDate' | translate }}</th>
+              <th class="px-3 py-2 text-right">{{ 'transactions.recurring.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 bg-white text-sm text-slate-700">
+            @for (recurring of recurringTransactions; track recurring.id) {
+              <tr class="transition-colors duration-100 hover:bg-slate-50">
+                <td class="px-3 py-2">{{ getRecurringSourceLabel(recurring.transactionId) }}</td>
+                <td class="px-3 py-2">{{ getRecurringTypeLabel(recurring.frequentType.value) }}</td>
+                <td class="px-3 py-2">{{ recurring.startDate | date:'dd/MM/yyyy':'+0700' }}</td>
+                <td class="px-3 py-2">{{ recurring.nextDate | date:'dd/MM/yyyy':'+0700' }}</td>
+                <td class="px-3 py-2 text-right">
+                  <app-button
+                    [label]="'transactions.recurring.delete' | translate"
+                    size="small"
+                    buttonType="danger"
+                    iconClass="fa-solid fa-trash"
+                    [disabled]="isLoadingRecurringTransactions"
+                    (clickEvent)="deleteRecurringTransaction(recurring.id)"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <app-modal
+    [isOpen]="isCreateModalOpen"
+    [showFooter]="true"
+    [size]="'xl'"
+    [title]="'transactions.create.title' | translate"
+    (closeEvent)="closeCreateTransaction()"
+  >
+    <form class="grid grid-cols-1 gap-4 md:grid-cols-2" [formGroup]="createForm" (ngSubmit)="createTransaction()">
+      <div>
+        <app-combobox
+          id="createCategoryId"
+          [label]="'transactions.create.category' | translate"
+          [placeholder]="'transactions.create.categoryPlaceholder' | translate"
+          [value]="createForm.get('categoryId')?.value || ''"
+          [options]="createCategoryOptions"
+          [allowCustomValue]="false"
+          [disabled]="isCreatingTransaction"
+          (valueChange)="onCreateCategoryChange($event)"
+        />
+      </div>
+
+      <div>
+        <app-combobox
+          id="createWalletId"
+          [label]="'transactions.create.wallet' | translate"
+          [placeholder]="'transactions.create.walletPlaceholder' | translate"
+          [value]="createForm.get('walletId')?.value || ''"
+          [options]="createWalletOptions"
+          [allowCustomValue]="false"
+          [disabled]="isCreatingTransaction"
+          (valueChange)="onCreateWalletChange($event)"
+        />
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-slate-700" for="createAmount">
+          {{ 'transactions.create.amount' | translate }}
+        </label>
+        <input
+          id="createAmount"
+          type="number"
+          min="1"
+          formControlName="amount"
+          class="h-10 w-full rounded-lg border border-slate-300 px-3 text-slate-700 transition-colors duration-150 ease-out focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          [placeholder]="'transactions.create.amountPlaceholder' | translate"
+        />
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-slate-700" for="createTransactionDate">
+          {{ 'transactions.create.transactionDate' | translate }}
+        </label>
+        <input
+          id="createTransactionDate"
+          type="datetime-local"
+          formControlName="transactionDate"
+          class="h-10 w-full rounded-lg border border-slate-300 px-3 text-slate-700 transition-colors duration-150 ease-out focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        />
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="mb-1.5 block text-sm font-medium text-slate-700" for="createNote">
+          {{ 'transactions.create.note' | translate }}
+        </label>
+        <textarea
+          id="createNote"
+          rows="3"
+          formControlName="note"
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-700 transition-colors duration-150 ease-out focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          [placeholder]="'transactions.create.notePlaceholder' | translate"
+        ></textarea>
+      </div>
+    </form>
+
+    <div modal-footer>
+      <app-button
+        [label]="'common.ui.buttons.cancel' | translate"
+        buttonType="secondary"
+        [disabled]="isCreatingTransaction"
+        (clickEvent)="closeCreateTransaction()"
+      />
+      <app-button
+        [label]="'transactions.create.submit' | translate"
+        iconClass="fa-solid fa-plus"
+        [loading]="isCreatingTransaction"
+        [disabled]="isCreatingTransaction"
+        (clickEvent)="createTransaction()"
+      />
+    </div>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="isCreateRecurringModalOpen"
+    [showFooter]="true"
+    [size]="'xl'"
+    [title]="'transactions.recurring.createTitle' | translate"
+    (closeEvent)="closeCreateRecurring()"
+  >
+    <form class="grid grid-cols-1 gap-4 md:grid-cols-2" [formGroup]="recurringForm" (ngSubmit)="createRecurringTransaction()">
+      <div class="md:col-span-2">
+        <app-combobox
+          id="recurringTransactionId"
+          [label]="'transactions.recurring.sourceTransaction' | translate"
+          [placeholder]="'transactions.recurring.sourceTransactionPlaceholder' | translate"
+          [value]="recurringForm.get('transactionId')?.value || ''"
+          [options]="recurringTransactionOptions"
+          [allowCustomValue]="false"
+          [disabled]="isCreatingRecurringTransaction"
+          (valueChange)="onRecurringTransactionChange($event)"
+        />
+      </div>
+
+      <div>
+        <app-combobox
+          id="recurringType"
+          [label]="'transactions.recurring.type' | translate"
+          [value]="recurringForm.get('frequentType')?.value || 'MONTHLY'"
+          [options]="recurringTypeOptions"
+          [allowCustomValue]="false"
+          [disabled]="isCreatingRecurringTransaction"
+          (valueChange)="onRecurringTypeChange($event)"
+        />
+      </div>
+
+      <div>
+        <app-date-picker
+          id="recurringStartDate"
+          [label]="'transactions.recurring.startDate' | translate"
+          [value]="recurringForm.get('startDate')?.value || ''"
+          [disabled]="isCreatingRecurringTransaction"
+          (valueChange)="onRecurringStartDateChange($event)"
+        />
+      </div>
+    </form>
+
+    <div modal-footer>
+      <app-button
+        [label]="'common.ui.buttons.cancel' | translate"
+        buttonType="secondary"
+        [disabled]="isCreatingRecurringTransaction"
+        (clickEvent)="closeCreateRecurring()"
+      />
+      <app-button
+        [label]="'transactions.recurring.submit' | translate"
+        iconClass="fa-solid fa-calendar-plus"
+        [loading]="isCreatingRecurringTransaction"
+        [disabled]="isCreatingRecurringTransaction"
+        (clickEvent)="createRecurringTransaction()"
+      />
+    </div>
+  </app-modal>
 </div>

@@ -47,6 +47,11 @@
             <p class="truncate text-sm text-slate-300">@{{ userName() }}</p>
           </div>
 
+          <div class="rounded-xl border border-indigo-400/25 bg-gradient-to-r from-indigo-500/10 to-sky-400/10 px-3 py-2">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-300">{{ userRoleLabel() }}</p>
+            <p class="mt-1 text-sm font-bold text-indigo-100">{{ userRole() }}</p>
+          </div>
+
           <div class="rounded-xl border border-cyan-400/25 bg-gradient-to-r from-cyan-400/10 to-indigo-400/10 px-3 py-2">
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-300">{{ 'common.plan.label' | translate }}</p>
             <p class="mt-1 text-sm font-bold" [class.text-emerald-200]="isPremium()" [class.text-cyan-100]="!isPremium()">{{ userPlanLabelKey() | translate }}</p>
@@ -164,7 +169,7 @@
 
   <!-- Bottom: User Actions -->
   <div class="relative border-t border-white/10 px-3 py-3">
-    <div class="mb-2.5">
+    <div class="mb-2.5" [class.flex]="isCollapsed()" [class.justify-center]="isCollapsed()">
       <app-language-switcher [compact]="isCollapsed()"></app-language-switcher>
     </div>
 

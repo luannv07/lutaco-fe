@@ -37,4 +37,12 @@ export class CategoryService extends BaseService {
   updateCategory(id: string, request: CategoryRequest): Observable<BaseResponse<object>> {
     return this.http.put<BaseResponse<object>>(`${this.baseUrl}/${this.apiUrl}/${id}`, request);
   }
+
+  getChildrenCategories(parentId: string): Observable<BaseResponse<Category[]>> {
+    return this.http.get<BaseResponse<Category[]>>(`${this.baseUrl}/${this.apiUrl}/${parentId}/children`);
+  }
+
+  disableCategory(id: string): Observable<BaseResponse<object>> {
+    return this.http.patch<BaseResponse<object>>(`${this.baseUrl}/${this.apiUrl}/${id}/disabled`, {});
+  }
 }

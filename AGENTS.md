@@ -6,8 +6,7 @@ Angular 17+ · TypeScript · Tailwind CSS · Standalone · Clean Code · Token-E
 
 1. Existing codebase 2. This document 3. Angular defaults
    → Never stop execution. Never refuse on minor missing context.
-
-=============================================================================
+2. # Tìm kiếm trong base import trước khi muốn import gì
 
 ## 01 · EXECUTION MODE
 
@@ -404,3 +403,4 @@ Section 16 — Token Economy bao gồm: forbidden response patterns ("Here is th
 Codex will review your output once you are done.
 nói ngắn gọn, ko giải thích, ko hỏi lại, chỉ code.
 Tận dụng tối đa tailwind, hạn chế việc dùng css thuần
+giờ ở db và be là giờ utc, nên mọi quy đổi đều phải convert sang locale

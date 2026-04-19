@@ -1,26 +1,69 @@
 {
   "dashboard": {
     "title": "Bảng điều khiển",
+    "subtitle": "Tổng quan tài chính và cảnh báo quan trọng trong một nơi.",
+    "overview": {
+      "totalIncome": "Tổng thu nhập",
+      "totalExpense": "Tổng chi tiêu",
+      "balance": "Số dư ròng",
+      "walletCount": "Số lượng ví"
+    },
     "buttons": {
       "logout": "Đăng xuất",
-      "getMe": "Lấy thông tin cá nhân (Phải xác thực)",
-      "getPremium": "Nâng cấp thành viên"
+      "refresh": "Làm mới",
+      "wallets": "Ví",
+      "transactions": "Giao dịch"
     },
     "loading": "Đang tải dữ liệu người dùng...",
-    "empty": "Nhấn \"Lấy thông tin cá nhân\" để tải dữ liệu người dùng.",
-    "userInfo": {
-      "title": "Thông tin người dùng",
-      "id": "ID",
-      "username": "Tên đăng nhập",
-      "fullName": "Họ tên",
-      "email": "Email",
-      "gender": "Giới tính",
-      "userPlan": "Gói người dùng",
-      "userStatus": "Trạng thái",
-      "role": "Vai trò"
+    "empty": "Không có dữ liệu dashboard để hiển thị.",
+    "notices": {
+      "title": "Thông báo hệ thống",
+      "subtitle": "Các insight và cảnh báo được tổng hợp từ dữ liệu tài chính của bạn.",
+      "empty": "Chưa có cảnh báo nào trong kỳ hiện tại."
+    },
+    "wallets": {
+      "title": "Tổng quan ví",
+      "subtitle": "Số dư các ví nổi bật trong kỳ hiện tại.",
+      "empty": "Chưa có dữ liệu ví để hiển thị."
+    },
+    "period": {
+      "current": "Kỳ hiện tại"
+    },
+    "insights": {
+      "levels": {
+        "WARN": "Cảnh báo",
+        "DANGER": "Nguy cơ cao",
+        "SUCCESS": "Tích cực"
+      },
+      "codes": {
+        "EXPENSE_INCREASE": "Chi tiêu tăng {{value}}{{unit}} so với kỳ trước.",
+        "EXPENSE_DECREASE": "Chi tiêu giảm {{value}}{{unit}} so với kỳ trước.",
+        "INCOME_INCREASE": "Thu nhập tăng {{value}}{{unit}} so với kỳ trước.",
+        "INCOME_DECREASE": "Thu nhập giảm {{value}}{{unit}} so với kỳ trước.",
+        "NEGATIVE_BALANCE": "Số dư đang âm, cần kiểm soát chi tiêu ngay.",
+        "LOW_BALANCE": "Số dư thấp, nên bổ sung ngân sách dự phòng.",
+        "CATEGORY_OVER_SPENDING": "Một danh mục đang vượt mức chi tiêu bình thường.",
+        "CATEGORY_DOMINANT": "Một danh mục đang chiếm tỷ trọng chi tiêu cao.",
+        "DEFAULT": "Có cập nhật tài chính mới trong kỳ hiện tại."
+      }
     },
     "messages": {
-      "logoutSuccess": "Đã đăng xuất thành công"
+      "logoutSuccess": "Đã đăng xuất thành công",
+      "summaryLoadError": "Không thể tải dữ liệu tổng quan dashboard."
+    },
+    "ai": {
+      "title": "AI Chat Demo",
+      "subtitle": "Khu vực demo để bạn thử hỏi nhanh với trợ lý AI.",
+      "promptLabel": "Nội dung",
+      "promptPlaceholder": "Ví dụ: Gợi ý mẹo quản lý chi tiêu cá nhân",
+      "enterHint": "Nhấn Enter để gửi nhanh",
+      "askButton": "Gửi",
+      "clearButton": "Xóa",
+      "answerLabel": "Phản hồi",
+      "messages": {
+        "empty": "API không trả dữ liệu.",
+        "error": "Không thể gọi AI chat."
+      }
     }
   }
 }

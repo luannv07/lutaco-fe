@@ -21,3 +21,11 @@ export interface TransactionFilter {
   minAmount?: number;
   maxAmount?: number;
 }
+
+export interface TransactionCreateRequest {
+  categoryId: string;
+  walletId: string;
+  amount: number;
+  transactionDate: string;
+  note?: string;
+}

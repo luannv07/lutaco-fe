@@ -12,6 +12,9 @@
                    type="checkbox" />
           </th>
         }
+        @if (showIndex) {
+          <th [class]="thTxtCls" class="w-16 px-4 py-3 text-xs font-semibold uppercase tracking-wide">STT</th>
+        }
         @for (col of columns; track col.key) {
           <th (click)="sort(col)"
               [class.cursor-pointer]="col.sortable" [class]="thTxtCls" [style.text-align]="col.align||'left'"
@@ -41,6 +44,11 @@
               @if (selectable) {
                 <td class="px-4 py-3">
                   <div [class]="skeletonCls" class="h-4 w-4 rounded animate-pulse"></div>
+                </td>
+              }
+              @if (showIndex) {
+                <td class="px-4 py-3.5">
+                  <div [class]="skeletonCls" class="h-3.5 w-8 rounded-full animate-pulse"></div>
                 </td>
               }
               @for (col of columns; track col.key) {
@@ -75,6 +83,11 @@
                   <input [checked]="selected.has($index)"
                          class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                          type="checkbox" />
+                </td>
+              }
+              @if (showIndex) {
+                <td [class]="tdCls" class="px-4 py-3.5 text-slate-500 tabular-nums">
+                  {{ getRowNumber($index) }}
                 </td>
               }
               @for (col of columns; track col.key) {

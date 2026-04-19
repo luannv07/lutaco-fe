@@ -32,6 +32,7 @@ export const routes: Routes = [
       {
         path: 'users',
         loadChildren: () => import('./pages/users/users.routes').then((m) => m.USERS_ROUTES),
+        resolve: { translations: translationResolver('profile') },
       },
       {
         path: 'admin',
@@ -56,6 +57,12 @@ export const routes: Routes = [
             (m) => m.TransactionsComponent,
           ),
         resolve: { translations: translationResolver('transactions') },
+      },
+      {
+        path: 'payment',
+        loadComponent: () =>
+          import('./pages/payment/payment.component').then((m) => m.PaymentComponent),
+        resolve: { translations: translationResolver('payment') },
       },
     ],
   },

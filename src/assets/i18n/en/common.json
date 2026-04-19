@@ -1,6 +1,9 @@
 {
   "common": {
     "logout": "Logout",
+    "user": {
+      "role": "Role"
+    },
     "menu": {
       "dashboard": "Dashboard",
       "profile": "Profile",

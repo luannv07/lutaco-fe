@@ -1,4 +1,5 @@
 import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 import { provideRouter } from '@angular/router';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
@@ -44,6 +45,10 @@ export const appConfig: ApplicationConfig = {
       useFactory: initializeApp,
       deps: [LanguageService],
       multi: true,
+    },
+    {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useValue: { timezone: '+0700' },
     },
   ],
 };

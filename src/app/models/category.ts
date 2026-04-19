@@ -8,6 +8,7 @@ export interface Category {
   parentId: string | null;
   categoryType: EnumValue;
   children: Category[];
+  hasChildren: boolean;
   isSystem: boolean;
   createdDate: string;
   createdBy: string;

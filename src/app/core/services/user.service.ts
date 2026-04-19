@@ -5,11 +5,25 @@ import { User, UserUpdateRequest } from '../../models/user';
 import { BaseResponse } from '../../models/base-response';
 import { LOCAL_STORAGE_KEY } from './local-storage.service';
 
+export interface UpdatePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService extends BaseService {
   protected readonly apiUrl: string = 'users';
+
+  private notifyUserInfoUpdated(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent('user-info-updated'));
+  }
 
   private shouldUpdateCachedUser(user: User): boolean {
     // Only update cache in browser environment
@@ -25,7 +39,10 @@ export class UserService extends BaseService {
     return (
       currentUser.id !== user.id ||
       currentUser.updatedDate !== user.updatedDate ||
-      currentUser.userStatus?.value !== user.userStatus?.value
+      currentUser.userStatus?.value !== user.userStatus?.value ||
+      currentUser.userPlan?.value !== user.userPlan?.value ||
+      currentUser.roleName !== user.roleName ||
+      currentUser.fullName !== user.fullName
     );
   }
 
@@ -38,6 +55,7 @@ export class UserService extends BaseService {
       tap((response: BaseResponse<User>) => {
         if (response && response.data && this.shouldUpdateCachedUser(response.data)) {
           this.localStorageService.set(LOCAL_STORAGE_KEY.USER_INFO_KEY, response.data);
+          this.notifyUserInfoUpdated();
         }
       }),
     );
@@ -48,8 +66,16 @@ export class UserService extends BaseService {
       tap((response: BaseResponse<User>) => {
         if (response && response.data && this.shouldUpdateCachedUser(response.data)) {
           this.localStorageService.set(LOCAL_STORAGE_KEY.USER_INFO_KEY, response.data);
+          this.notifyUserInfoUpdated();
         }
       }),
+    );
+  }
+
+  updatePassword(userId: string, passwordRequest: UpdatePasswordRequest): Observable<BaseResponse<void>> {
+    return this.http.patch<BaseResponse<void>>(
+      `${this.baseUrl}/${this.apiUrl}/${userId}/password`,
+      passwordRequest,
     );
   }
 }

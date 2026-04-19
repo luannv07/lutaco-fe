@@ -19,6 +19,8 @@
     "list": {
       "title": "Transaction list",
       "total": "Total",
+      "sync": "Sync",
+      "create": "Create transaction",
       "empty": "No transactions found for current filters.",
       "columns": {
         "date": "Date",
@@ -33,9 +35,60 @@
         "page": "Page"
       }
     },
+    "create": {
+      "title": "Create transaction",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "wallet": "Wallet",
+      "walletPlaceholder": "Select wallet",
+      "amount": "Amount",
+      "amountPlaceholder": "Enter amount",
+      "transactionDate": "Transaction date",
+      "note": "Note",
+      "notePlaceholder": "Enter note (optional)",
+      "submit": "Create transaction"
+    },
+    "recurring": {
+      "title": "Recurring transactions",
+      "createExpense": "Create recurring expense",
+      "createIncome": "Create recurring income",
+      "createTitle": "Create recurring transaction",
+      "sourceTransaction": "Source transaction",
+      "sourceTransactionPlaceholder": "Select a base transaction",
+      "type": "Recurring type",
+      "startDate": "Start date",
+      "submit": "Create recurring",
+      "delete": "Delete",
+      "filterType": "Filter by type",
+      "apply": "Apply",
+      "reset": "Reset",
+      "empty": "No recurring transactions found.",
+      "columns": {
+        "source": "Source transaction",
+        "type": "Type",
+        "startDate": "Start",
+        "nextDate": "Next run",
+        "actions": "Actions"
+      },
+      "types": {
+        "all": "All types",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      }
+    },
     "messages": {
       "loadError": "Failed to load transactions.",
-      "categoryLoadError": "Failed to load category list."
+      "categoryLoadError": "Failed to load category list.",
+      "walletLoadError": "Failed to load wallet list.",
+      "createSuccess": "Transaction created successfully.",
+      "createError": "Failed to create transaction.",
+      "recurringLoadError": "Failed to load recurring transactions.",
+      "recurringCreateSuccess": "Recurring transaction created successfully.",
+      "recurringCreateError": "Failed to create recurring transaction.",
+      "recurringDeleteSuccess": "Recurring transaction deleted successfully.",
+      "recurringDeleteError": "Failed to delete recurring transaction."
     }
   }
 }
